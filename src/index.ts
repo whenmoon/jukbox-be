@@ -4,7 +4,6 @@ import passport from 'passport';
 
 const app: express.Application = express();
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(router);
