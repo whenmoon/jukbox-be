@@ -1,6 +1,6 @@
-import { GoogleCredentials } from "../types";
+import { Credentials } from "../types";
 
-export const Google: GoogleCredentials = {
+export const Google: Credentials = {
   client_id: '670283342299-nqdeklnghobvuq349kuj6fk6do8259ku.apps.googleusercontent.com',
   client_secret: 'yT_4IdDgmE87SUNYu7gIDxGz',
   redirect_uri: 'http://localhost:4000/login/user/redirect'
