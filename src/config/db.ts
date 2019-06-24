@@ -30,7 +30,7 @@ function createTables () {
       diamonds INTEGER NOT NULL DEFAULT 0
     );
 
-    CREATE TABLE playist (
+    CREATE TABLE playlist (
       id SERIAL,
       venue_id VARCHAR REFERENCES venues(name),
       song VARCHAR,

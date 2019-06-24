@@ -15,14 +15,14 @@ export const postVenue = (venue: Venue) => pool.query(`
 
 export const postUserVenue = (userVenue: UserVenue) => pool.query(`
   INSERT INTO user_venues (user_id, venue_id, tickets, diamonds)
-  VALUES ('${userVenue.userEmail}, ${userVenue.venueName}, ${userVenue.tickets}, ${userVenue.diamonds})
+  VALUES ('${userVenue.userEmail}', '${userVenue.venueName}', ${userVenue.tickets}, ${userVenue.diamonds})
   RETURNING *;
 `);
 
 
 export const postSong = (playlistItem: PlaylistItem) => pool.query(`
   INSERT INTO playlist (venue_id, song, user_id, diamonds, submission_time)
-  VALUES ('${playlistItem.venueName}', '${playlistItem.song}, '${playlistItem.userEmail}', 0, '${String(new Date(Date.now()))}')
+  VALUES ('${playlistItem.venueName}', '${playlistItem.song}', '${playlistItem.userEmail}', 0, '${String(new Date(Date.now()))}')
   RETURNING *;
 `);
 
