@@ -1,10 +1,10 @@
-import { tokens } from '../services/google';
+import { user } from '../services/google';
 import { searchSpotify } from '../services/spotifyAPI';
 
 export const redirectUser = (req: any, res: any) => {
   try {
     // 'http://localhost:3000/authorized-user?access_token=TOKEN'
-    res.redirect(`http://localhost:3000/login?token=${tokens.access_token}`);
+    res.redirect(`http://localhost:3000/login?token=${user.token}`);
   } catch(e) {
     res.status(500).end();
   }
@@ -26,7 +26,6 @@ export const searchForSongs = async (req: any, res: any) => {
     const response = await searchSpotify(token, songName);
     response && res.status(200).json(response);
   } catch(e) {
-    console.log(e);
     res.status(500).end();
   }
 }
