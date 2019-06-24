@@ -2,9 +2,13 @@ import pool from '../config/db';
 import { User, Venue, UserVenue, PlaylistItem } from '../types';
 
 export const postUser = (user: User) => pool.query(`
-  INSERT INTO users (email, name, diamonds)
-  VALUES ('${user.email}', '${user.name}', ${user.diamonds})
+  INSERT INTO users (email, token, name, diamonds)
+  VALUES ('${user.email}', '${user.token}' '${user.name}', ${user.diamonds})
   RETURNING *;
+`);
+
+export const findUser = (email: string) => pool.query(`
+  SELECT * FROM users WHERE email = ${email};
 `);
 
 export const postVenue = (venue: Venue) => pool.query(`
