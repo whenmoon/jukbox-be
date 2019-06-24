@@ -1,8 +1,9 @@
 import express from 'express';
-import router from './router.js';
-
-
+import router from './router';
+require('dotenv').config()
+const { PORT} = process.env;
 const app: express.Application = express();
 
 app.use(router);
-app.listen(5000, () => console.log('Server running'));
+
+app.listen(PORT, () => console.log('Server running'));
