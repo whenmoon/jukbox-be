@@ -1,9 +1,8 @@
-import { tokens } from '../services/google';
+import tokens from '../services/google';
 import { searchSpotify } from '../services/spotifyAPI';
 
 export const redirectUser = (req: any, res: any) => {
   try {
-    // 'http://localhost:3000/authorized-user?access_token=TOKEN'
     res.redirect(`http://localhost:3000/login?token=${tokens.access_token}`);
   } catch(e) {
     res.status(500).end();

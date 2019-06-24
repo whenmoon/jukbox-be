@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 const router = express.Router();
-import { tokens } from './services/google';
+import tokens from './services/google';
 import './services/spotify';
 import './services/google';
 import './services/token-strategy';
@@ -36,12 +36,13 @@ router.get('/me', verifyToken, passport.authenticate('token', {
 router.get('/search', provideTokenToUser, searchForSongs);
 
 // /login/admin
-router.get('/login', passport.authenticate('spotify', {
+router.get('/login/admin', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
 
 router.get('/login/admin/redirect', passport.authenticate('spotify',{
   session: false
 }), redirectAdmin);
+
 
 export default router;
