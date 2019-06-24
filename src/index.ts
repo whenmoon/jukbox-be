@@ -4,6 +4,9 @@ import passport from 'passport';
 import cors from 'cors';
 
 const app: express.Application = express();
-app.use(cors());
-app.use(router);
-app.listen(4000, () => console.log('Server running'));
+
+app
+  .use(cors())
+  .use(router);
+
+app.listen(4000, () => console.log('Server listening on port 4000'));
