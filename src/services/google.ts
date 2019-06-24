@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { Google } from '../.env/credentials';
-import { UserType, Token } from '../types';
+import { Google } from '../config/credentials';
+import { Token } from '../types';
 let tokens: Token = {access_token: ''};
 
 passport.use(
