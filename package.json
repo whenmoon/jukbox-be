@@ -12,16 +12,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "btoa": "^1.2.1",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "gulp-eslint": "^5.0.0",
+    "gulp-load-plugins": "^1.6.0",
     "passport": "^0.4.0",
-    "passport-spotify": "^1.0.1"
+    "passport-spotify": "^1.0.1",
+    "passport-unique-token": "^0.1.4",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.0",
     "@types/node": "^12.0.8",
     "@types/passport": "^1.0.0",
     "@types/passport-google-oauth": "^1.0.41",
+    "eslint-plugin-json": "^1.4.0",
     "install": "^0.12.2",
     "nodemon": "^1.19.1",
     "npm": "^6.9.0",

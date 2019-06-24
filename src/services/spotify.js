@@ -1,37 +1,30 @@
 const SpotifyStrategy = require('passport-spotify').Strategy;
+const UniqueTokenStrategy =  require('passport-unique-token').Strategy
 const passport = require('passport');
 require('dotenv').config();
-const rp = require('request-promise');
-const { SpotifyClientID, SpotifyClientSecret, RedirectURI} = process.env;
-
-const tokens = {
-  accessToken: '',
-  refreshToken: '',
-}
-
+const spotifyAPI = require('./spotifyAPI')
+const {
+  SpotifyClientID,
+  SpotifyClientSecret,
+  RedirectURI
+} = process.env;
 
 passport.use(new SpotifyStrategy({
     clientID: SpotifyClientID,
     clientSecret: SpotifyClientSecret,
     callbackURL: RedirectURI
   },
-  async (accessToken, refreshToken, expires_in, profile, done) => {
-    tokens.accessToken = accessToken;
-    tokens.refreshToken = refreshToken;
-    // get refreshToken
-    var options = {
-      uri: 'https://api.github.com/user/repos',
-      qs: {
-          access_token: 'xxxxx xxxxx' // -> uri + '?access_token=xxxxx%20xxxxx'
-      },
-      headers: {
-          'User-Agent': 'Request-Promise'
-      },
-      json: true // Automatically parses the JSON string in the response
-    };
-
-    done()
+  async (_, refreshToken, __, ___, done) => {
+    try {
+      const result = await spotifyAPI.getRefreshToken(refreshToken)
+      console.log(result)
+    } catch (e) {
+      console.log(e);
+    }
+    done();
   }))
+
+
 
 
 
