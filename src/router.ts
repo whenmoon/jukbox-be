@@ -16,6 +16,4 @@ router.get('/login/user/redirect', passport.authenticate('google'), (req, res) =
   res.redirect(`http://localhost:3000/login?token=${tokens.access_token}`);
 });
 
-router.post('/user', controllers.postUser);
-
 export default router;

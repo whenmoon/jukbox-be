@@ -1,23 +1,34 @@
+export interface GoogleCredentials {
+  client_id: string,
+  client_secret: string,
+  redirect_uri: string
+};
+
+export interface Token {
+  access_token: string
+};
+
 export interface User {
-  _id?: string
-  token?: string
   email: string
+  token?: string
   name: string
   diamonds: number
-}
+};
 
 export interface UserVenue {
   id?: string
+  userEmail: string
+  venueName: string
   tickets: number
   diamonds: number
-}
+};
 
 export interface Venue {
-  id?: string
+  name: string
   token?: string
   ticket_default_no: number
-  closing_times: ClosingTimes
-}
+  closing_times?: ClosingTimes
+};
 
 export interface ClosingTimes {
   Monday: string
@@ -27,14 +38,12 @@ export interface ClosingTimes {
   Friday: string
   Saturday: string
   Sunday: string
-}
-
-export interface GoogleCredentials {
-  client_id: string,
-  client_secret: string,
-  redirect_uri: string
 };
 
-export interface Token {
-  access_token: string
+export interface PlaylistItem {
+  song: string
+  userEmail: string
+  venueName: string
+  diamonds?: number
+  submission?: string
 };
