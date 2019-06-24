@@ -11,8 +11,8 @@ router.get('/login', passport.authenticate('google', {
   scope
 }));
 
-router.get('/login/user/redirect', passport.authenticate('google'), (req, res) => {
-  
+router.get('/login/user/redirect', passport.authenticate('google', { session: false }), (req, res) => {
+
   res.redirect(`http://localhost:3000/login?token=${tokens.access_token}`);
 });
 
