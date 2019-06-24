@@ -1,12 +1,13 @@
 import { Pool } from 'pg';
 import { User } from '../types';
+import * as db from '../.env/db';
 
 const pool = new Pool({
-  user: process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DATABASE,
-  password: process.env.PASSWORD,
-  port: 5432
+  user: db.USER,
+  host: db.HOST,
+  database: db.DATABASE,
+  password: db.PASSWORD,
+  port: db.PORT
 });
 
 exports.getPlaylist = async () => {
