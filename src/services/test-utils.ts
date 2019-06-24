@@ -2,18 +2,14 @@ import { User, Venue, UserVenue, PlaylistItem } from '../types';
 
 export const mockUser: User = {
   email: 'testPerson@codeworks.me',
+  token: 'blabla',
   name: 'Test Person',
-  diamonds: 0
-};
-
-export const mockUser2: User = {
-  email: 'testPerson2@codeworks.me',
-  name: 'Mock Person',
   diamonds: 0
 };
 
 export const mockVenue: Venue = {
   name: 'Codeworks',
+  token: 'blabla',
   ticket_default_no: 1
 };
 

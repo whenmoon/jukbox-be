@@ -13,7 +13,7 @@ export const findUser = (email: string) => pool.query(`
 
 export const postVenue = (venue: Venue) => pool.query(`
   INSERT INTO venues (name, ticket_default_no)
-  VALUES ('${venue.name}', ${venue.ticket_default_no})
+  VALUES ('${venue.name}', '${venue.token}' ${venue.ticket_default_no})
   RETURNING *;
 `);
 

@@ -4,6 +4,7 @@ function createTables () {
   pool.query(`
     CREATE TABLE users (
       email VARCHAR NOT NULL,
+      token VARCHAR NOT NULL,
       name VARCHAR NOT NULL,
       diamonds INTEGER NOT NULL DEFAULT 0,
       PRIMARY KEY (email)
@@ -11,6 +12,7 @@ function createTables () {
 
     CREATE TABLE venues (
       name VARCHAR NOT NULL,
+      token VARCHAR NOT NULL,
       ticket_default_no INTEGER NOT NULL DEFAULT 1,
       closing_times VARCHAR,
       PRIMARY KEY (name)
