@@ -1,8 +1,8 @@
 
-import { Spotify } from '../.env/credentials';
 const request = require('request-promise');
 const btoa = require('btoa');
 
+// only called when access token expires and 403 error on admin
 export const getRefreshToken = (refreshToken: string) => {
   const options = {
     url: 'https://accounts.spotify.com/api/token',
@@ -11,9 +11,9 @@ export const getRefreshToken = (refreshToken: string) => {
       refresh_token: refreshToken
     },
     headers: {
-      'Authorization': 'Basic ' + btoa(<string>Spotify.client_id + ':' + <string>Spotify.client_secret)
+      'Authorization': 'Basic ' + btoa(<string>process.env.SpotifyClientID + ':' + <string>process.env.SpotifyClientSecret)
     },
-    json: true // Automatically parses the JSON string in the response
+    json: true 
   }
   return request.post(options);
 }

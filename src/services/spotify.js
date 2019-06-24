@@ -1,24 +1,22 @@
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const UniqueTokenStrategy =  require('passport-unique-token').Strategy
 const passport = require('passport');
-const { Spotify } = require('../.env/credentials');
 const { getRefreshToken } = require('./spotifyAPI')
+require('dotenv').config()
 
 passport.use(new SpotifyStrategy({
-    clientID: Spotify.client_id,
-    clientSecret: Spotify.client_secret,
-    callbackURL: Spotify.redirect_uri
+    clientID: process.env.SpotifyClientID,
+    clientSecret: process.env.SpotifyClientSecret,
+    callbackURL: process.env.SpotifyRedirectURI
   },
-  async (_, refreshToken, profile, __, done) => {
+  async (accessToken, refreshToken, profile, _, done) => {
     try {
-      // const result = await getRefreshToken(refreshToken);
-      // save access token in db
+      // save access token and refresh token in db
       console.log(_);
-      console.log(result);
-
     } catch (e) {
       console.log(e);
     }
+    // Jozef was rather frustrated when he wrote this
     done(null, {
       fuck: 'fuck',
       id: 123

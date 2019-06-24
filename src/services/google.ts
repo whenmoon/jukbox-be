@@ -1,15 +1,16 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { Google } from '../.env/credentials';
 import { UserType, Token } from '../types';
 let tokens: Token = {access_token: ''};
+require('dotenv').config()
+
 
 passport.use(
   new GoogleStrategy({
-    callbackURL: <string> Google.redirect_uri,
-    clientID: <string> Google.client_id,
-    clientSecret: <string> Google.client_secret,
-  }, (accessToken: string, refreshToken: string, profile: any, done: any) => {
+    callbackURL: <string> process.env.GoogleRedirectURI,
+    clientID: <string> process.env.GoogleClientID,
+    clientSecret: <string> process.env.GoogleClientSecret,
+  }, (accessToken: string, _: string, profile: any, done: any) => {
     tokens.access_token = accessToken;
     done(null, profile.id);
   })
