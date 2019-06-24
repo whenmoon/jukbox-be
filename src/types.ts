@@ -1,16 +1,20 @@
 export interface User {
-  _id: string
+  _id?: string
+  token?: string
   email: string
   name: string
   diamonds: number
 }
 
 export interface UserVenue {
+  id?: string
   tickets: number
   diamonds: number
 }
 
 export interface Venue {
+  id?: string
+  token?: string
   ticket_default_no: number
   closing_times: ClosingTimes
 }

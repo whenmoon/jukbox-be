@@ -15,4 +15,4 @@ passport.use(
   })
 );
 
-export default tokens ;
+export default tokens;
