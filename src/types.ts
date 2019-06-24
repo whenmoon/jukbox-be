@@ -3,3 +3,15 @@ export interface GoogleCredentials {
   client_secret: string,
   redirect_uri: string
 };
+
+export interface UserType {
+  id: string,
+  name: string,
+  email: string,
+  tickets: number,
+  diamonds: number
+};
+
+export interface Token {
+  access_token: string
+};
