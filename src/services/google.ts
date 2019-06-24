@@ -9,7 +9,7 @@ passport.use(
     callbackURL: <string> Google.redirect_uri,
     clientID: <string> Google.client_id,
     clientSecret: <string> Google.client_secret,
-  }, (accessToken: string, _: string, profile: any, done: any) => {
+  }, (accessToken: string, refreshToken: string, profile: any, done: any) => {
     tokens.access_token = accessToken;
     done(null, profile.id);
   })

@@ -1,7 +1,7 @@
 import { tokens } from '../services/google';
-import { searchSpotify } from '../services/api-client';
+import { searchSpotify } from '../services/spotifyAPI';
 
-export const redirectBack = (req: any, res: any) => {
+export const redirectUser = (req: any, res: any) => {
   try {
     // 'http://localhost:3000/authorized-user?access_token=TOKEN'
     res.redirect(`http://localhost:3000/login?token=${tokens.access_token}`);
@@ -12,7 +12,6 @@ export const redirectBack = (req: any, res: any) => {
 
 export const getUserInfo = (req: any, res: any) => {
   try {
-    // should be 200 not 201 as it is in docs
     req.user && res.status(200).json(req.user);
     res.status(403).end();
   } catch(e) {
