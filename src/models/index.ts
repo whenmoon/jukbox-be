@@ -3,7 +3,7 @@ import { User, Venue, UserVenue, PlaylistItem } from '../types';
 
 export const postUser = (user: User) => pool.query(`
   INSERT INTO users (email, token, name, diamonds)
-  VALUES ('${user.email}', '${user.token}' '${user.name}', ${user.diamonds})
+  VALUES ('${user.email}', '${user.token}', '${user.name}', ${user.diamonds})
   RETURNING *;
 `);
 
@@ -12,8 +12,8 @@ export const findUser = (email: string) => pool.query(`
 `);
 
 export const postVenue = (venue: Venue) => pool.query(`
-  INSERT INTO venues (name, ticket_default_no)
-  VALUES ('${venue.name}', '${venue.token}' ${venue.ticket_default_no})
+  INSERT INTO venues (name, token, ticket_default_no)
+  VALUES ('${venue.name}', '${venue.token}', ${venue.ticket_default_no})
   RETURNING *;
 `);
 
@@ -33,3 +33,9 @@ export const postSong = (playlistItem: PlaylistItem) => pool.query(`
 export const getPlaylist = () => {
   return pool.query(`SELECT * FROM playlist`);
 };
+
+
+export const deleteFromTables = () => pool.query(`
+  DELETE FROM users WHERE email LIKE '%codeworks%';
+  DELETE FROM venues WHERE name LIKE '%Codeworks%';
+`);

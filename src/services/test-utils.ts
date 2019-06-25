@@ -2,7 +2,7 @@ import { User, Venue, UserVenue, PlaylistItem } from '../types';
 import client from 'socket.io-client';
 
 export const mockUser: User = {
-  email: 'testPerson@codeworks.me',
+  email: 'test@codeworks.me',
   token: 'blabla',
   name: 'Test Person',
   diamonds: 0
@@ -15,7 +15,7 @@ export const mockVenue: Venue = {
 };
 
 export const mockUserVenue: UserVenue = {
-  userEmail: 'testPerson@codeworks.me',
+  userEmail: 'test@codeworks.me',
   venueName: 'Codeworks',
   tickets: 0,
   diamonds: 0
@@ -23,10 +23,11 @@ export const mockUserVenue: UserVenue = {
 
 export const mockPlaylistItem: PlaylistItem = {
   song: 'Hello world',
-  userEmail: 'testPerson@codeworks.me',
+  userEmail: 'test@codeworks.me',
   venueName: 'Codeworks',
   currentlyPlaying: false,
-  lockedIn: true
+  lockedIn: true,
+  diamonds: 0
 };
 
 

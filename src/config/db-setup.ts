@@ -33,8 +33,8 @@ function createTables () {
       user_id VARCHAR REFERENCES users(email),
       diamonds INTEGER NOT NULL DEFAULT 0,
       submission_time VARCHAR NOT NULL DEFAULT '${String(new Date(Date.now()))}',
-      currentlyPlaying: BOOLEAN NOT NULL DEFAULT FALSE,
-      lockedIn: BOOLEAN NOT NULL DEFAULT FALSE
+      currentlyPlaying BOOLEAN NOT NULL DEFAULT FALSE,
+      lockedIn BOOLEAN NOT NULL DEFAULT FALSE
     );
   `);
 };
