@@ -12,18 +12,19 @@ passport.use(
     clientSecret: <string> Google.client_secret,
   }, async (accessToken: string, refreshToken: string, profile: any, done: any) => {
     user = await findUser(profile.emails[0].value);
-    if (!user.rows.length) {
+    user = user.rows[0];
+    if (!user) {
       user = {
         email: profile.emails[0].value,
         token: accessToken,
         name: profile.displayName,
         diamonds: 0
       }
-      await postUser(user);
-    } else {
+      user = await postUser(user);
       user = user.rows[0];
-      user.token = accessToken;
-      await updateToken(user.email, accessToken);
+    } else {
+      user = await updateToken(user.email, accessToken);
+      user = user.rows[0];
     }
     done(null, user);
   })

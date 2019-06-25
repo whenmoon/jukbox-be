@@ -7,22 +7,27 @@ export const postUser = (user: User) => pool.query(`
   RETURNING *;
 `);
 
+export const findUser = (email: string) => pool.query(`
+  SELECT * FROM users WHERE email = '${email}';
+`);
+
 export const updateToken = (email: string, token: string) => pool.query(`
-  UPDATE users SET token = '${token}' WHERE email = '${email}';
+  UPDATE users SET token = '${token}' WHERE email = '${email}'
+  RETURNING *;
 `);
 
 export const authorize = (token: string) => pool.query(`
   SELECT * FROM users WHERE token = '${token}';
 `);
 
-export const findUser = (email: string) => pool.query(`
-  SELECT * FROM users WHERE email = '${email}';
-`);
-
 export const postVenue = (venue: Venue) => pool.query(`
   INSERT INTO venues (name, ticket_default_no)
   VALUES ('${venue.name}', ${venue.ticket_default_no})
   RETURNING *;
+`);
+
+export const getVenueToken = (name: string) => pool.query(`
+  SELECT token FROM venues WHERE name = ${name};
 `);
 
 export const postUserVenue = (userVenue: UserVenue) => pool.query(`
