@@ -12,7 +12,7 @@ export const getRefreshToken = (refreshToken: string) => {
       refresh_token: refreshToken
     },
     headers: {
-      'Authorization': 'Basic ' + btoa(<string>process.env.SpotifyClientID + ':' + <string>process.env.SpotifyClientSecret)
+      'Authorization': 'Basic ' + btoa(<string>Spotify.client_id + ':' + <string>Spotify.client_secret)
     },
     json: true
   }

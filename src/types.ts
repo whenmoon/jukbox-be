@@ -25,6 +25,7 @@ export interface UserVenue {
 
 export interface Venue {
   name: string
+  spotify_id: string
   token?: string
   ticket_default_no: number
   closing_times?: ClosingTimes

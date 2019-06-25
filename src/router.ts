@@ -11,7 +11,7 @@ const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
 // /login/user/Codeworks
-router.get('/login', passport.authenticate('google', {
+router.get('/login/user/Codeworks', passport.authenticate('google', {
   scope: scopeGoogle
 }));
 
@@ -25,7 +25,8 @@ router.get('/me', verifyToken, passport.authenticate('token', {
 
 router.get('/search', provideTokenToUser, searchForSongs);
 
-router.get('/login/admin', passport.authenticate('spotify', {
+// /login/admin
+router.get('/login', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
 

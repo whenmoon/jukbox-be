@@ -1,5 +1,15 @@
 import pool from '../config/db';
 import { User, Venue, UserVenue, PlaylistItem } from '../types';
+// =============================================================
+export const getVenueToken = () => pool.query(`
+  SELECT token FROM tokens WHERE id = 1;
+`);
+
+export const storeVenueToken = (token: string) => pool.query(`
+  INSERT INTO tokens (token) VALUES ('${token}') RETURNING token;
+`);
+// =============================================================
+
 
 export const postUser = (user: User) => pool.query(`
   INSERT INTO users (email, token, name, diamonds)
@@ -11,23 +21,28 @@ export const findUser = (email: string) => pool.query(`
   SELECT * FROM users WHERE email = '${email}';
 `);
 
-export const updateToken = (email: string, token: string) => pool.query(`
+export const updateUserToken = (email: string, token: string) => pool.query(`
   UPDATE users SET token = '${token}' WHERE email = '${email}'
   RETURNING *;
 `);
 
-export const authorize = (token: string) => pool.query(`
+export const authorizeUser = (token: string) => pool.query(`
   SELECT * FROM users WHERE token = '${token}';
 `);
 
 export const postVenue = (venue: Venue) => pool.query(`
-  INSERT INTO venues (name,token, ticket_default_no)
-  VALUES ('${venue.name}', '${venue.token}', ${venue.ticket_default_no})
+  INSERT INTO venues (name, spotify_id, token, ticket_default_no)
+  VALUES ('${venue.name}', '${venue.spotify_id}', '${venue.token}', ${venue.ticket_default_no})
   RETURNING *;
 `);
 
-export const getVenueToken = (name: string) => pool.query(`
-  SELECT token FROM venues WHERE name = ${name};
+export const findVenue =  (id: string) => pool.query(`
+  SELECT * FROM venues WHERE spotify_id = '${id}';
+`);
+
+export const updateVenueToken = (id: string, token: string) => pool.query(`
+  UPDATE venues SET token = '${token}' WHERE spotify_id = '${id}'
+  RETURNING *;
 `);
 
 export const postUserVenue = (userVenue: UserVenue) => pool.query(`
