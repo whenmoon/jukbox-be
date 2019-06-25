@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Google } from '../config/credentials';
 import { Token, User } from '../types';
-import { postUser, findUser } from '../models';
+import { postUser, findUser, updateToken } from '../models';
 let user: any;
 
 passport.use(
@@ -11,7 +11,6 @@ passport.use(
     clientID: <string> Google.client_id,
     clientSecret: <string> Google.client_secret,
   }, async (accessToken: string, refreshToken: string, profile: any, done: any) => {
-    console.log(accessToken);
     user = await findUser(profile.emails[0].value);
     if (!user.rows.length) {
       user = {
@@ -23,8 +22,10 @@ passport.use(
       await postUser(user);
     } else {
       user = user.rows[0];
+      user.token = accessToken;
+      await updateToken(user.email, accessToken);
     }
-    done(null, {done: true});
+    done(null, user);
   })
 );
 

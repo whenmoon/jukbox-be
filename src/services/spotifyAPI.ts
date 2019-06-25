@@ -20,7 +20,6 @@ export const getRefreshToken = (refreshToken: string) => {
 
 export const searchSpotify = (token: string, songName: string) => {
   const options: any = {
-    // this url has to be formatted, because now it sucks
     url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
     headers: {
       'Authorization': `Bearer ${token}`,

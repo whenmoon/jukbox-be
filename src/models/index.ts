@@ -7,8 +7,12 @@ export const postUser = (user: User) => pool.query(`
   RETURNING *;
 `);
 
+export const updateToken = (email: string, token: string) => pool.query(`
+  UPDATE users SET token = '${token}' WHERE email = '${email}';
+`);
+
 export const authorize = (token: string) => pool.query(`
-  SELECT * FROM users WHERE token = ${token};
+  SELECT * FROM users WHERE token = '${token}';
 `);
 
 export const findUser = (email: string) => pool.query(`

@@ -23,10 +23,8 @@ router.get('/me', verifyToken, passport.authenticate('token', {
   session: false
 }), getUserInfo);
 
-// api-client needed for searching songs in spotify
 router.get('/search', provideTokenToUser, searchForSongs);
 
-// /login/admin
 router.get('/login/admin', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
