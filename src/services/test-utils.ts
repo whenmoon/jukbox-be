@@ -1,4 +1,5 @@
 import { User, Venue, UserVenue, PlaylistItem } from '../types';
+import client from 'socket.io-client';
 
 export const mockUser: User = {
   email: 'testPerson@codeworks.me',
@@ -23,5 +24,16 @@ export const mockUserVenue: UserVenue = {
 export const mockPlaylistItem: PlaylistItem = {
   song: 'Hello world',
   userEmail: 'testPerson@codeworks.me',
-  venueName: 'Codeworks'
+  venueName: 'Codeworks',
+  currentlyPlaying: false,
+  lockedIn: true
+};
+
+
+export const createClient = (PORT: number) => {
+  return new Promise((resolve, reject) => {
+    const socket: any = client.connect(`http://localhost:${PORT}/codeworks`);
+    socket.on('connect', () => resolve(socket));
+    socket.on('error', () => reject);
+  })
 };

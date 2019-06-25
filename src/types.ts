@@ -6,7 +6,7 @@ export interface Credentials {
 
 export interface User {
   email: string
-  token?: string
+  token: string
   name: string
   diamonds: number
 };
@@ -25,7 +25,7 @@ export interface UserVenue {
 
 export interface Venue {
   name: string
-  token?: string
+  token: string
   ticket_default_no: number
   closing_times?: ClosingTimes
 };
@@ -46,4 +46,6 @@ export interface PlaylistItem {
   venueName: string
   diamonds?: number
   submission?: string
+  currentlyPlaying: boolean
+  lockedIn: boolean
 };

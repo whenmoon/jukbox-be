@@ -1,47 +1,93 @@
-// import 'mocha';
-// import * as models from './models';
-// import { mockUser, mockVenue, mockUserVenue, mockPlaylistItem } from './services/test-utils';
+import 'mocha';
+import { createClient } from './services/test-utils';
+import server from './';
+import chai from 'chai';
+chai.should();
+const PORT = 4000;
 
-// describe('Models', () => {
+const wait = (time: number) => new Promise((resolve, reject) => setTimeout(() => {
+  resolve();
+}, time));
 
-//   it('.postUser should return the inserted record of the new user', async () => {
-//     await models.postUser(mockUser)
-//       .then((result: any) => {
-//         console.log(result);
-//         result.command.should.equal('INSERT');
-//         result.rows[0].email.should.equal(mockUser.email);
-//         result.rows[0].name.should.equal(mockUser.name);
-//         result.rows[0].diamonds.should.equal(mockUser.diamonds);
-//       });
-//   });
 
-//   it('.postVenue should return the inserted record of the new venue', async () => {
-//     const result: any = await models.postVenue(mockVenue);
-//     result.Result.command.should.eql('INSERT');
-//     result.Result.rows[0].name.should.eql(mockVenue.name);
-//     result.Result.rows[0].ticket_default_no.should.eql(mockVenue.ticket_default_no);
-//     result.Result.rows[0].closing_times.should.eql(null);
-//   });
+describe('Sockets', () => {
 
-//   it('.postUserVenue should return the inserted record of the new user-venue relation', async () => {
-//     const result: any = await models.postUserVenue(mockUserVenue);
-//     result.Result.command.should.eql('INSERT');
-//     result.Result.rows[0].id.should.eql(1);
-//     result.Result.rows[0].user_id.should.eql(mockUserVenue.userEmail);
-//     result.Result.rows[0].venue_id.should.eql(mockUserVenue.venueName);
-//     result.Result.rows[0].tickets.should.eql(mockUserVenue.tickets);
-//     result.Result.rows[0].diamonds.should.eql(mockUserVenue.diamonds);
-//   });
+  before(done => {
+    server.listen(PORT);
+    done();
+  });
 
-//   it('.postSong should return the inserted record of the new song in the playlist', async () => {
-//     const result: any = await models.postSong(mockPlaylistItem);
-//     result.Result.command.should.eql('INSERT');
-//     result.Result.rows[0].id.should.eql(1);
-//     result.Result.rows[0].user_id.should.eql(mockPlaylistItem.userEmail);
-//     result.Result.rows[0].venue_id.should.eql(mockPlaylistItem.venueName);
-//     result.Result.rows[0].song.should.eql(mockPlaylistItem.song);
-//     result.Result.rows[0].diamonds.should.eql(mockPlaylistItem.diamonds);
-//     result.Result.rows[0].submissions_time.should.eql(String(new Date(Date.now())));
-//   });
+  after(done => {
+    server.close();
+    done();
+  });
+
+  it('broadcasts the updatedPlaylist on addSong to mulitple clients', async () => {
+    const client1: any = await createClient(PORT);
+    const client2: any = await createClient(PORT);
+    const client3: any = await createClient(PORT);
+
+    const song = 'my song';
+    let countReceived = 0;
+    let client1Received = false;
+
+    // if true, then client1 unintentionally received the emit
+    client1.on('updatedPlaylist', (data: number) => {
+      client1Received=true;
+    });
+
+    client2.on('updatedPlaylist', (data: string) => {
+      data.should.eql(song);
+      countReceived++;
+    });
+
+    client3.on('updatedPlaylist', (data: string) => {
+      data.should.eql(song);
+      countReceived++;
+    });
+
+    client1.emit('addSong', song);
+
+    // We wait 200ms to ensure both clients received the message
+    await wait(200);
+
+    countReceived.should.equal(2);
+    client1Received.should.equal(false);
+    client1.disconnect() && client2.disconnect() && client3.disconnect();
+  });
+
+  it('broadcasts the updatedPlaylist on updateSongDiamonds to mulitple clients', async () => {
+    const client1: any = await createClient(PORT);
+    const client2: any = await createClient(PORT);
+    const client3: any = await createClient(PORT);
+    const diamonds = 5;
+    let countReceived = 0;
+    let client1Received = false;
+
+    client1.on('updatedPlaylist', (data: number) => {
+      client1Received=true;
+    });
+
+    client2.on('updatedPlaylist', (data: number) => {
+      data.should.eql(diamonds);
+      countReceived++;
+    });
+
+    client3.on('updatedPlaylist', (data: number) => {
+      data.should.eql(diamonds);
+      countReceived++;
+    });
+
+    client1.emit('updateSongDiamonds', diamonds);
+
+    await wait(200);
+
+    countReceived.should.equal(2);
+    client1Received.should.equal(false);
+    client1.disconnect() && client2.disconnect() && client3.disconnect();
+
+  });
+
+
   
-// });
+});
