@@ -1,7 +1,7 @@
 const SpotifyStrategy = require('passport-spotify').Strategy;
-const UniqueTokenStrategy =  require('passport-unique-token').Strategy
 const passport = require('passport');
-const { getRefreshToken } = require('./spotifyAPI')
+const {postVenue} = require('../models')
+
 require('dotenv').config()
 
 passport.use(new SpotifyStrategy({
@@ -9,16 +9,21 @@ passport.use(new SpotifyStrategy({
     clientSecret: process.env.SpotifyClientSecret,
     callbackURL: process.env.SpotifyRedirectURI
   },
-  async (accessToken, refreshToken, profile, _, done) => {
+  // we may want to include refresh Token and profile
+  async (accessToken, refreshToken, profile,_, done) => {
     try {
-      // save access token and refresh token in db
-      console.log(_);
+      console.log(accessToken)
+      const newVenue  = await postVenue(
+        { name: 'Codeworks',
+        token: accessToken,
+        ticket_default_no: 1
+        })
+      // Jozef was rather frustrated when he wrote this
+      done(null, {fuck: 'fuck',id: 123});
     } catch (e) {
       console.log(e);
     }
-    // Jozef was rather frustrated when he wrote this
-    done(null, {
-      fuck: 'fuck',
-      id: 123
-    });
+      
   }))
+
+
