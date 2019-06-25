@@ -10,8 +10,7 @@ import { verifyToken, provideTokenToUser } from './services/helpers';
 const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
-// /login/user/Codeworks
-router.get('/login/user/Codeworks', passport.authenticate('google', {
+router.get('/login/login/Codeworks', passport.authenticate('google', {
   scope: scopeGoogle
 }));
 
@@ -25,8 +24,7 @@ router.get('/me', verifyToken, passport.authenticate('token', {
 
 router.get('/search', provideTokenToUser, searchForSongs);
 
-// /login/admin
-router.get('/login', passport.authenticate('spotify', {
+router.get('/login/admin', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
 

@@ -3,7 +3,6 @@ const passport = require('passport');
 const { Spotify } = require('../config/credentials');
 const { getRefreshToken } = require('./spotifyAPI')
 const { postVenue, findVenue, updateVenueToken, storeVenueToken } = require('../models');
-let newVenue;
 
 passport.use(new SpotifyStrategy({
     clientID: Spotify.client_id,
@@ -12,21 +11,18 @@ passport.use(new SpotifyStrategy({
   }, async (accessToken, refreshToken, expires_in, profile, done) => {
     const test = await storeVenueToken(accessToken);
     try {
-      newVenue = await findVenue(profile.id);
-      newVenue = newVenue.rows[0];
-      if (!newVenue) {
+      let newVenue = await findVenue(profile.id);
+      if (!newVenue.rows[0]) {
         newVenue = await postVenue({
           name: 'Codeworks',
           spotify_id: profile.id,
           token: accessToken,
           ticket_default_no: 1
         });
-        newVenue = newVenue.rows[0];
       } else {
-        newVenue = await updateVenueToken(newVenue.spotify_id, accessToken);
-        newVenue = newVenue.rows[0];
+        newVenue = await updateVenueToken(newVenue.rows[0].spotify_id, accessToken);
       }
-      done(null, newVenue);
+      done(null, newVenue.rows[0]);
     } catch (e) {
       console.log(e);
     }

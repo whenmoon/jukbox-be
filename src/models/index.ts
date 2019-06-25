@@ -30,6 +30,10 @@ export const authorizeUser = (token: string) => pool.query(`
   SELECT * FROM users WHERE token = '${token}';
 `);
 
+export const authorizeVenue = (token: string) => pool.query(`
+  SELECT * FROM venues WHERE token = '${token}';
+`);
+
 export const postVenue = (venue: Venue) => pool.query(`
   INSERT INTO venues (name, spotify_id, token, ticket_default_no)
   VALUES ('${venue.name}', '${venue.spotify_id}', '${venue.token}', ${venue.ticket_default_no})
