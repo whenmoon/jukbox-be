@@ -6,7 +6,7 @@ export interface Credentials {
 
 export interface User {
   email: string
-  token?: Token
+  token?: string
   name: string
   diamonds: number
 };

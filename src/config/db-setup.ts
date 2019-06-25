@@ -12,6 +12,7 @@ function createTables () {
 
     CREATE TABLE venues (
       name VARCHAR NOT NULL,
+      token VARCHAR NOT NULL,
       ticket_default_no INTEGER NOT NULL DEFAULT 1,
       closing_times VARCHAR,
       PRIMARY KEY (name)
