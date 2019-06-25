@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './router';
+import router, { socketRouter } from './router';
 import passport from 'passport';
 import socketIo from 'socket.io';
 import http from 'http';
@@ -18,12 +18,6 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const nsp = io.of('/codeworks');
-nsp.on('connection', socket => {
-  socket.on('addSong', data => {
-    socket.broadcast.emit('updatedPlaylist', data);
-    });
-  socket.on('updateSongDiamonds', data => socket.broadcast.emit('updatedPlaylist', data));
-});
+nsp.on('connection', socketRouter);
 
 export default server;
-

@@ -46,6 +46,6 @@ export interface PlaylistItem {
   venueName: string
   diamonds?: number
   submission?: string
-  currentlyPlaying: boolean
-  lockedIn: boolean
+  currentlyPlaying?: boolean
+  lockedIn?: boolean
 };

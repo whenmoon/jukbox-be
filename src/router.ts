@@ -3,6 +3,8 @@ import passport from 'passport';
 import tokens from './services/google';
 import './services/google';
 import * as controllers from './controllers';
+import * as socketControllers from './controllers/sockets';
+import socketIO from 'socket.io';
 const router = express.Router();
 const scope: string[] = ['profile', 'email'];
 
@@ -17,3 +19,11 @@ router.get('/login/user/redirect', passport.authenticate('google'), (req, res) =
 });
 
 export default router;
+
+export const socketRouter = (socket: socketIO.Socket) => {
+  socket.on('addSong', data => socketControllers.addSongToPlaylist(data, socket));
+  socket.on('updateSongDiamonds', data => socket.broadcast.emit('updatedPlaylist', data));
+  socket.on('error', (err) => console.log(err));
+};
+
+
