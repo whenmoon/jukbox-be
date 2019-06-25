@@ -5,6 +5,7 @@ export interface Credentials {
 };
 
 export interface User {
+  id?: number
   email: string
   token: string
   name: string
@@ -24,6 +25,7 @@ export interface UserVenue {
 };
 
 export interface Venue {
+  id?: number
   name: string
   token: string
   ticket_default_no: number
@@ -41,6 +43,7 @@ export interface ClosingTimes {
 };
 
 export interface PlaylistItem {
+  id?: number
   song: string
   userEmail: string
   venueName: string

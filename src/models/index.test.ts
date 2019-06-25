@@ -7,7 +7,7 @@ chai.should();
 describe('Models', () => {
 
   after((done) => {
-    models.deleteFromTables;
+    models.deleteFromTables();
     done();
   })
 

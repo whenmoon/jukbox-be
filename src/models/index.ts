@@ -30,12 +30,11 @@ export const postSong = (playlistItem: PlaylistItem) => pool.query(`
   RETURNING *;
 `);
 
-export const getPlaylist = () => {
-  return pool.query(`SELECT * FROM playlist`);
-};
-
+export const getPlaylist = () => pool.query(`SELECT * FROM playlist`);
 
 export const deleteFromTables = () => pool.query(`
+  DELETE FROM playlist WHERE user_id LIKE '%codeworks%';
+  DELETE FROM user_venues WHERE user_id LIKE '%codeworks%';
   DELETE FROM users WHERE email LIKE '%codeworks%';
   DELETE FROM venues WHERE name LIKE '%Codeworks%';
 `);
