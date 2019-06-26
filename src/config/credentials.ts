@@ -11,3 +11,5 @@ export const Spotify: Credentials = {
   client_secret: "d086e0f316a6403c92bec5f0c3624690",
   redirect_uri: "http://localhost:4000/login/admin/redirect"
 }
+
+export const PORT: number = 4000;

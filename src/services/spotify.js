@@ -9,7 +9,6 @@ passport.use(new SpotifyStrategy({
     clientSecret: Spotify.client_secret,
     callbackURL: Spotify.redirect_uri
   }, async (accessToken, refreshToken, expires_in, profile, done) => {
-    const test = await storeVenueToken(accessToken);
     try {
       let newVenue = await findVenue(profile.id);
       if (!newVenue.rows[0]) {

@@ -37,11 +37,6 @@ function createTables () {
       diamonds INTEGER NOT NULL DEFAULT 0,
       submission_time VARCHAR NOT NULL DEFAULT '${String(new Date(Date.now()))}'
     );
-
-    CREATE TABLE tokens (
-      id INTEGER NOT NULL DEFAULT 1,
-      token VARCHAR NOT NULL
-    );
   `);
 };
 

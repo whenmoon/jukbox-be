@@ -1,15 +1,5 @@
 import pool from '../config/db';
 import { User, Venue, UserVenue, PlaylistItem } from '../types';
-// =============================================================
-export const getVenueToken = () => pool.query(`
-  SELECT token FROM tokens WHERE id = 1;
-`);
-
-export const storeVenueToken = (token: string) => pool.query(`
-  INSERT INTO tokens (token) VALUES ('${token}') RETURNING token;
-`);
-// =============================================================
-
 
 export const postUser = (user: User) => pool.query(`
   INSERT INTO users (email, token, name, diamonds)
@@ -54,7 +44,6 @@ export const postUserVenue = (userVenue: UserVenue) => pool.query(`
   VALUES ('${userVenue.userEmail}', '${userVenue.venueName}', ${userVenue.tickets}, ${userVenue.diamonds})
   RETURNING *;
 `);
-
 
 export const postSong = (playlistItem: PlaylistItem) => pool.query(`
   INSERT INTO playlist (venue_id, song, user_id, diamonds, submission_time)
