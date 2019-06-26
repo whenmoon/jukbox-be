@@ -21,8 +21,8 @@ function createTables () {
 
     CREATE TABLE user_venues (
       id SERIAL,
-      user_id VARCHAR REFERENCES users(email),
-      venue_id VARCHAR REFERENCES venues(name),
+      user_id VARCHAR REFERENCES users(email) ON UPDATE CASCADE,
+      venue_id VARCHAR REFERENCES venues(name) ON UPDATE CASCADE,
       tickets INTEGER NOT NULL DEFAULT 0,
       diamonds INTEGER NOT NULL DEFAULT 0
     );

@@ -13,7 +13,7 @@ const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
 // /login/login/Codeworks
-router.get('/login', passport.authenticate('google', {
+router.get('/login/user/Codeworks', passport.authenticate('google', {
   scope: scopeGoogle
 }));
 
@@ -29,7 +29,7 @@ router.get('/search', verifyToken, passport.authenticate('token', {
   session: false
 }), provideTokenToUser, searchForSongs);
 
-router.get('/login/admin', passport.authenticate('spotify', {
+router.get('/login', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
 

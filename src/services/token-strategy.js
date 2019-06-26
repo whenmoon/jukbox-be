@@ -1,15 +1,15 @@
 const passport = require('passport');
 const UniqueTokenStrategy = require('passport-unique-token').Strategy;
-const { authorizeUser, authorizeVenue } = require('../models');
+const { Venue, User } = require('../models');
 
 passport.use(
   new UniqueTokenStrategy(async (token, done) => {
-    const user = await authorizeUser(token);
-    if (user.rows[0]) done(null, user.rows[0]);
+    const user = await User.authorize(token);
+    if (user) done(null, user);
     else {
-      const venue = await authorizeVenue(token);
-      venue.rows[0] && done(null, venue.rows[0]);
-      done(null, false);
+      const venue = await Venue.authorize(token);
+      venue && done(null, venue);
+      done(Error(), false);
     }
   })
 );

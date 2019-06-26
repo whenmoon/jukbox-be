@@ -20,7 +20,7 @@ export default class User {
 
   public static async find (email: string): Promise<User>  {
     const result = await pool.query(`
-      SELECT * FROM users WHERE email = ${email};
+      SELECT * FROM users WHERE email = '${email}';
     `);
     return result.rows[0];
   };
