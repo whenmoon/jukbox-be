@@ -1,8 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Google } from '../config/credentials';
-import { Token, User } from '../types';
-import { postUser, findUser, updateUserToken } from '../models';
+import User from '../models/User';
 
 passport.use(
   new GoogleStrategy({
@@ -11,18 +10,18 @@ passport.use(
     clientSecret: <string> Google.client_secret,
   }, async (accessToken: string, refreshToken: string, profile: any, done: any) => {
     try {
-      let user = await findUser(profile.emails[0].value);
-      if (!user.rows[0]) {
-        user = await postUser({
+      let user = await User.find(profile.emails[0].value);
+      if (!user) {
+        user = await User.create({
           email: profile.emails[0].value,
           token: accessToken,
           name: profile.displayName,
           diamonds: 0
         })
       } else {
-        user = await updateUserToken(user.rows[0].email, accessToken);
+        user = await User.updateToken(user.email, accessToken);
       }
-      done(null, user.rows[0]);
+      done(null, user);
     } catch(e) {
       console.log(e);
     }

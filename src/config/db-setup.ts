@@ -3,7 +3,6 @@ import pool, { port } from './db';
 function createTables () {
   pool.query(`
     CREATE TABLE users (
-      id SERIAL,
       email VARCHAR NOT NULL,
       token VARCHAR NOT NULL,
       name VARCHAR NOT NULL,
@@ -12,7 +11,6 @@ function createTables () {
     );
 
     CREATE TABLE venues (
-      id SERIAL,
       name VARCHAR NOT NULL,
       spotify_id VARCHAR NOT NULL,
       token VARCHAR NOT NULL,
@@ -29,13 +27,15 @@ function createTables () {
       diamonds INTEGER NOT NULL DEFAULT 0
     );
 
-    CREATE TABLE playlist (
+    CREATE TABLE venue_songs (
       id SERIAL,
       venue_id VARCHAR REFERENCES venues(name),
       song VARCHAR,
       user_id VARCHAR REFERENCES users(email),
       diamonds INTEGER NOT NULL DEFAULT 0,
-      submission_time VARCHAR NOT NULL DEFAULT '${String(new Date(Date.now()))}'
+      submission_time VARCHAR NOT NULL DEFAULT '${String(new Date(Date.now()))}',
+      currentlyPlaying BOOLEAN NOT NULL DEFAULT FALSE,
+      lockedIn BOOLEAN NOT NULL DEFAULT FALSE
     );
   `);
 };

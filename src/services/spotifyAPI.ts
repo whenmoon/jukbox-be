@@ -1,4 +1,3 @@
-
 import { Spotify } from '../config/credentials';
 const request = require('request-promise');
 const btoa = require('btoa');
