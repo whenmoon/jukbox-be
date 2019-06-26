@@ -8,12 +8,13 @@
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc -p .",
-    "test": "mocha -r ts-node/register src/**/index.test.ts"
+    "test": "mocha -r ts-node/register \"**/*.test.ts\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/cors": "^2.8.5",
+    "btoa": "^1.2.1",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
@@ -23,9 +24,10 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-spotify": "^1.0.1",
     "passport-unique-token": "^0.1.4",
+    "pg": "^7.11.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "pg": "^7.11.0"
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
@@ -37,10 +39,13 @@
     "eslint-plugin-json": "^1.4.0",
     "install": "^0.12.2",
     "@types/pg": "^7.4.14",
+    "@types/socket.io": "^2.1.2",
+    "@types/socket.io-client": "^1.4.32",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1",
     "npm": "^6.9.0",
+    "socket.io-client": "^2.2.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.2"
   }

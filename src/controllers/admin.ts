@@ -1,4 +1,4 @@
-import { pausePlayerPlayback,transferPlayerPlayback, setPlayerPlay, setPlayerVolume } from '../services/spotifyAPI';
+import { pausePlayer,transferPlayerPlayback, setPlayerPlay, setPlayerVolume } from '../services/spotifyAPI';
 
 
 export const redirectAdmin = async (req: any, res: any) => {
@@ -35,7 +35,7 @@ export const setVolume = async (req: any, res: any) => {
 
 export const setPause = async (req:any, res: any) => {
   try {
-    await pausePlayerPlayback(req.user.token);
+    await pausePlayer(req.user.token);
     res.status(204).send()
   } catch(e) {
   }

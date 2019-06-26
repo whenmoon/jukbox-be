@@ -1,4 +1,3 @@
-
 import { Spotify } from '../config/credentials';
 import { getAPIOptions} from './spotifyAPIOptions'
 const request = require('request-promise');

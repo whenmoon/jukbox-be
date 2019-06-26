@@ -1,9 +1,11 @@
 import express from 'express';
 import passport from 'passport';
 const router = express.Router();
+import socketIO from 'socket.io';
 import './services/spotify';
 import './services/google';
 import './services/token-strategy';
+import * as socketControllers from './controllers/sockets';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
 import { redirectAdmin, setPlayResume} from './controllers/admin';
 import { verifyToken, provideTokenToUser } from './services/helpers';
@@ -44,3 +46,9 @@ router.get('/playdevice/:deviceid/', verifyToken , passport.authenticate('token'
 //  }), )
 
 export default router;
+
+export const socketRouter = (socket: socketIO.Socket) => {
+  socket.on('addSong', (spotifySong, userEmail) => socketControllers.addSongToPlaylist(spotifySong, userEmail, socket));
+  socket.on('updateSongDiamonds', venueSong => socketControllers.updateSongDiamonds(venueSong, socket));;
+  socket.on('error', (err) => console.log(err));
+};
