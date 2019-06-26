@@ -4,14 +4,15 @@ const router = express.Router();
 import './services/spotify';
 import './services/google';
 import './services/token-strategy';
+import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
 import { redirectAdmin, setPlayResume} from './controllers/admin';
 import { verifyToken, provideTokenToUser } from './services/helpers';
+import * as socketControllers from './controllers/sockets'
 const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
-// /login/login/Codeworks
-router.get('/login', passport.authenticate('google', {
+router.get('/login/user/Codeworks', passport.authenticate('google', {
   scope: scopeGoogle
 }));
 
@@ -27,7 +28,7 @@ router.get('/search', verifyToken, passport.authenticate('token', {
   session: false
 }), provideTokenToUser, searchForSongs);
 
-router.get('/login/admin', passport.authenticate('spotify', {
+router.get('/login', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
 
@@ -42,5 +43,11 @@ router.get('/playdevice/:deviceid/', verifyToken , passport.authenticate('token'
 router.get('/playdevice/:deviceid/volume/:volumepercent',passport.authenticate('token',{
   session: false 
  }), )
+
+export const socketRouter = (socket: socketIO.Socket) => {
+  socket.on('addSong', (song:string, userEmail:string) => socketControllers.addSongToPlaylist(song, userEmail, socket));
+  socket.on('updateSongDiamonds', (song:string, userEmail:string) => socketControllers.updateSongDiamonds(song, userEmail, socket));;
+  socket.on('error', (err:string) => console.log(err));
+};
 
 export default router;

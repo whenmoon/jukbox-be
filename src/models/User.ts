@@ -41,4 +41,13 @@ export default class User {
     `);
     return result.rows[0];
   };
+
+  public static async decrementDiamonds (userEmail: string): Promise<User> {
+    const result = await pool.query(`
+      UPDATE users
+      SET diamonds = diamonds - 5
+      WHERE email = '${userEmail}';
+    `);
+    return result.rows[0];
+  };
 }

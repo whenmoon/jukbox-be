@@ -20,7 +20,17 @@ export default class UserVenue {
 
   public static async find (userEmail: string, venueName: string): Promise<UserVenue>  {
     const result = await pool.query(`
-      SELECT * FROM user_venues WHERE user_id = '${userEmail}' AND venue_id = '${venueName}';
+      SELECT * FROM user_venues
+      WHERE user_id = '${userEmail}' AND venue_id = '${venueName}';
+    `);
+    return result.rows[0];
+  };
+
+  public static async decrementTickets (userEmail: string, venueName: string): Promise<UserVenue> {
+    const result = await pool.query(`
+      UPDATE user_venues
+      SET tickets = tickets - 1
+      WHERE user_id = '${userEmail}' AND venue_id = '${venueName}';
     `);
     return result.rows[0];
   };

@@ -1,21 +1,23 @@
-import { VenueSong } from '../models';
+import { VenueSong, UserVenue, User } from '../models';
 import socketIO from 'socket.io';
-const PORT = 4000;
+import { nsp } from '../';
+import { toCapitalCase, sortPlaylist } from '../services';
 
-function toCapitalCase (namespace: string) {
-  return namespace.slice(1, 2).toUpperCase() + namespace.slice(2);
-};
-
-export const addSongToPlaylist = async (spotifySong: string, userEmail: string, socket: socketIO.Socket) => {
+export const addSongToPlaylist = async (song: string, userEmail: string, socket: socketIO.Socket) => {
   try {
-    const postSong = await VenueSong.create(spotifySong, userEmail, toCapitalCase(socket.nsp.name));
-    if (postSong !== undefined) {
-      const result = await VenueSong.getAll(toCapitalCase(socket.nsp.name));
-      result
-        ? socket.broadcast.emit('updatedPlaylist', result)
-        : console.log('could not get playlist');
+    const venueName = toCapitalCase(socket.nsp.name);
+    const userAtCurrentVenue = await UserVenue.find(userEmail, venueName);
+    if (userAtCurrentVenue.tickets > 0) {
+      const postSong = await VenueSong.create(song, userEmail, venueName);
+      if (postSong !== undefined) {
+        await UserVenue.decrementTickets(userEmail, venueName);
+        const result = await VenueSong.getAll(venueName);
+        const sortedResult = sortPlaylist(result);
+        nsp.emit('updatedPlaylist', sortedResult);
+      }
     } else {
-      console.log('no result from models');
+      const result = await VenueSong.getAll(venueName);
+      nsp.emit('updatedPlaylist', result);
     }
   } catch (error) {
     console.log(error);
@@ -23,16 +25,21 @@ export const addSongToPlaylist = async (spotifySong: string, userEmail: string, 
 };
 
 
-export const updateSongDiamonds = async (venueSong: VenueSong, socket: socketIO.Socket) => {
+export const updateSongDiamonds = async (song: string, userEmail: string, socket: socketIO.Socket) => {
   try {
-    const promoteSong = await VenueSong.promote(venueSong);
-    if (promoteSong !== undefined) {
-      const result = await VenueSong.getAll(toCapitalCase(socket.nsp.name));
-      result
-        ? socket.broadcast.emit('updatedPlaylist', result)
-        : console.log('could not get playlist');
+    const venueName = toCapitalCase(socket.nsp.name);
+    const user = await User.find(userEmail);
+    if (user.diamonds > 0) {
+      const promoteSong = await VenueSong.promote(song);
+      if (promoteSong !== undefined) {
+        await User.decrementDiamonds(userEmail);
+        const result = await VenueSong.getAll(venueName);
+        const sortedResult = sortPlaylist(result);
+        nsp.emit('updatedPlaylist', sortedResult);
+      }
     } else {
-      console.log('no result from models');
+      const result = await VenueSong.getAll(venueName);
+      nsp.emit('updatedPlaylist', result);
     }
   } catch (error) {
     console.log(error);

@@ -1,17 +1,11 @@
 import 'mocha';
-import { createClient } from './services/test-utils';
+import { createClient, forClientsToReceiveMessage, mockUserVenue } from './services/test-utils';
 import server from './';
 import chai from 'chai';
 chai.should();
 import { mockUser, mockVenue, mockVenueSong, deleteTableContents } from './services/test-utils';
-import { User, Venue, VenueSong } from './models';
+import { User, Venue, VenueSong, UserVenue } from './models';
 const PORT = 4000;
-import pool from './config/db';
-
-const ClientsReceivedMessage = (time: number) => new Promise((resolve, reject) => setTimeout(() => {
-  resolve();
-}, time));
-
 
 describe('Sockets', () => {
 
@@ -19,12 +13,12 @@ describe('Sockets', () => {
     server.listen(PORT);
     User.create(mockUser);
     Venue.create(mockVenue);
+    UserVenue.create(mockUserVenue);
     done();
   });
 
   after(done => {
     deleteTableContents();
-    // pool.disconnect();
     server.close(done);
   });
 
@@ -34,10 +28,11 @@ describe('Sockets', () => {
     const client3: any = await createClient(PORT);
 
     let countReceived = 0;
-    let client1Received = false;
 
     client1.on('updatedPlaylist', (data: Array<VenueSong>) => {
-      client1Received=true;
+      const result = data[0];
+      result.song.should.eql(mockVenueSong.song);
+      countReceived++;
     });
 
     client2.on('updatedPlaylist', (data: Array<VenueSong>) => {
@@ -54,10 +49,9 @@ describe('Sockets', () => {
 
     client1.emit('addSong', mockVenueSong.song, mockVenueSong.userEmail);
 
-    await ClientsReceivedMessage(200);
+    await forClientsToReceiveMessage(200);
 
-    countReceived.should.equal(2);
-    client1Received.should.equal(false);
+    countReceived.should.equal(3);
     client1.disconnect() && client2.disconnect() && client3.disconnect();
   });
 
@@ -67,10 +61,11 @@ describe('Sockets', () => {
     const client3: any = await createClient(PORT);
     const diamonds = 5;
     let countReceived = 0;
-    let client1Received = false;
 
     client1.on('updatedPlaylist', (data: Array<VenueSong>) => {
-      client1Received=true;
+      const result = data[0];
+      result.diamonds.should.eql(diamonds);
+      countReceived++;
     });
 
     client2.on('updatedPlaylist', (data: Array<VenueSong>) => {
@@ -85,16 +80,13 @@ describe('Sockets', () => {
       countReceived++;
     });
 
-    client1.emit('updateSongDiamonds', mockVenueSong);
+    client1.emit('updateSongDiamonds', mockVenueSong.song, mockVenueSong.userEmail);
 
-    await ClientsReceivedMessage(200);
+    await forClientsToReceiveMessage(200);
 
-    countReceived.should.equal(2);
-    client1Received.should.equal(false);
+    countReceived.should.equal(3);
     client1.disconnect() && client2.disconnect() && client3.disconnect();
 
   });
 
-
-  
 });
