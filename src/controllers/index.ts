@@ -1,6 +1,5 @@
 import express from 'express';
 import tokens from '../services/google';
-import * as models from '../models';
 
 export const redirecting = (req: express.Request, res: express.Response) => {
   try {

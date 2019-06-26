@@ -12,6 +12,7 @@ function createTables () {
 
     CREATE TABLE venues (
       name VARCHAR NOT NULL,
+      spotify_id VARCHAR NOT NULL,
       token VARCHAR NOT NULL,
       ticket_default_no INTEGER NOT NULL DEFAULT 1,
       closing_times VARCHAR,
@@ -26,7 +27,7 @@ function createTables () {
       diamonds INTEGER NOT NULL DEFAULT 0
     );
 
-    CREATE TABLE playlist (
+    CREATE TABLE venue_songs (
       id SERIAL,
       venue_id VARCHAR REFERENCES venues(name),
       song VARCHAR,
