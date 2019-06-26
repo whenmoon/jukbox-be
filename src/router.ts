@@ -5,7 +5,7 @@ import './services/spotify';
 import './services/google';
 import './services/token-strategy';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
-import { redirectAdmin } from './controllers/admin';
+import { redirectAdmin, setPlayResume} from './controllers/admin';
 import { verifyToken, provideTokenToUser } from './services/helpers';
 const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
 const scopeGoogle: string[] = ['profile', 'email'];
@@ -34,5 +34,13 @@ router.get('/login/admin', passport.authenticate('spotify', {
 router.get('/login/admin/redirect', passport.authenticate('spotify',{
   session: false
 }), redirectAdmin);
+
+router.get('/playdevice/:deviceid/', verifyToken , passport.authenticate('token',{
+ session: false 
+}), setPlayResume)
+
+// router.get('/playdevice/:deviceid/volume/:volumepercent',passport.authenticate('token',{
+//   session: false 
+//  }), )
 
 export default router;

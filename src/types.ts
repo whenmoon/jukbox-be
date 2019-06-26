@@ -23,6 +23,16 @@ export interface UserVenue {
   diamonds: number
 };
 
+export interface SpotifyParams {
+  type: string
+  refreshToken: string
+  token: string
+  song: string
+  deviceId:string
+  volume: string
+};
+
+
 export interface Venue {
   name: string
   spotify_id: string

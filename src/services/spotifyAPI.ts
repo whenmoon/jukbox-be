@@ -1,32 +1,90 @@
 
 import { Spotify } from '../config/credentials';
+import { getAPIOptions} from './spotifyAPIOptions'
 const request = require('request-promise');
 const btoa = require('btoa');
 
 // only called when access token expires and 403 error on admin
 export const getRefreshToken = (refreshToken: string) => {
-  const options = {
-    url: 'https://accounts.spotify.com/api/token',
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken
-    },
-    headers: {
-      'Authorization': 'Basic ' + btoa(<string>Spotify.client_id + ':' + <string>Spotify.client_secret)
-    },
-    json: true
-  }
+  const options = getAPIOptions({
+    type: 'Refresh',
+    refreshToken,
+    token: '',
+    song: '',
+    volume: '',
+    deviceId: '',
+  })
   return request.post(options);
 }
 
 export const searchSpotify = (token: string, songName: string) => {
-  const options: any = {
-    url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  };
+  const options = getAPIOptions({
+    type: 'SearchSpotify',
+    refreshToken:'',
+    token,
+    song: songName,
+    volume: '',
+    deviceId: '',
+  })
   return request.get(options);
 };
+
+export const setPlayerVolume = (token:string, volume:string) => {
+  const options = getAPIOptions({
+    type: 'PlayerVolume',
+    refreshToken:'',
+    token,
+    song: '',
+    volume,
+    deviceId: '',
+
+  })
+  return request.put(options);
+}
+
+export const resumePlayerPlayback = (token:string) => {
+  const options = getAPIOptions({
+    type: 'PlayResume',
+    refreshToken:'',
+    token,
+    song: '',
+    volume: '',
+    deviceId: '',
+  })
+  return request.put(options);
+}
+
+export const pausePlayer = (token:string) => {
+  const options = getAPIOptions({
+    type: 'Pause',
+    refreshToken:'',
+    token,
+    song: '',
+    volume: '',
+    deviceId: '',
+  })
+  return request.put(options);
+}
+
+export const TransferPlayerPlayback = (token:string) => {
+  const options = getAPIOptions({
+    type: 'TransferPlayback',
+    refreshToken:'',
+    token,
+    song: '',
+    volume: '',
+    deviceId: '',
+  })
+  return request.put(options);
+}
+
+
+
+
+
+
+
+
+
+
+

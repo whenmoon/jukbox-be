@@ -54,3 +54,4 @@ export const postSong = (playlistItem: PlaylistItem) => pool.query(`
 export const getPlaylist = () => {
   return pool.query(`SELECT * FROM playlist`);
 };
+

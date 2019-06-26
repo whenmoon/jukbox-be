@@ -1,14 +1,13 @@
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const passport = require('passport');
 const { Spotify } = require('../config/credentials');
-const { getRefreshToken } = require('./spotifyAPI')
-const { postVenue, findVenue, updateVenueToken, storeVenueToken } = require('../models');
+const { postVenue, findVenue, updateVenueToken} = require('../models');
 
 passport.use(new SpotifyStrategy({
     clientID: Spotify.client_id,
     clientSecret: Spotify.client_secret,
     callbackURL: Spotify.redirect_uri
-  }, async (accessToken, refreshToken, expires_in, profile, done) => {
+  }, async (accessToken, _, __, profile, done) => {
     try {
       let newVenue = await findVenue(profile.id);
       if (!newVenue.rows[0]) {
