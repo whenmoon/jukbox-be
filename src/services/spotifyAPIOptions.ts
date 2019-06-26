@@ -8,17 +8,17 @@ export const getAPIOptions = (params: SpotifyParams) => {
     case 'Refresh':
       createRefreshTokenOptions(params.refreshToken);
     case 'SearchSpotify':
-      createBearerTokenOptions(params.type, params.token, params.song);
+      createSpotifyPlayerOptions(params.type, params.token, params.song);
     case 'PlayerVolume':
-      createBearerTokenOptions(params.type, params.token,params.volume);
+      createSpotifyPlayerOptions(params.type, params.token,params.volume);
     case 'PlayResume':
-      createBearerTokenOptions(params.type, params.token,'undefined');
+      createSpotifyPlayerOptions(params.type, params.token,'undefined');
     case 'TransferPlayback':
       createTransferPlaybackOptions(params.token, params.deviceId);
   }
 };
 
-const createBearerTokenOptions = (paramType: string, token: string, urlParam: string) => {
+const createSpotifyPlayerOptions = (paramType: string, token: string, urlParam: string) => {
   return {
     url: getUrl(paramType, urlParam),
     headers: {

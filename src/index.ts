@@ -1,5 +1,5 @@
 import express from 'express';
-import router, { socketRouter } from './router';
+import router from './router';
 import passport from 'passport';
 import cors from 'cors';
 import { PORT } from './config/credentials';
@@ -14,11 +14,11 @@ app
 
 const server = http.createServer(app);
 
-// server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
-const io = socketIo(server);
+//const io = socketIo(server);
 
-const nsp = io.of('/codeworks');
-nsp.on('connection', socketRouter);
+// const nsp = io.of('/codeworks');
+// nsp.on('connection', socketRouter);
 
 export default server;
