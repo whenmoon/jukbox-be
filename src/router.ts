@@ -21,9 +21,10 @@ router.get('/login/user/redirect', passport.authenticate('google'), (req, res) =
 export default router;
 
 export const socketRouter = (socket: socketIO.Socket) => {
+  socket.on('connectUserToVenue', userEmail => socketControllers.connectUserToVenue(userEmail, socket));
   socket.on('addSong', (song, userEmail) => socketControllers.addSongToPlaylist(song, userEmail, socket));
   socket.on('updateSongDiamonds', (song, userEmail) => socketControllers.updateSongDiamonds(song, userEmail, socket));;
-  socket.on('error', (err) => console.log(err));
+  socket.on('error', error => console.log(error));
 };
 
 

@@ -1,3 +1,4 @@
+require('dotenv').config();
 import pool, { port } from './db';
 
 function createTables () {

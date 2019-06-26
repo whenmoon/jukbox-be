@@ -1,4 +1,4 @@
-import pool from '../config/db';
+import pool from '../services/db';
 
 export default class Venue {
   constructor(
