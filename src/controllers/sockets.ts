@@ -13,7 +13,7 @@ export const connectUserToVenue = async (userEmail: string, socket: socketIO.Soc
     }
     const playlist = await VenueSong.getAll(venueName);
     const sortedPlaylist = sortPlaylist(playlist);
-    nsp.emit('updatePlaylist', sortedPlaylist);
+    nsp.emit('updatedPlaylist', sortedPlaylist);
   } catch (error) {
     console.log(error);
   }
@@ -28,7 +28,7 @@ export const addSongToPlaylist = async (song: string, userEmail: string, socket:
       await UserVenue.decrementTickets(userEmail, venueName);
       const playlist = await VenueSong.getAll(venueName);
       const sortedPlaylist = sortPlaylist(playlist);
-      nsp.emit('updatePlaylist', sortedPlaylist);
+      nsp.emit('updatedPlaylist', sortedPlaylist);
     } else {
       const result = await VenueSong.getAll(venueName);
       nsp.emit('updatedPlaylist', result);
@@ -47,7 +47,7 @@ export const updateSongDiamonds = async (song: string, userEmail: string, socket
       await User.decrementDiamonds(userEmail);
       const playlist = await VenueSong.getAll(venueName);
       const sortedPlaylist = sortPlaylist(playlist);
-      nsp.emit('updatePlaylist', sortedPlaylist);
+      nsp.emit('updatedPlaylist', sortedPlaylist);
     } else {
       const result = await VenueSong.getAll(venueName);
       nsp.emit('updatedPlaylist', result);
