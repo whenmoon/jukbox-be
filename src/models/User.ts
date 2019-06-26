@@ -6,11 +6,7 @@ export default class User {
     public token: string,
     public name: string,
     public diamonds: number,
-<<<<<<< HEAD
-    private id?: number
-=======
     private id?:number
->>>>>>> fbe84e886c3d966fae319773c14ed9c4e73a17b1
   ) {}
 
   public static async create (user: User): Promise<User> {
