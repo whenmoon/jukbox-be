@@ -3,14 +3,14 @@ import Venue from './Venue';
 
 export default class VenueSong {
   constructor(
-    private id: number,
     public song: string,
     public userEmail: string,
     public venueName: string,
     public diamonds: number,
     public submission: string,
     public currentlyPlaying: boolean,
-    public lockedIn: boolean
+    public lockedIn: boolean,
+    private id?: number
   ) {}
 
   // Need to remove user's ticket.
@@ -26,9 +26,9 @@ export default class VenueSong {
   // Need to remove user's diamonds.
   public static async promote (venueSong: VenueSong): Promise<VenueSong>  {
     const result = await pool.query(`
-      UPDATE playlist
+      UPDATE venue_songs
       SET diamonds = 5
-      WHERE '${venueSong.song}'
+      WHERE song = '${venueSong.song}'
       RETURNING *;
     `);
     return result.rows[0];

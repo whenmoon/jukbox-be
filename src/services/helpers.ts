@@ -5,6 +5,7 @@ export const verifyToken = (req: any, res: any, next: any) => {
 
 export const provideTokenToUser = async (req: any, res: any, next: any) => {
   // in construction ...
-  req.token = 'dog';
+  req.token = res.user.token;
+
   next();
 }

@@ -2,11 +2,11 @@ import pool from '../config/db';
 
 export default class UserVenue {
   constructor(
-    private id: string,
     public userEmail: string,
     public venueName: string,
     public tickets: number,
-    public diamonds: number
+    public diamonds: number,
+    private id?: string
   ) {}
 
   public static async create (userVenue: UserVenue): Promise<UserVenue> {

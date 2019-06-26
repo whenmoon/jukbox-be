@@ -1,4 +1,4 @@
-import { pausePlayer,transferPlayerPlayback, setPlayerPlay, setPlayerVolume } from '../services/spotifyAPI';
+import { pausePlayer,transferPlayerPlayback, resumePlayerPlayback, setPlayerVolume } from '../services/spotifyAPI';
 
 
 export const redirectAdmin = async (req: any, res: any) => {
@@ -15,7 +15,7 @@ export const setPlayResume = async (req: any, res: any) => {
     const device_id = req.params.device_id; 
     //to add - getcurrenttrack, this a placeholder for returning the current track 
     await transferPlayerPlayback(req.user.token, device_id)
-   // await setPlayerPlay(play, playlist)
+   // await resumePlayerPlayback(play, playlist)
    res.status(204).send()
   } catch(e) {
     console.log(e);

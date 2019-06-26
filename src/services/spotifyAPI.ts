@@ -65,14 +65,14 @@ export const pausePlayer = (token:string) => {
   return request.put(options);
 }
 
-export const TransferPlayerPlayback = (token:string) => {
+export const transferPlayerPlayback = (token:string, deviceId:string) => {
   const options = getAPIOptions({
     type: 'TransferPlayback',
     refreshToken:'',
     token,
     song: '',
     volume: '',
-    deviceId: '',
+    deviceId,
   })
   return request.put(options);
 }
