@@ -9,7 +9,7 @@ export default class UserVenue {
     private id?: string
   ) {}
 
-  private async create (userVenue: UserVenue): Promise<UserVenue> {
+  public static async create (userVenue: UserVenue): Promise<UserVenue> {
     const result = await pool.query(`
       INSERT INTO user_venues (user_id, venue_id, tickets, diamonds)
       VALUES ('${userVenue.userEmail}', '${userVenue.venueName}', ${userVenue.tickets}, ${userVenue.diamonds})
@@ -18,9 +18,19 @@ export default class UserVenue {
     return result.rows[0];
   };
 
-  private async find (userEmail: string, venueName: string): Promise<UserVenue>  {
+  public static async find (userEmail: string, venueName: string): Promise<UserVenue>  {
     const result = await pool.query(`
-      SELECT * FROM user_venues WHERE user_id = ${userEmail} AND venue_id = ${venueName};
+      SELECT * FROM user_venues
+      WHERE user_id = '${userEmail}' AND venue_id = '${venueName}';
+    `);
+    return result.rows[0];
+  };
+
+  public static async decrementTickets (userEmail: string, venueName: string): Promise<UserVenue> {
+    const result = await pool.query(`
+      UPDATE user_venues
+      SET tickets = tickets - 1
+      WHERE user_id = '${userEmail}' AND venue_id = '${venueName}';
     `);
     return result.rows[0];
   };

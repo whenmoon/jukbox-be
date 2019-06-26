@@ -25,19 +25,28 @@ export default class User {
     return result.rows[0];
   };
 
-  public static async authorize (token:string): Promise<User>  {
+  public static async authorize (token:string): Promise<User> {
     const result = await pool.query(`
       SELECT * FROM users WHERE token = '${token}';
     `);
     return result.rows[0];
   };
 
-  public static async updateToken (email: string, token:string): Promise<User>  {
+  public static async updateToken (email: string, token:string): Promise<User> {
     const result = await pool.query(`
       UPDATE users
       SET token = '${token}'
       WHERE email = '${email}'
       RETURNING *;
+    `);
+    return result.rows[0];
+  };
+
+  public static async decrementDiamonds (userEmail: string): Promise<User> {
+    const result = await pool.query(`
+      UPDATE users
+      SET diamonds = diamonds - 5
+      WHERE email = '${userEmail}';
     `);
     return result.rows[0];
   };

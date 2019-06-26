@@ -1,13 +1,13 @@
 // import 'mocha';
 // import * as models from './';
-// import { mockUser, mockVenue, mockUserVenue, mockPlaylistItem } from '../services/test-utils';
+// import { mockUser, mockVenue, mockUserVenue, mockVenueSong, deleteTableContents } from '../services/test-utils';
 // import chai from 'chai'; 
 // chai.should();
 
 // describe('Models', () => {
 
 //   after((done) => {
-//     models.deleteFromTables();
+//     deleteTableContents();
 //     done();
 //   })
 

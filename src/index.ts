@@ -17,7 +17,7 @@ const server = http.createServer(app);
 
 const io = socketIo(server);
 
-const nsp = io.of('/codeworks');
+export const nsp = io.of('/codeworks');
 nsp.on('connection', socketRouter);
 
 export default server;
