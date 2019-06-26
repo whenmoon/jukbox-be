@@ -2,12 +2,12 @@ import pool from '../config/db';
 
 export default class Venue {
   constructor(
-    private id: number,
     public name: string,
     public spotify_id: string,
     private token: string,
     public ticket_default_no: number,
-    public closing_times: string
+    public closing_times?: string,
+    private id?: number
   ) {}
 
   public static async create (venue: Venue): Promise<Venue> {

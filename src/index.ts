@@ -18,7 +18,7 @@ server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 const io = socketIo(server);
 
-const nsp = io.of('/codeworks');
+export const nsp = io.of('/codeworks');
 nsp.on('connection', socketRouter);
 
 export default server;

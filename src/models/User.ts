@@ -6,7 +6,7 @@ export default class User {
     public token: string,
     public name: string,
     public diamonds: number,
-    private id?: number
+    private id?:number
   ) {}
 
   public static async create (user: User): Promise<User> {
@@ -38,6 +38,15 @@ export default class User {
       SET token = '${token}'
       WHERE email = '${email}'
       RETURNING *;
+    `);
+    return result.rows[0];
+  };
+
+  public static async decrementDiamonds (userEmail: string): Promise<User> {
+    const result = await pool.query(`
+      UPDATE users
+      SET diamonds = diamonds - 5
+      WHERE email = '${userEmail}';
     `);
     return result.rows[0];
   };

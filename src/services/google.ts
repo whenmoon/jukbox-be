@@ -17,7 +17,7 @@ passport.use(
           token: accessToken,
           name: profile.displayName,
           diamonds: 0
-        })
+        });
       } else {
         user = await User.updateToken(user.email, accessToken);
       }

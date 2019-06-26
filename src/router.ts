@@ -12,7 +12,6 @@ import { verifyToken, provideTokenToUser } from './services/helpers';
 const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
-// /login/login/Codeworks
 router.get('/login/user/Codeworks', passport.authenticate('google', {
   scope: scopeGoogle
 }));
@@ -40,7 +39,7 @@ router.get('/login/admin/redirect', passport.authenticate('spotify',{
 export default router;
 
 export const socketRouter = (socket: socketIO.Socket) => {
-  socket.on('addSong', (spotifySong, userEmail) => socketControllers.addSongToPlaylist(spotifySong, userEmail, socket));
-  socket.on('updateSongDiamonds', venueSong => socketControllers.updateSongDiamonds(venueSong, socket));;
+  socket.on('addSong', (song, userEmail) => socketControllers.addSongToPlaylist(song, userEmail, socket));
+  socket.on('updateSongDiamonds', (song, userEmail) => socketControllers.updateSongDiamonds(song, userEmail, socket));;
   socket.on('error', (err) => console.log(err));
 };
