@@ -13,6 +13,12 @@ export function sortPlaylist (playlist: Array<VenueSong>) {
   playlist.sort((a: VenueSong, b: VenueSong) => {
     return b.diamonds - a.diamonds;
   });
+  playlist.sort((a: VenueSong, b: VenueSong) => {
+    return (a.lockedIn === b.lockedIn) ? 0 : a.lockedIn ? -1 : 1;
+  });
+  playlist.sort((a: VenueSong, b: VenueSong) => {
+    return (a.currentlyPlaying === b.currentlyPlaying) ? 0 : a.currentlyPlaying ? -1 : 1;
+  });
   return playlist;
 };
 

@@ -9,7 +9,7 @@ passport.use(
     else {
       const venue = await Venue.authorize(token);
       venue && done(null, venue);
-      done(Error(), false);
+      done(null, false);
     }
   })
 );

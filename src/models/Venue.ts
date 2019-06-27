@@ -1,4 +1,4 @@
-import pool from '../config/db';
+import pool from '../services/db';
 
 export default class Venue {
   constructor(
@@ -42,6 +42,13 @@ export default class Venue {
     `);
     return result.rows[0];
   };
+
+  public static async getVenueTokenMVP (name: string): Promise<string> {
+    const result = await pool.query(`
+      SELECT token FROM venues WHERE name = '${name}';
+    `);
+    return result.rows[0];
+  }
 
   public static async getVenueToken (email: string): Promise<string> {
     const result = await pool.query(`

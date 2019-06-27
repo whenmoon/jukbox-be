@@ -12,8 +12,8 @@ export const redirectAdmin = async (req: any, res: any) => {
 
 export const setPlayResume = async (req: any, res: any) => {
   try {
-    const device_id = req.params.device_id; 
-    //to add - getcurrenttrack, this a placeholder for returning the current track 
+    const device_id = req.params.device_id;
+    //to add - getcurrenttrack, this a placeholder for returning the current track
     await transferPlayerPlayback(req.user.token, device_id)
    // await resumePlayerPlayback(play, playlist)
    res.status(204).send()
@@ -24,8 +24,8 @@ export const setPlayResume = async (req: any, res: any) => {
 
 export const setVolume = async (req: any, res: any) => {
   try {
-    const device_id = req.params.device_id; 
-    const volume = req.params.volume; 
+    const device_id = req.params.device_id;
+    const volume = req.params.volume;
     await transferPlayerPlayback(req.user.token, device_id);
     await setPlayerVolume(req.user.token, volume);
     res.status(204).send()

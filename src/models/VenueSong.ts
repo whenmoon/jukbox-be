@@ -1,5 +1,4 @@
-import pool from '../config/db';
-import Venue from './Venue';
+import pool from '../services/db';
 
 export default class VenueSong {
   constructor(
@@ -13,7 +12,6 @@ export default class VenueSong {
     private id?: number
   ) {}
 
-  // Need to remove user's ticket.
   public static async create (song: string, userEmail: string, venueName: string): Promise<VenueSong> {
     const result = await pool.query(`
       INSERT INTO venue_songs (song, user_id, venue_id, diamonds, submission_time)
@@ -23,7 +21,6 @@ export default class VenueSong {
     return result.rows[0];
   };
 
-  // Need to remove user's diamonds.
   public static async promote (song: string): Promise<VenueSong>  {
     const result = await pool.query(`
       UPDATE venue_songs

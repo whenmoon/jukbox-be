@@ -6,7 +6,7 @@ import { mockNamespace, mockVenue, mockPlaylist, sortedMockPlaylist } from '../s
 
 describe('Controller service functions', () => {
 
-  it(`toCapitalCase should return a namespace ('/:namespace') in capital case`, () => {
+  it(`toCapitalCase should return a namespace ('/:namespace') in capital case (Namespace)`, () => {
     toCapitalCase(mockNamespace).should.equal(mockVenue.name);
   });
 

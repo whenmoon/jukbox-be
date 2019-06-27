@@ -1,3 +1,4 @@
+require('dotenv').config();
 import 'mocha';
 import { createClient, forClientsToReceiveMessage, mockUserVenue } from './services/test-utils';
 import server from './';
@@ -10,10 +11,9 @@ const PORT = 4000;
 describe('Sockets', () => {
 
   before(done => {
-    server.listen(PORT);
     User.create(mockUser);
     Venue.create(mockVenue);
-    UserVenue.create(mockUserVenue);
+    UserVenue.create(mockUserVenue.userEmail, mockUserVenue.venueName, mockUserVenue.tickets);
     done();
   });
 
@@ -26,7 +26,6 @@ describe('Sockets', () => {
     const client1: any = await createClient(PORT);
     const client2: any = await createClient(PORT);
     const client3: any = await createClient(PORT);
-
     let countReceived = 0;
 
     client1.on('updatedPlaylist', (data: Array<VenueSong>) => {

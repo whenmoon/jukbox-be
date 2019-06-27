@@ -28,7 +28,7 @@ router.get('/search', verifyToken, passport.authenticate('token', {
   session: false
 }), provideTokenToUser, searchForSongs);
 
-router.get('/login', passport.authenticate('spotify', {
+router.get('/login/admin', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
 
@@ -37,17 +37,18 @@ router.get('/login/admin/redirect', passport.authenticate('spotify',{
 }), redirectAdmin);
 
 router.get('/playdevice/:deviceid/', verifyToken , passport.authenticate('token',{
- session: false 
+ session: false
 }), setPlayResume)
 
 router.get('/playdevice/:deviceid/volume/:volumepercent',passport.authenticate('token',{
-  session: false 
+  session: false
  }), )
 
 export const socketRouter = (socket: socketIO.Socket) => {
-  socket.on('addSong', (song:string, userEmail:string) => socketControllers.addSongToPlaylist(song, userEmail, socket));
-  socket.on('updateSongDiamonds', (song:string, userEmail:string) => socketControllers.updateSongDiamonds(song, userEmail, socket));;
-  socket.on('error', (err:string) => console.log(err));
+  socket.on('connectUserToVenue', userEmail => socketControllers.connectUserToVenue(userEmail, socket));
+  socket.on('addSong', (song, userEmail) => socketControllers.addSongToPlaylist(song, userEmail, socket));
+  socket.on('updateSongDiamonds', (song, userEmail) => socketControllers.updateSongDiamonds(song, userEmail, socket));;
+  socket.on('error', error => console.log(error));
 };
 
 export default router;

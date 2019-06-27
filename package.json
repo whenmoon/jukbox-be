@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "db:setup": "ts-node src/config/db-setup.ts",
+    "db:setup": "ts-node src/services/db-setup.ts",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc -p .",
@@ -42,6 +42,7 @@
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",
     "chai": "^4.2.0",
+    "dotenv": "^8.0.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1",
     "npm": "^6.9.0",

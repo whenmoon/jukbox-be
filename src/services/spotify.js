@@ -1,14 +1,14 @@
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const passport = require('passport');
-const { Spotify } = require('../config/credentials');
 const { getRefreshToken } = require('./spotifyAPI')
 const { Venue } = require('../models');
+require('dotenv').config();
 
 passport.use(new SpotifyStrategy({
-    clientID: Spotify.client_id,
-    clientSecret: Spotify.client_secret,
-    callbackURL: Spotify.redirect_uri
-  }, async (accessToken, _, __, profile, done) => {
+    clientID: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    callbackURL: process.env.SPOTIFY_REDIRECT_URI
+  }, async (accessToken, refreshToken, expires_in, profile, done) => {
     try {
       let newVenue = await Venue.find('Codeworks');
       if (!newVenue) {
