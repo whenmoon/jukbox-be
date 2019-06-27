@@ -1,7 +1,8 @@
 import Venue from '../models/Venue';
 
 export const extractToken = (req: any , res: any, next: any) => {
-  req.headers.token = req.headers.authorization.slice(7);
+  if (req.headers.authorization) req.headers.token = req.headers.authorization.slice(7);
+  else res.status(403).end();
   next();
 };
 
