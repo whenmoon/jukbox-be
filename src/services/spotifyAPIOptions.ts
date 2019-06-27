@@ -6,15 +6,15 @@ const btoa = require('btoa');
 export const getAPIOptions = (params: SpotifyParams) => {
   switch (params.type) {
     case 'Refresh':
-      createRefreshTokenOptions(params.refreshToken);
+      return createRefreshTokenOptions(params.refreshToken);
     case 'SearchSpotify':
-      createSpotifyPlayerOptions(params.type, params.token, params.song);
+      return createSpotifyPlayerOptions(params.type, params.token, params.song);
     case 'PlayerVolume':
-      createSpotifyPlayerOptions(params.type, params.token,params.volume);
+      return createSpotifyPlayerOptions(params.type, params.token, params.volume);
     case 'PlayResume':
-      createSpotifyPlayerOptions(params.type, params.token,'undefined');
+      return createSpotifyPlayerOptions(params.type, params.token, 'undefined');
     case 'TransferPlayback':
-      createTransferPlaybackOptions(params.token, params.deviceId);
+      return createTransferPlaybackOptions(params.token, params.deviceId);
   }
 };
 
@@ -43,20 +43,20 @@ const createRefreshTokenOptions = (refreshToken: string) => {
   }
 };
 
-const createTransferPlaybackOptions = (token:string, deviceId:string) => {
+const createTransferPlaybackOptions = (token: string, deviceId: string) => {
   return {
     uri: 'https://api.spotify.com/v1/me/player',
-    method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
+    body: {
       'device_ids': [deviceId],
       'play': false,
-    })
+    },
+    json: true
   }
-} 
+}
 
 const getUrl = (optionsType: string, Parameter: string) => {
   switch (optionsType) {

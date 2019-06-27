@@ -25,4 +25,5 @@ export interface SpotifyParams {
   song: string,
   volume: string,
   deviceId: string,
+  playlist: [string]
 }

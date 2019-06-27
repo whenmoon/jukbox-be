@@ -6,8 +6,8 @@ import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
-import { redirectAdmin, setPlayResume} from './controllers/admin';
-import { verifyToken, provideTokenToUser } from './services/helpers';
+import { redirectAdmin, setPlayResume, setVolume, setPause} from './controllers/admin';
+import { extractToken, provideTokenToUser } from './services/helpers';
 import * as socketControllers from './controllers/sockets'
 const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
 const scopeGoogle: string[] = ['profile', 'email'];
@@ -20,15 +20,15 @@ router.get('/login/user/redirect', passport.authenticate('google', {
   session: false
 }), redirectUser);
 
-router.get('/me', verifyToken, passport.authenticate('token', {
+router.get('/me', extractToken, passport.authenticate('token', {
   session: false
 }), getUserInfo);
 
-router.get('/search', verifyToken, passport.authenticate('token', {
+router.get('/search', extractToken, passport.authenticate('token', {
   session: false
 }), provideTokenToUser, searchForSongs);
 
-router.get('/login', passport.authenticate('spotify', {
+router.get('/login/admin', passport.authenticate('spotify', {
   scope: scopeSpotify
 }));
 
@@ -36,13 +36,14 @@ router.get('/login/admin/redirect', passport.authenticate('spotify',{
   session: false
 }), redirectAdmin);
 
-router.get('/playdevice/:deviceid/', verifyToken , passport.authenticate('token',{
- session: false 
-}), setPlayResume)
-
-router.get('/playdevice/:deviceid/volume/:volumepercent',passport.authenticate('token',{
+router.get('/playdevice/:deviceid', extractToken,passport.authenticate('token',{
   session: false 
- }), )
+ }), setPlayResume)
+
+router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken,passport.authenticate('token',{
+  session: false 
+ }),setVolume )
+
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('addSong', (song:string, userEmail:string) => socketControllers.addSongToPlaylist(song, userEmail, socket));

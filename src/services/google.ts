@@ -8,7 +8,7 @@ passport.use(
     callbackURL: <string> Google.redirect_uri,
     clientID: <string> Google.client_id,
     clientSecret: <string> Google.client_secret,
-  }, async (accessToken: string, refreshToken: string, profile: any, done: any) => {
+  }, async (accessToken: string, _: string, profile: any, done: any) => {
     try {
       let user = await User.find(profile.emails[0].value);
       if (!user) {
