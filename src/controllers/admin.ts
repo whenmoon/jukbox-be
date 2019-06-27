@@ -12,7 +12,7 @@ export const redirectAdmin = async (req: any, res: any) => {
 export const setPlayResume = async (req: any, res: any) => {
   try {
     //to add - getcurrenttrack, this a placeholder for returning the current track
-    const transferPlayRes = await transferPlayerPlayback(req.user.token, req.params);
+    const transferPlayRes = await transferPlayerPlayback(req.user.token, req.params.device_id);
     const resumePlayRes = await setPlayerPlay(req.user.token, ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]);
     res.status(204).send();
   } catch (e) {
