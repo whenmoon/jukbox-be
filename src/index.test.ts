@@ -1,47 +1,93 @@
-// import 'mocha';
-// import * as models from './models';
-// import { mockUser, mockVenue, mockUserVenue, mockPlaylistItem } from './services/test-utils';
+require('dotenv').config();
+import 'mocha';
+import { createClient, forClientsToReceiveMessage, mockUserVenue } from './services/test-utils';
+import server from './';
+import chai from 'chai';
+chai.should();
+import { mockUser, mockVenue, mockVenueSong, deleteTableContents } from './services/test-utils';
+import { User, Venue, VenueSong, UserVenue } from './models';
+const PORT = 4000;
 
-// describe('Models', () => {
+describe('Sockets', () => {
+  let client1: any, client2: any, client3: any, countReceived: number;
 
-//   it('.postUser should return the inserted record of the new user', async () => {
-//     await models.postUser(mockUser)
-//       .then((result: any) => {
-//         console.log(result);
-//         result.command.should.equal('INSERT');
-//         result.rows[0].email.should.equal(mockUser.email);
-//         result.rows[0].name.should.equal(mockUser.name);
-//         result.rows[0].diamonds.should.equal(mockUser.diamonds);
-//       });
-//   });
+  before(done => {
+    User.create(mockUser);
+    Venue.create(mockVenue);
+    UserVenue.create(mockUserVenue.userEmail, mockUserVenue.venueName, mockUserVenue.tickets);
+    done();
+  });
 
-//   it('.postVenue should return the inserted record of the new venue', async () => {
-//     const result: any = await models.postVenue(mockVenue);
-//     result.Result.command.should.eql('INSERT');
-//     result.Result.rows[0].name.should.eql(mockVenue.name);
-//     result.Result.rows[0].ticket_default_no.should.eql(mockVenue.ticket_default_no);
-//     result.Result.rows[0].closing_times.should.eql(null);
-//   });
+  beforeEach(async () => {
+    client1 = await createClient(PORT);
+    client2 = await createClient(PORT);
+    client3 = await createClient(PORT);
+    countReceived = 0;
+  })
 
-//   it('.postUserVenue should return the inserted record of the new user-venue relation', async () => {
-//     const result: any = await models.postUserVenue(mockUserVenue);
-//     result.Result.command.should.eql('INSERT');
-//     result.Result.rows[0].id.should.eql(1);
-//     result.Result.rows[0].user_id.should.eql(mockUserVenue.userEmail);
-//     result.Result.rows[0].venue_id.should.eql(mockUserVenue.venueName);
-//     result.Result.rows[0].tickets.should.eql(mockUserVenue.tickets);
-//     result.Result.rows[0].diamonds.should.eql(mockUserVenue.diamonds);
-//   });
+  afterEach(async () => {
+    countReceived = 0;
+    await client1.disconnect()
+    await client2.disconnect()
+    await client3.disconnect();
+  })
 
-//   it('.postSong should return the inserted record of the new song in the playlist', async () => {
-//     const result: any = await models.postSong(mockPlaylistItem);
-//     result.Result.command.should.eql('INSERT');
-//     result.Result.rows[0].id.should.eql(1);
-//     result.Result.rows[0].user_id.should.eql(mockPlaylistItem.userEmail);
-//     result.Result.rows[0].venue_id.should.eql(mockPlaylistItem.venueName);
-//     result.Result.rows[0].song.should.eql(mockPlaylistItem.song);
-//     result.Result.rows[0].diamonds.should.eql(mockPlaylistItem.diamonds);
-//     result.Result.rows[0].submissions_time.should.eql(String(new Date(Date.now())));
-//   });
-  
-// });
+  after(done => {
+    deleteTableContents();
+    server.close(done);
+  });
+
+  it('broadcasts the updatedPlaylist on addSong to mulitple clients', async () => {
+    client1.on('updatedPlaylist', (data: Array<VenueSong>) => {
+      const result = data[0];
+      result.song.should.eql(mockVenueSong.song);
+      countReceived++;
+    });
+
+    client2.on('updatedPlaylist', (data: Array<VenueSong>) => {
+      const result = data[0];
+      result.song.should.eql(mockVenueSong.song);
+      countReceived++;
+    });
+
+    client3.on('updatedPlaylist', (data: Array<VenueSong>) => {
+      const result = data[0];
+      result.song.should.eql(mockVenueSong.song);
+      countReceived++;
+    });
+
+    client1.emit('addSong', mockVenueSong.song, mockVenueSong.userEmail);
+
+    await forClientsToReceiveMessage(200);
+    countReceived.should.equal(3);
+  });
+
+  it('broadcasts the updatedPlaylist on updateSongDiamonds to mulitple clients', async () => {
+    const diamonds = 5;
+    
+    client1.on('updatedPlaylist', (data: Array<VenueSong>) => {
+      const result = data[0];
+      result.diamonds.should.eql(diamonds);
+      countReceived++;
+    });
+
+    client2.on('updatedPlaylist', (data: Array<VenueSong>) => {
+      const result = data[0];
+      result.diamonds.should.eql(diamonds);
+      countReceived++;
+    });
+
+    client3.on('updatedPlaylist', (data: Array<VenueSong>) => {
+      const result = data[0];
+      result.diamonds.should.eql(diamonds);
+      countReceived++;
+    });
+
+    client1.emit('updateSongDiamonds', mockVenueSong.song, mockVenueSong.userEmail);
+
+    await forClientsToReceiveMessage(200);
+    countReceived.should.equal(3);
+
+  });
+
+});
