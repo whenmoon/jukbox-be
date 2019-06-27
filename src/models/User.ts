@@ -3,7 +3,7 @@ import pool from '../services/db';
 export default class User {
   constructor(
     public email: string,
-    private token: string,
+    public token: string,
     public name: string,
     public diamonds: number,
     private id?:number
@@ -12,7 +12,7 @@ export default class User {
   public static async create (user: User): Promise<User> {
     const result = await pool.query(`
       INSERT INTO users (email, token, name, diamonds)
-      VALUES ('${user.email}', '${user.token}', '${user.name}', ${user.diamonds})
+      VALUES ('${user.email}', '${user.token}', '${user.name}', '${user.diamonds}')
       RETURNING *;
     `);
     return result.rows[0];
@@ -25,14 +25,14 @@ export default class User {
     return result.rows[0];
   };
 
-  public static async authorize (token:string): Promise<User> {
+  public static async authorize (token:string): Promise<User>  {
     const result = await pool.query(`
       SELECT * FROM users WHERE token = '${token}';
     `);
     return result.rows[0];
   };
 
-  public static async updateToken (email: string, token:string): Promise<User> {
+  public static async updateToken (email: string, token:string): Promise<User>  {
     const result = await pool.query(`
       UPDATE users
       SET token = '${token}'

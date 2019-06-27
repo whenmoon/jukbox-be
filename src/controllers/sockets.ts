@@ -56,4 +56,3 @@ export const updateSongDiamonds = async (song: string, userEmail: string, socket
     console.log(error);
   }
 };
-

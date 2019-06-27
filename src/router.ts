@@ -1,24 +1,53 @@
-import  express from 'express';
+import express from 'express';
 import passport from 'passport';
-import tokens from './services/google';
-import './services/google';
-import * as controllers from './controllers';
-import * as socketControllers from './controllers/sockets';
-import socketIO from 'socket.io';
 const router = express.Router();
-const scope: string[] = ['profile', 'email'];
+import './services/spotify';
+import './services/google';
+import './services/token-strategy';
+import socketIO from 'socket.io';
+import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
+import { redirectAdmin, setPlayResume, setVolume} from './controllers/admin';
+import { extractToken, provideTokenToUser } from './services/authUtils';
+import * as socketControllers from './controllers/sockets'
+const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
+const scopeGoogle: string[] = ['profile', 'email'];
 
-// change to '/login/user'
-router.get('/login', passport.authenticate('google', {
-  scope
+router.get('/login/user/Codeworks', passport.authenticate('google', {
+  scope: scopeGoogle
 }));
 
-router.get('/login/user/redirect', passport.authenticate('google'), (req, res) => {
-  
-  res.redirect(`http://localhost:3000/login?token=${tokens.access_token}`);
-});
+router.get('/login/user/redirect', passport.authenticate('google', {
+  session: false
+}), redirectUser);
 
-export default router;
+router.get('/me', extractToken, passport.authenticate('token', {
+  session: false
+}), getUserInfo);
+
+router.get('/search', extractToken, passport.authenticate('token', {
+  session: false
+}), provideTokenToUser, searchForSongs);
+
+router.get('/login/admin', passport.authenticate('spotify', {
+  scope: scopeSpotify
+}));
+
+router.get('/login/admin/redirect', passport.authenticate('spotify',{
+  session: false
+}), redirectAdmin);
+
+router.get('/playdevice/:deviceid', extractToken, passport.authenticate('token',{
+  session: false
+ }), setPlayResume)
+
+router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport.authenticate('token',{
+  session: false
+ }),setVolume )
+
+router.get('/next', extractToken, passport.authenticate('token',{
+  session: false
+ }), )
+
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('connectUserToVenue', userEmail => socketControllers.connectUserToVenue(userEmail, socket));
@@ -27,4 +56,4 @@ export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('error', error => console.log(error));
 };
 
-
+export default router;

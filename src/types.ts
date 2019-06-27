@@ -18,3 +18,14 @@ export interface ClosingTimes {
   Sunday: string
 };
 
+
+
+export interface SpotifyPlayerParams {
+  paramType?: string,
+  urlType?: string,
+  token?: string
+}
+export interface Url {
+  urlType?: string,
+  urlParam?: string,
+}

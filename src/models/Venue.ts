@@ -2,18 +2,18 @@ import pool from '../services/db';
 
 export default class Venue {
   constructor(
+    private id: number,
     public name: string,
     public spotify_id: string,
     private token: string,
     public ticket_default_no: number,
-    public closing_times?: string,
-    private id?: number
+    public closing_times: string
   ) {}
 
   public static async create (venue: Venue): Promise<Venue> {
     const result = await pool.query(`
       INSERT INTO venues (name, token, ticket_default_no, spotify_id)
-      VALUES ('${venue.name}', '${venue.token}', ${venue.ticket_default_no}, '${venue.spotify_id}')
+      VALUES ('${venue.name}', '${venue.token}', '${venue.ticket_default_no}', '${venue.spotify_id}')
       RETURNING *;
     `);
     return result.rows[0];
@@ -21,7 +21,7 @@ export default class Venue {
 
   public static async find (name: string): Promise<Venue>  {
     const result = await pool.query(`
-      SELECT * FROM venues WHERE name = ${name};
+      SELECT * FROM venues WHERE name = '${name}';
     `);
     return result.rows[0];
   };
@@ -42,4 +42,21 @@ export default class Venue {
     `);
     return result.rows[0];
   };
+
+  public static async getVenueTokenMVP (name: string): Promise<string> {
+    const result = await pool.query(`
+      SELECT token FROM venues WHERE name = '${name}';
+    `);
+    return result.rows[0];
+  }
+
+  public static async getVenueToken (email: string): Promise<string> {
+    const result = await pool.query(`
+      SELECT * FROM users
+      INNER JOIN user_venues ON users.email = user_venues.user_id
+      INNER JOIN venues ON user_venues.venue_id = venues.name
+      WHERE users.email = '${email}';
+    `);
+    return result.rows[0];
+  }
 }
