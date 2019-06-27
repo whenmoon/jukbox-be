@@ -27,7 +27,9 @@ describe('Sockets', () => {
 
   afterEach(async () => {
     countReceived = 0;
-    await client1.disconnect() && await client2.disconnect() && await client3.disconnect();
+    await client1.disconnect()
+    await client2.disconnect()
+    await client3.disconnect();
   })
 
   after(done => {
