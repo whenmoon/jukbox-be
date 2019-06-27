@@ -6,7 +6,7 @@ import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
-import { redirectAdmin, setPlayResume, setVolume, setPause} from './controllers/admin';
+import { redirectAdmin, setPlayResume, setVolume} from './controllers/admin';
 import { extractToken, provideTokenToUser } from './services/helpers';
 import * as socketControllers from './controllers/sockets'
 const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
@@ -43,6 +43,10 @@ router.get('/playdevice/:deviceid', extractToken,passport.authenticate('token',{
 router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken,passport.authenticate('token',{
   session: false 
  }),setVolume )
+
+router.get('/next', extractToken, passport.authenticate('token',{
+  session: false 
+ }), )
 
 
 export const socketRouter = (socket: socketIO.Socket) => {
