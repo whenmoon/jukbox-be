@@ -1,7 +1,7 @@
 import { VenueSong, UserVenue, User, Venue } from '../models';
 import socketIO from 'socket.io';
 import { nsp } from '../';
-import { toCapitalCase, sortPlaylist } from '../services';
+import { toCapitalCase } from '../services';
 
 export const connectUserToVenue = async (userEmail: string, socket: socketIO.Socket) => {
   try {
@@ -12,7 +12,7 @@ export const connectUserToVenue = async (userEmail: string, socket: socketIO.Soc
       await UserVenue.create(userEmail, venueName, ticket_default_no);
     }
     const playlist = await VenueSong.getAll(venueName);
-    const sortedPlaylist = sortPlaylist(playlist);
+    const sortedPlaylist = await VenueSong.sortPlaylist(playlist);
     nsp.emit('updatedPlaylist', sortedPlaylist);
   } catch (error) {
     console.log(error);
@@ -27,7 +27,7 @@ export const addSongToPlaylist = async (song: string, userEmail: string, socket:
       await VenueSong.create(song, userEmail, venueName);
       await UserVenue.decrementTickets(userEmail, venueName);
       const playlist = await VenueSong.getAll(venueName);
-      const sortedPlaylist = sortPlaylist(playlist);
+      const sortedPlaylist = await VenueSong.sortPlaylist(playlist);
       nsp.emit('updatedPlaylist', sortedPlaylist);
     } else {
       const result = await VenueSong.getAll(venueName);
@@ -46,7 +46,7 @@ export const updateSongDiamonds = async (song: string, userEmail: string, socket
       await VenueSong.promote(song);
       await User.decrementDiamonds(userEmail);
       const playlist = await VenueSong.getAll(venueName);
-      const sortedPlaylist = sortPlaylist(playlist);
+      const sortedPlaylist = await VenueSong.sortPlaylist(playlist);
       nsp.emit('updatedPlaylist', sortedPlaylist);
     } else {
       const result = await VenueSong.getAll(venueName);

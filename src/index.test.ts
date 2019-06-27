@@ -9,6 +9,7 @@ import { User, Venue, VenueSong, UserVenue } from './models';
 const PORT = 4000;
 
 describe('Sockets', () => {
+  let client1: any, client2: any, client3: any, countReceived: number;
 
   before(done => {
     User.create(mockUser);
@@ -17,17 +18,26 @@ describe('Sockets', () => {
     done();
   });
 
+  beforeEach(async () => {
+    client1 = await createClient(PORT);
+    client2 = await createClient(PORT);
+    client3 = await createClient(PORT);
+    countReceived = 0;
+  })
+
+  afterEach(async () => {
+    countReceived = 0;
+    await client1.disconnect()
+    await client2.disconnect()
+    await client3.disconnect();
+  })
+
   after(done => {
     deleteTableContents();
     server.close(done);
   });
 
   it('broadcasts the updatedPlaylist on addSong to mulitple clients', async () => {
-    const client1: any = await createClient(PORT);
-    const client2: any = await createClient(PORT);
-    const client3: any = await createClient(PORT);
-    let countReceived = 0;
-
     client1.on('updatedPlaylist', (data: Array<VenueSong>) => {
       const result = data[0];
       result.song.should.eql(mockVenueSong.song);
@@ -49,18 +59,12 @@ describe('Sockets', () => {
     client1.emit('addSong', mockVenueSong.song, mockVenueSong.userEmail);
 
     await forClientsToReceiveMessage(200);
-
     countReceived.should.equal(3);
-    client1.disconnect() && client2.disconnect() && client3.disconnect();
   });
 
   it('broadcasts the updatedPlaylist on updateSongDiamonds to mulitple clients', async () => {
-    const client1: any = await createClient(PORT);
-    const client2: any = await createClient(PORT);
-    const client3: any = await createClient(PORT);
     const diamonds = 5;
-    let countReceived = 0;
-
+    
     client1.on('updatedPlaylist', (data: Array<VenueSong>) => {
       const result = data[0];
       result.diamonds.should.eql(diamonds);
@@ -82,9 +86,7 @@ describe('Sockets', () => {
     client1.emit('updateSongDiamonds', mockVenueSong.song, mockVenueSong.userEmail);
 
     await forClientsToReceiveMessage(200);
-
     countReceived.should.equal(3);
-    client1.disconnect() && client2.disconnect() && client3.disconnect();
 
   });
 
