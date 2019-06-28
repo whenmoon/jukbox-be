@@ -16,17 +16,17 @@ export const sortedMockPlaylist = [mockVenueSong5, mockVenueSong4, mockVenueSong
 
 export const createClient = (PORT: number) => {
   return new Promise((resolve, reject) => {
-    const socket: any = client.connect(`http://localhost:${PORT}/codeworks`);
+    const socket: SocketIOClient.Socket = client.connect(`http://localhost:${PORT}/codeworks`);
     socket.on('connect', () => resolve(socket));
     socket.on('error', () => reject);
-  })
+  });
 };
 
 export const forClientsToReceiveMessage = (time: number) => new Promise((resolve, reject) => setTimeout(() => {
   resolve();
 }, time));
 
-export const deleteTableContents = () => pool.query(`
+export const deleteTableContents = async () => await pool.query(`
   DELETE FROM venue_songs WHERE user_id LIKE '%codeworks%';
   DELETE FROM user_venues WHERE user_id LIKE '%codeworks%';
   DELETE FROM users WHERE email LIKE '%codeworks%';

@@ -11,9 +11,7 @@ export const connectUserToVenue = async (userEmail: string, socket: socketIO.Soc
       const { ticket_default_no } = await Venue.find(venueName);
       await UserVenue.create(userEmail, venueName, ticket_default_no);
     }
-    const playlist = await VenueSong.getAll(venueName);
-    const sortedPlaylist = await VenueSong.sortPlaylist(playlist);
-    nsp.emit('updatedPlaylist', sortedPlaylist);
+    await emitSortedPlaylist(venueName);
   } catch (error) {
     console.log(error);
   }
@@ -26,13 +24,8 @@ export const addSongToPlaylist = async (song: string, userEmail: string, socket:
     if (userAtCurrentVenue.tickets > 0) {
       await VenueSong.create(song, userEmail, venueName);
       await UserVenue.decrementTickets(userEmail, venueName);
-      const playlist = await VenueSong.getAll(venueName);
-      const sortedPlaylist = await VenueSong.sortPlaylist(playlist);
-      nsp.emit('updatedPlaylist', sortedPlaylist);
-    } else {
-      const result = await VenueSong.getAll(venueName);
-      nsp.emit('updatedPlaylist', result);
     }
+    await emitSortedPlaylist(venueName);
   } catch (error) {
     console.log(error);
   }
@@ -45,14 +38,21 @@ export const updateSongDiamonds = async (song: string, userEmail: string, socket
     if (user.diamonds > 0) {
       await VenueSong.promote(song);
       await User.decrementDiamonds(userEmail);
-      const playlist = await VenueSong.getAll(venueName);
-      const sortedPlaylist = await VenueSong.sortPlaylist(playlist);
-      nsp.emit('updatedPlaylist', sortedPlaylist);
-    } else {
-      const result = await VenueSong.getAll(venueName);
-      nsp.emit('updatedPlaylist', result);
     }
+    await emitSortedPlaylist(venueName);
   } catch (error) {
     console.log(error);
   }
+};
+
+const emitSortedPlaylist = async (venueName: string) => {
+  const playlist = await VenueSong.getAll(venueName);
+  const sortedPlaylist = VenueSong.sortPlaylist(playlist);
+  const message = {
+    route: 'updatedPlaylist',
+    data: {
+      updatedPlaylist: sortedPlaylist
+    }
+  };
+  nsp.emit('message', message);
 };
