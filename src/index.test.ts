@@ -87,7 +87,6 @@ describe('Sockets', () => {
 
     await forClientsToReceiveMessage(200);
     countReceived.should.equal(3);
-
   });
 
 });
