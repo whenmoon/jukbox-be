@@ -1,3 +1,3 @@
-import { toCapitalCase, sortPlaylist } from './controllers';
+import { toCapitalCase, sortPlaylist } from './playlist';
 
 export { toCapitalCase, sortPlaylist };

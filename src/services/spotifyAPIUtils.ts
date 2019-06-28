@@ -5,7 +5,6 @@ export const createBearerHeaderOptions = (token: string) => {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   }
-
 };
 
 

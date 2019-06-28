@@ -43,13 +43,7 @@ export default class Venue {
     return result.rows[0];
   };
 
-  public static async getVenueToken (email: string): Promise<string> {
-    const result = await pool.query(`
-      SELECT * FROM users
-      INNER JOIN user_venues ON users.email = user_venues.user_id
-      INNER JOIN venues ON user_venues.venue_id = venues.name
-      WHERE users.email = '${email}';
-    `);
-    return result.rows[0];
-  }
+  
+
+ 
 }

@@ -13,7 +13,6 @@ export default class VenueSong {
     private id?: number
   ) {}
 
-  // Need to remove user's ticket.
   public static async create (song: string, userEmail: string, venueName: string): Promise<VenueSong> {
     const result = await pool.query(`
       INSERT INTO venue_songs (song, user_id, venue_id, diamonds, submission_time)
@@ -23,7 +22,6 @@ export default class VenueSong {
     return result.rows[0];
   };
 
-  // Need to remove user's diamonds.
   public static async promote (song: string): Promise<VenueSong>  {
     const result = await pool.query(`
       UPDATE venue_songs
@@ -40,4 +38,41 @@ export default class VenueSong {
     `);
     return result.rows;
   };
+
+  public static async getNextSong(): Promise<VenueSong> {
+    const result = await pool.query(`
+    SELECT * FROM venue_songs
+    LIMIT 1;
+  `);
+    return result.rows[0];
+  }
+
+  public static async lockSong (song: string): Promise<VenueSong> {
+    const result = await pool.query(`
+      UPDATE venue_songs 
+      SET lockedIn = true
+      WHERE song = '${song}'
+      RETURNING *;
+    `);
+    return result.rows[0];
+  }
+
+  // change to delete
+  public static async deleteLastPlayedSong (): Promise<VenueSong> {
+    const result = await pool.query(`
+      DELETE FROM venue_songs 
+      WHERE currentlyPlaying = true; 
+    `);
+    return result.rows[0];
+  }
+
+  public static async getSongToPlay (): Promise<VenueSong> {
+    const result = await pool.query(`
+      UPDATE venue_songs 
+      SET currentlyPlaying = true
+      WHERE lockedIn = true
+      RETURNING *;
+    `);
+    return result.rows[0];
+  }
 }
