@@ -4,7 +4,7 @@ export default class Venue {
   constructor(
     public name: string,
     public spotify_id: string,
-    private token: string,
+    public token: string,
     public ticket_default_no: number,
     public closing_times: string,
     private id?: number

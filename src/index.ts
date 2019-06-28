@@ -1,3 +1,9 @@
+import path from 'path';
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
+require('dotenv').config({
+ path: path.resolve(__dirname, `../${envFile}`)
+});
+
 import express from 'express';
 import router, {socketRouter} from './router';
 import passport from 'passport';

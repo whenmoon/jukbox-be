@@ -1,7 +1,6 @@
-require('dotenv').config();
 import 'mocha';
-import { createClient, forClientsToReceiveMessage, mockUserVenue } from './services/test-utils';
 import server from './';
+import { createClient, forClientsToReceiveMessage, mockUserVenue } from './services/test-utils';
 import chai from 'chai';
 chai.should();
 import { mockUser, mockVenue, mockVenueSong, deleteTableContents } from './services/test-utils';
@@ -64,7 +63,7 @@ describe('Sockets', () => {
 
   it('broadcasts the updatedPlaylist on updateSongDiamonds to mulitple clients', async () => {
     const diamonds = 5;
-    
+
     client1.on('updatedPlaylist', (data: Array<VenueSong>) => {
       const result = data[0];
       result.diamonds.should.eql(diamonds);
