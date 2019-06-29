@@ -63,7 +63,7 @@ describe('Saving/Updating records in DB', () => {
   });
 
   it('should find a user current venue', async () => {
-    const venueInfo: any = await Venue.authorize(existingUser.email);
+    const venueInfo: any = await Venue.getVenueToken(existingUser.email);
     const venue: any = await Venue.find(venueInfo.venue_id);
     expect(venue.token).to.equal(newToken);
   })
