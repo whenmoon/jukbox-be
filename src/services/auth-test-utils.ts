@@ -1,7 +1,16 @@
-import pool, { port } from './db';
+import { User, Venue, UserVenue, VenueSong } from '../models';
+import pool from './db';
 
-function createTables () {
-  pool.query(`
+export const existingUser = new User('test@codeworks.me', 'token123', 'Test Person', 5);
+export const newUser = new User('notUser@Ironhack.me', 'token456', 'Another Test', 3);
+export const existingVenue = new Venue('Codeworks', '12345', 'token123', 2, '23:00');
+export const newVenue = new Venue('Ironhack', '54321', 'token321', 2, '24:00');
+export const newToken = 'newtoken123';
+
+export const createTables = async () => {
+  return await pool.query(`
+    DROP TABLE IF EXISTS users, user_venues, venues, venue_songs;
+
     CREATE TABLE users (
       email VARCHAR NOT NULL,
       token VARCHAR NOT NULL,
@@ -21,7 +30,7 @@ function createTables () {
 
     CREATE TABLE user_venues (
       id SERIAL,
-      user_id VARCHAR REFERENCES users(email) ,
+      user_id VARCHAR REFERENCES users(email),
       venue_id VARCHAR REFERENCES venues(name),
       tickets INTEGER NOT NULL DEFAULT 0,
       diamonds INTEGER NOT NULL DEFAULT 0
@@ -38,15 +47,4 @@ function createTables () {
       lockedIn BOOLEAN NOT NULL DEFAULT FALSE
     );
   `);
-};
-
-async function setupDB () {
-  await createTables();
-  console.log(`Database successfully set up on port ${port} 🚀`);
-};
-
-try {
-  setupDB();
-} catch (error) {
-  console.log(error);
 }

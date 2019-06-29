@@ -53,11 +53,36 @@ router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('t
 }), setTransferPlayback)
 
 
+router.get('/playdevice/:deviceid', extractToken, passport.authenticate('token',{
+  session: false
+ }), setPlayResume)
+
+router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport.authenticate('token',{
+  session: false
+ }),setVolume )
+
+router.get('/next', extractToken, passport.authenticate('token',{
+  session: false
+ }), )
+
 
 export const socketRouter = (socket: socketIO.Socket) => {
-  socket.on('addSong', (song: string, userEmail: string) => socketControllers.addSongToPlaylist(song, userEmail, socket));
-  socket.on('updateSongDiamonds', (song: string, userEmail: string) => socketControllers.updateSongDiamonds(song, userEmail, socket));;
-  socket.on('error', (err: string) => console.log(err));
+  socket.on('message', message => {
+    const { route, data } = message;
+    if (message) {
+    switch(route) {
+      case 'connectUserToVenue':
+        socketControllers.connectUserToVenue(data.userEmail, socket);
+        break;
+      case 'addSong':
+        socketControllers.addSongToPlaylist(data.song, data.userEmail, socket);
+        break;
+      case 'updateSongDiamonds':
+        socketControllers.updateSongDiamonds(data.song, data.userEmail, socket);
+    }
+  }
+  });
+  socket.on('error', error => console.log(error));
 };
 
 export default router;

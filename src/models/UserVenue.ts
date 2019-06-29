@@ -1,4 +1,4 @@
-import pool from '../config/db';
+import pool from '../services/db';
 
 export default class UserVenue {
   constructor(
@@ -9,10 +9,10 @@ export default class UserVenue {
     private id?: string
   ) {}
 
-  public static async create (userVenue: UserVenue): Promise<UserVenue> {
+  public static async create (userEmail: string, venueName: string, ticket_default_no: number): Promise<UserVenue> {
     const result = await pool.query(`
       INSERT INTO user_venues (user_id, venue_id, tickets, diamonds)
-      VALUES ('${userVenue.userEmail}', '${userVenue.venueName}', '${userVenue.tickets}', '${userVenue.diamonds}')
+      VALUES ('${userEmail}', '${venueName}', ${ticket_default_no}, 0)
       RETURNING *;
     `);
     return result.rows[0];

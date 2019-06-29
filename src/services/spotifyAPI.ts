@@ -33,7 +33,7 @@ export const transferPlayerPlayback = (token: string, deviceId: string) => {
 export const setPlayerToPlay = (token: string, playlist: [any]) => {
   const options = {
     url: "https://api.spotify.com/v1/me/player/play",
-    headers: createBearerHeaderOptions(token), 
+    headers: createBearerHeaderOptions(token),
     json: {
       "uris": playlist
     }

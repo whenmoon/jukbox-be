@@ -6,11 +6,3 @@ export const createBearerHeaderOptions = (token: string) => {
     'Content-Type': 'application/json'
   }
 };
-
-
-
-
-
-
-
-
