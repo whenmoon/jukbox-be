@@ -1,7 +1,7 @@
 import 'mocha';
 import chai from 'chai';
 chai.should();
-//import { toCapitalCase} from './';
+import { toCapitalCase} from './';
 import { mockNamespace, mockDone, token, mockVenue, mockPlaylist, sortedMockPlaylist, deleteTableContents, mockUserVenue } from '../services/test-utils';
 import { extractToken, provideTokenToUser } from './authUtils';
 import Venue from '../models/Venue';

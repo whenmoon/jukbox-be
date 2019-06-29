@@ -1,3 +1,3 @@
-//import { toCapitalCase } from '../controllers/sockets';
+import { toCapitalCase } from './controllers';
 
-//export { toCapitalCase };
+export { toCapitalCase };

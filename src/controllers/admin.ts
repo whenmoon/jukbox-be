@@ -48,6 +48,7 @@ export const lockNextSong = async( req: any, res:any) => {
 
 export const setTransferPlayback = async (req: any, res: any) => {
   try {
+    console.log(req.params.deviceid)
     await transferPlayerPlayback(req.user.token, req.params.deviceid);
     res.status(204).send();
   } catch (e) {

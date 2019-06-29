@@ -26,11 +26,7 @@ function createTables () {
 
     CREATE TABLE user_venues (
       id SERIAL,
-<<<<<<< HEAD:src/config/db-setup.ts
-      user_id VARCHAR REFERENCES users(email) ,
-=======
       user_id VARCHAR REFERENCES users(email),
->>>>>>> 2f5c50426f28119f5c0b98a9c52dc44aeaac742a:src/services/db-setup.ts
       venue_id VARCHAR REFERENCES venues(name),
       tickets INTEGER NOT NULL DEFAULT 0,
       diamonds INTEGER NOT NULL DEFAULT 0

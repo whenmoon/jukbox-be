@@ -52,20 +52,6 @@ router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('t
   session: false
 }), setTransferPlayback)
 
-
-router.get('/playdevice/:deviceid', extractToken, passport.authenticate('token',{
-  session: false
- }), setPlayResume)
-
-router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport.authenticate('token',{
-  session: false
- }),setVolume )
-
-router.get('/next', extractToken, passport.authenticate('token',{
-  session: false
- }), )
-
-
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', message => {
     const { route, data } = message;
