@@ -12,11 +12,10 @@ export const redirectAdmin = async (req: any, res: any) => {
 
 export const setPlayResume = async (req: any, res: any) => {
   try {
-    const venueName = await Venue.getVenueName(req.user.token)
-    const songToPlay = await VenueSong.getSongToPlay();
+    const venue = await Venue.getVenue(req.user.token)
+    const songToPlay = await VenueSong.getSongToPlay(venue.name);
     if (songToPlay) await setPlayerToPlay(req.user.token,[songToPlay]); 
     else await setPlayerToPlay(req.user.token,["spotify:track:5c882VwvW0mlp82KaSk99W"]);
-    //to add - getcurrenttrack, this a placeholder for returning the current track
     res.status(204).send();
   } catch (e) {
     res.status(e.error.error.status).send(e);
@@ -34,9 +33,9 @@ export const setVolume = async (req: any, res: any) => {
 
 export const lockNextSong = async( req: any, res:any) => {
   try {
-    const venueName = await Venue.getVenueName(req.user.token)
-    await VenueSong.deleteLastPlayedSong(venueName)
-    let nextSong = await VenueSong.getNextSong(venueName) 
+    const venue = await Venue.getVenue(req.user.token)
+    await VenueSong.deleteLastPlayedSong(venue.name)
+    let nextSong = await VenueSong.getNextSong(venue.name) 
     if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song, nextSong.venueName)
     res.status(204).send(nextSong);
   } catch(e) {

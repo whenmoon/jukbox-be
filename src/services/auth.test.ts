@@ -50,7 +50,7 @@ describe('Saving/Updating records in DB', () => {
 
   it('should find venue associated with token', async () => {
     const venueRecord = await Venue.find(existingVenue.name);
-    const venue = await Venue.authorize(venueRecord.token);
+    const venue = await Venue.getVenue(venueRecord.token);
     expect(venue.spotify_id).to.equal(existingVenue.spotify_id);
     expect(venue.name).to.equal(existingVenue.name);
   });

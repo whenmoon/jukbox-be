@@ -54,9 +54,9 @@ router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('t
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', message => {
-    if (message) {
+    if (message && message.route && message.data) {
       const { route, data } = message;
-      switch (route) {
+      switch(route) {
         case 'connectUserToVenue':
           socketControllers.connectUserToVenue(data.userEmail, socket);
           break;
@@ -66,7 +66,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
         case 'updateSongDiamonds':
           socketControllers.updateSongDiamonds(data.song, data.userEmail, socket);
       }
-  }
+    }
   });
   socket.on('error', error => console.log(error));
 };
