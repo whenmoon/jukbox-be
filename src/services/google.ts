@@ -13,6 +13,7 @@ export const saveGoogleToken = async (accessToken: string, _: string, profile: a
         name: profile.displayName,
         diamonds: 0
       });
+      console.log(user);
     } else {
       user = await User.updateToken(user.email, accessToken);
     }

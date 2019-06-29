@@ -19,6 +19,9 @@ export const mockRequest = {
 export const mockNext = () => {};
 export const mockDone = () => {};
 
+export const mockProfile = {
+  emails:[{value:'test@codeworks.me'}]
+}
 export const mockUser = new User('test@codeworks.me', 'blabla', 'Test Person', 5);
 export const mockVenue = new Venue(3,'Codeworks', 'blabla2', '123456', 1,'12');
 export const token = 'BQDOoBxcfhThYHsfSYtG_uWlhr3bYlntXIxQJ0n2FNsVhlf8egcuLiHopWM62zW3xo8bFudSC7uU9qQ4QLfPSv9WvXXbBRjPi4hopb0-6ugscKmqqRDW34JILtvZFTqPyObej7Q9Q_MyKPFCF1TLi6GXgEz0I7zE'

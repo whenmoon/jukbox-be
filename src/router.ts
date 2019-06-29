@@ -9,7 +9,7 @@ import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
 import { redirectAdmin, setPlayResume, setVolume,lockNextSong} from './controllers/admin';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
-const scopeSpotify: string[] =['user-read-email', 'user-read-private'];
+const scopeSpotify: string[] =['user-read-email', 'user-read-private','user-modify-playback-state','user-read-playback-state'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
 router.get('/login/user/Codeworks', passport.authenticate('google', {

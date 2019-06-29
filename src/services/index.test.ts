@@ -3,14 +3,11 @@ import chai from 'chai';
 chai.should();
 import { toCapitalCase, sortPlaylist } from './';
 import { mockNamespace, mockDone, token, mockVenue, mockPlaylist, sortedMockPlaylist, deleteTableContents, mockUserVenue } from '../services/test-utils';
-import {extractToken, provideTokenToUser} from './authUtils';
+import { extractToken, provideTokenToUser } from './authUtils';
 import Venue from '../models/Venue';
-import {mockUser, mockRequest, mockNext, mockVenueSong} from './test-utils';
+import { mockUser, mockRequest, mockNext, mockVenueSong, mockProfile } from './test-utils';
 import { UserVenue, User, VenueSong } from '../models';
-import {saveGoogleToken} from './google';
-//import {saveSpotifyToken as saveSpotifyToken} from './spotify.js';
-
-
+import { saveGoogleToken } from './google';
 
 
 describe('Controller service functions', () => {
@@ -26,26 +23,13 @@ describe('Controller service functions', () => {
 });
 
 
-before(async()=> {
-  await Venue.create(mockVenue);
-  await User.create(mockUser);
-  await UserVenue.create(mockUserVenue);
-  await VenueSong.create('hello' ,'test@codeworks.me','Codeworks');
-})
-
-beforeEach(async() => {
-  //await deleteTableContents();
-  // await Venue.create(mockVenue);
-  // await User.create(mockUser);
-  // await UserVenue.create(mockUserVenue);
-  // await VenueSong.create('hello' ,'test@codeworks.me','Codeworks');
-
-  // mockRequest.headers.token ='';
-
+beforeEach(async () => {
+  await deleteTableContents();
+  mockRequest.headers.token = '';
 });
 
-afterEach(async() => {
-  //await deleteTableContents();
+afterEach(async () => {
+  await deleteTableContents();
 })
 
 describe('Authentication Testing', () => {
@@ -58,19 +42,37 @@ describe('Authentication Testing', () => {
     })
 
     it(`authUtils.providetoken to user should provide a user with venue token `, async () => {
+      await Venue.create(mockVenue);
+      await User.create(mockUser);
+      await UserVenue.create(mockUserVenue);
       await provideTokenToUser(mockRequest, '', mockNext);
-      (mockRequest.token.token).should.equal('123456')
+      (mockRequest.token.token).should.equal('123456');
     })
 
   })
 
+
+
   describe('OAUTH strategy callback testing', () => {
 
-    // it(`google.saveGoogleToken`, async () => {
-    //   await saveGoogleToken(token, '', '', mockDone)
+    it(`google.saveGoogleToken saves a new token when there is no user`, async () => {
+      await saveGoogleToken(token, '', mockProfile, mockDone);
+      const user = await User.find('test@codeworks.me');
+      (user.token).should.equal(token);
+    });
+
+    it(`google.saveGoogleToken updates the token when a user already exists`, async () => {
+      await User.create(mockUser);
+      await saveGoogleToken(token, '', mockProfile, mockDone);
+      const user = await User.find('test@codeworks.me');
+      (user.token).should.equal(token);
+    });
+
+    // it(`spotify.saveSpotifyToken`, async () => {
+
     // });
 
-});
+  });
 
 
 });

@@ -13,17 +13,19 @@ export const redirectAdmin = async (req: any, res: any) => {
 export const setPlayResume = async (req: any, res: any) => {
   try {
     const songToPlay = await VenueSong.getSongToPlay();
-    const transferPlayRes = await transferPlayerPlayback(req.user.token, req.params.device_id);
-    const resumePlayRes = await setPlayerToPlay(req.user.token,[songToPlay]);
+    await transferPlayerPlayback(req.user.token, req.params.deviceid);
+    if (songToPlay)   await setPlayerToPlay(req.user.token,[songToPlay]); 
+    else await setPlayerToPlay(req.user.token,["spotify:track:5c882VwvW0mlp82KaSk99W"]);
     res.status(204).send();
   } catch (e) {
+    console.log(e)
     res.status(e.error.error.status).send(e);
   }
 };
 
 export const setVolume = async (req: any, res: any) => {
   try {
-    const transferPlayRes = await transferPlayerPlayback(req.user.token, req.params.device_id);
+    const transferPlayRes = await transferPlayerPlayback(req.user.token, req.params.deviceid);
     const volumeRes = await setPlayerVolume(req.user.token, req.params.volumepercent);
     res.status(204).send();
   } catch(e) {
