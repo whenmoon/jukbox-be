@@ -38,38 +38,41 @@ export default class VenueSong {
     return result.rows;
   };
 
-  public static async getNextSong(): Promise<VenueSong> {
+  public static async getNextSong(venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
-    SELECT * FROM venue_songs
+    SELECT * FROM venue_songs WHERE venue_id = '${venueName}';
     LIMIT 1;
   `);
     return result.rows[0];
   }
 
-  public static async lockSong (song: string): Promise<VenueSong> {
+  public static async lockSong (song: string, venueName: string) : Promise<VenueSong> {
     const result = await pool.query(`
       UPDATE venue_songs 
       SET lockedIn = true
       WHERE song = '${song}'
+      AND venueName = '${venueName}'
       RETURNING *;
     `);
     return result.rows[0];
   }
 
   // change to delete
-  public static async deleteLastPlayedSong (): Promise<VenueSong> {
+  public static async deleteLastPlayedSong (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
       DELETE FROM venue_songs 
-      WHERE currentlyPlaying = true; 
+      WHERE currentlyPlaying = true;
+      AND venueName = '${venueName}' 
     `);
     return result.rows[0];
   }
 
-  public static async getSongToPlay (): Promise<VenueSong> {
+  public static async getSongToPlay (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
       UPDATE venue_songs 
       SET currentlyPlaying = true
       WHERE lockedIn = true
+      AND venueName = '${venueName}'
       RETURNING *;
     `);
     return result.rows[0];

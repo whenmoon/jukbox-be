@@ -33,6 +33,14 @@ export default class Venue {
     return result.rows[0];
   };
 
+  public static async getVenueName (token:string): Promise<Venue>  {
+    const result = await pool.query(`
+      SELECT * FROM venues WHERE token = '${token}';
+    `);
+    return result.rows[0].name;
+  };
+
+
   public static async updateToken (spotify_id: string, token:string): Promise<Venue>  {
     const result = await pool.query(`
       UPDATE venues

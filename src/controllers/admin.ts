@@ -1,5 +1,5 @@
 import {transferPlayerPlayback, setPlayerToPlay, setPlayerVolume } from '../services/spotifyAPI';
-import { VenueSong} from '../models';
+import { VenueSong, Venue} from '../models';
 
 
 export const redirectAdmin = async (req: any, res: any) => {
@@ -12,15 +12,13 @@ export const redirectAdmin = async (req: any, res: any) => {
 
 export const setPlayResume = async (req: any, res: any) => {
   try {
-    console.log(req.params.deviceid, 'device id');
-    //await transferPlayerPlayback(req.user.token, req.params.deviceid);
+    const venueName = await Venue.getVenueName(req.user.token)
     const songToPlay = await VenueSong.getSongToPlay();
     if (songToPlay) await setPlayerToPlay(req.user.token,[songToPlay]); 
     else await setPlayerToPlay(req.user.token,["spotify:track:5c882VwvW0mlp82KaSk99W"]);
     //to add - getcurrenttrack, this a placeholder for returning the current track
     res.status(204).send();
   } catch (e) {
-    console.log(e)
     res.status(e.error.error.status).send(e);
   }
 };
@@ -36,9 +34,10 @@ export const setVolume = async (req: any, res: any) => {
 
 export const lockNextSong = async( req: any, res:any) => {
   try {
-    await VenueSong.deleteLastPlayedSong()
-    let nextSong = await VenueSong.getNextSong() 
-    if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song)
+    const venueName = await Venue.getVenueName(req.user.token)
+    await VenueSong.deleteLastPlayedSong(venueName)
+    let nextSong = await VenueSong.getNextSong(venueName) 
+    if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song, nextSong.venueName)
     res.status(204).send(nextSong);
   } catch(e) {
     res.status(500).send(e);
@@ -48,11 +47,9 @@ export const lockNextSong = async( req: any, res:any) => {
 
 export const setTransferPlayback = async (req: any, res: any) => {
   try {
-    console.log(req.params.deviceid)
     await transferPlayerPlayback(req.user.token, req.params.deviceid);
     res.status(204).send();
   } catch (e) {
-    console.log(e)
     res.status(e.error.error.status).send(e);
   }
 };

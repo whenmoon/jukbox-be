@@ -2,7 +2,7 @@ import 'mocha';
 import chai from 'chai';
 chai.should();
 import { toCapitalCase} from './';
-import { mockNamespace, mockDone, token, mockVenue, mockPlaylist, sortedMockPlaylist, deleteTableContents, mockUserVenue } from '../services/test-utils';
+import { mockNamespace, mockDone, mockToken, mockVenue, mockPlaylist, sortedMockPlaylist, deleteTableContents, mockUserVenue } from '../services/test-utils';
 import { extractToken, provideTokenToUser } from './authUtils';
 import Venue from '../models/Venue';
 import { mockUser, mockRequest, mockNext, mockVenueSong, mockProfile } from './test-utils';
@@ -51,16 +51,16 @@ describe('Authentication Testing', () => {
   describe('OAUTH strategy callback testing', () => {
 
     it(`google.saveGoogleToken saves a new token when there is no user`, async () => {
-      await saveGoogleToken(token, '', mockProfile, mockDone);
+      await saveGoogleToken(mockToken, '', mockProfile, mockDone);
       const user = await User.find('test@codeworks.me');
-      (user.token).should.equal(token);
+      (user.token).should.equal(mockToken);
     });
 
     it(`google.saveGoogleToken updates the token when a user already exists`, async () => {
       await User.create(mockUser);
-      await saveGoogleToken(token, '', mockProfile, mockDone);
+      await saveGoogleToken(mockToken, '', mockProfile, mockDone);
       const user = await User.find('test@codeworks.me');
-      (user.token).should.equal(token);
+      (user.token).should.equal(mockToken);
     });
 
     // it(`spotify.saveSpotifyToken`, async () => {

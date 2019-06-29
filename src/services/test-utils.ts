@@ -24,7 +24,7 @@ export const mockProfile = {
 }
 export const mockUser = new User('test@codeworks.me', 'blabla', 'Test Person', 5);
 export const mockVenue = new Venue('Codeworks', 'blabla', '123456', 1, 'closing');
-export const token = 'BQDOoBxcfhThYHsfSYtG_uWlhr3bYlntXIxQJ0n2FNsVhlf8egcuLiHopWM62zW3xo8bFudSC7uU9qQ4QLfPSv9WvXXbBRjPi4hopb0-6ugscKmqqRDW34JILtvZFTqPyObej7Q9Q_MyKPFCF1TLi6GXgEz0I7zE'
+export const mockToken = '123456';
 export const mockNamespace = '/codeworks';
 export const mockUserVenue = new UserVenue('test@codeworks.me','Codeworks', 1, 0);
 export const mockVenueSong = new VenueSong('Hello world', 'test@codeworks.me', 'Codeworks', 5, 'Wed Jun 26 2019 16:23:09 GMT+0200 (Central European Summer Time)', false, false);
