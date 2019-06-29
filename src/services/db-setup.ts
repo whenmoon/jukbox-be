@@ -7,6 +7,15 @@ import pool, { port } from './db';
 
 function createTables () {
   pool.query(`
+    
+    DROP TABLE IF EXISTS user_venues;
+    
+    DROP TABLE IF EXISTS venue_songs;  
+    
+    DROP TABLE IF EXISTS users;
+    
+    DROP TABLE IF EXISTS venues;
+
     CREATE TABLE users (
       email VARCHAR NOT NULL,
       token VARCHAR NOT NULL,

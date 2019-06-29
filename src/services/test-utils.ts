@@ -2,10 +2,31 @@ import { User, Venue, UserVenue, VenueSong } from '../models';
 import client from 'socket.io-client';
 import pool from './db';
 
+
+export const mockRequest = {
+  headers:{
+    token : '',
+    authorization: 'Bearer blabla'
+  },
+  user: {
+    email: 'test@codeworks.me'
+  },
+  token: {
+    token: ''
+  }
+}
+
+export const mockNext = () => {};
+export const mockDone = () => {};
+
+export const mockProfile = {
+  emails:[{value:'test@codeworks.me'}]
+}
 export const mockUser = new User('test@codeworks.me', 'blabla', 'Test Person', 5);
 export const mockVenue = new Venue('Codeworks', 'blabla', '123456', 1, 'closing');
+export const mockToken = '123456';
 export const mockNamespace = '/codeworks';
-export const mockUserVenue = new UserVenue('test@codeworks.me', 'Codeworks', 1, 0);
+export const mockUserVenue = new UserVenue('test@codeworks.me','Codeworks', 1, 0);
 export const mockVenueSong = new VenueSong('Hello world', 'test@codeworks.me', 'Codeworks', 5, 'Wed Jun 26 2019 16:23:09 GMT+0200 (Central European Summer Time)', false, false);
 const mockVenueSong2 = new VenueSong('Lala', 'other@codeworks.me', 'Codeworks', 0, 'Wed Jun 26 2019 16:20:09 GMT+0200 (Central European Summer Time)', false, false);
 const mockVenueSong3 = new VenueSong('Blabla', 'third@codeworks.me', 'Codeworks', 0, 'Wed Jun 26 2019 16:22:09 GMT+0200 (Central European Summer Time)', false, false);

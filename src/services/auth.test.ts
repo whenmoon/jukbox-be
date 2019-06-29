@@ -1,12 +1,8 @@
-import path from 'path';
 import 'mocha';
 import chai from 'chai';
 chai.should();
 import { User, Venue, VenueSong, UserVenue } from '../models';
-import server from '../';
-const request = require('supertest')(server);
 const expect  = chai.expect;
-import pool, { port } from './db';
 import { createTables, existingUser, newUser, existingVenue, newVenue, newToken} from './auth-test-utils';
 
 describe('Saving/Updating records in DB', () => {
@@ -19,7 +15,6 @@ describe('Saving/Updating records in DB', () => {
   });
 
   after((done) => {
-
     done();
   });
 

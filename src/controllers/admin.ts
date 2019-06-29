@@ -1,4 +1,5 @@
-import { transferPlayerPlayback, setPlayerPlay, setPlayerVolume } from '../services/spotifyAPI';
+import {transferPlayerPlayback, setPlayerToPlay, setPlayerVolume } from '../services/spotifyAPI';
+import { VenueSong, Venue, UserVenue} from '../models';
 
 
 export const redirectAdmin = async (req: any, res: any) => {
@@ -11,9 +12,10 @@ export const redirectAdmin = async (req: any, res: any) => {
 
 export const setPlayResume = async (req: any, res: any) => {
   try {
-    //to add - getcurrenttrack, this a placeholder for returning the current track
-    const transferPlayRes = await transferPlayerPlayback(req.user.token, req.params.device_id);
-    const resumePlayRes = await setPlayerPlay(req.user.token, ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]);
+    const venue = await Venue.authorize(req.user.token)
+    const songToPlay = await VenueSong.getSongToPlay(venue.name);
+    if (songToPlay) await setPlayerToPlay(req.user.token,[songToPlay]); 
+    else await setPlayerToPlay(req.user.token,["spotify:track:5c882VwvW0mlp82KaSk99W"]);
     res.status(204).send();
   } catch (e) {
     res.status(e.error.error.status).send(e);
@@ -22,12 +24,32 @@ export const setPlayResume = async (req: any, res: any) => {
 
 export const setVolume = async (req: any, res: any) => {
   try {
-    const device_id = req.params.deviceid;
-    const volume = req.params.volumepercent;
-    const transferPlayRes = await transferPlayerPlayback(req.user.token, device_id);
-    const volumeRes = await setPlayerVolume(req.user.token, volume);
+    await setPlayerVolume(req.user.token, req.params.volumepercent);
     res.status(204).send();
   } catch(e) {
     res.status(e.error.error.status).send(e);
   }
 };
+
+export const lockNextSong = async( req: any, res:any) => {
+  try {
+    const venue = await Venue.authorize(req.user.token)
+    await VenueSong.deleteLastPlayedSong(venue.name)
+    let nextSong = await VenueSong.getNextSong(venue.name) 
+    if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song, venue.name);
+    res.status(204).send(nextSong);
+  } catch(e) {
+    res.status(500).send(e);
+  }
+};
+
+
+export const setTransferPlayback = async (req: any, res: any) => {
+  try {
+    await transferPlayerPlayback(req.user.token, req.params.deviceid);
+    res.status(204).send();
+  } catch (e) {
+    res.status(e.error.error.status).send(e);
+  }
+};
+

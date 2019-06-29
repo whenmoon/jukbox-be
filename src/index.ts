@@ -10,7 +10,7 @@ import passport from 'passport';
 import cors from 'cors';
 import socketIo from 'socket.io';
 import http from 'http';
-
+require('dotenv').config()
 const app: express.Application = express();
 app
   .use(cors())
@@ -18,7 +18,7 @@ app
 
 const server = http.createServer(app);
 
-server.listen(4000, () => console.log(`Listening on port 4000`));
+server.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));
 
 const io = socketIo(server);
 export const nsp = io.of('/codeworks');
