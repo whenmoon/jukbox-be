@@ -2,7 +2,6 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 const passport = require('passport');
 const { getRefreshToken } = require('./spotifyAPI')
 const { Venue } = require('../models');
-require('dotenv').config();
 
 passport.use(new SpotifyStrategy({
     clientID: process.env.SPOTIFY_CLIENT_ID,
@@ -26,5 +25,3 @@ passport.use(new SpotifyStrategy({
       console.log(e);
     }
 }));
-
-

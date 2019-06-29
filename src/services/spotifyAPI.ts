@@ -1,7 +1,6 @@
 import { createBearerHeaderOptions} from './spotifyAPIUtils'
 const request = require('request-promise');
 const btoa = require('btoa');
-require('dotenv').config();
 
 export const getRefreshToken = (refreshToken: string) => {
   const options = {
@@ -31,7 +30,6 @@ export const transferPlayerPlayback = (token: string, deviceId: string) => {
   return request.put(options);
 }
 
-
 export const setPlayerPlay = (token: string, playlist: [string]) => {
   const options = {
     url: "https://api.spotify.com/v1/me/player/play",
@@ -43,11 +41,11 @@ export const setPlayerPlay = (token: string, playlist: [string]) => {
   return request.put(options);
 }
 
-
 export const searchSpotify = (token: string, songName: string) => {
   const options = {
     url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
-    headers: createBearerHeaderOptions(token)
+    headers: createBearerHeaderOptions(token),
+    json: true
   }
   return request.get(options);
 };
@@ -55,7 +53,7 @@ export const searchSpotify = (token: string, songName: string) => {
 export const setPlayerVolume = (token: string, volume: string) => {
   const options = {
     url: `https://api.spotify.com/v1/me/player/volume?volume_percent${volume}`,
-    headers: createBearerHeaderOptions(token)
+    headers: createBearerHeaderOptions(token),
   }
   return request.put(options);
 }

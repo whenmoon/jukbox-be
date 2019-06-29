@@ -1,4 +1,3 @@
-require('dotenv').config();
 import User from './User';
 import UserVenue from './UserVenue';
 import Venue from './Venue';
