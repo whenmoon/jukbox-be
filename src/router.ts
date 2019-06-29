@@ -51,16 +51,18 @@ router.get('/next', extractToken, passport.authenticate('token',{
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', message => {
-    const { route, data } = message;
-    switch(route) {
-      case 'connectUserToVenue':
-        socketControllers.connectUserToVenue(data.userEmail, socket);
-        break;
-      case 'addSong':
-        socketControllers.addSongToPlaylist(data.song, data.userEmail, socket);
-        break;
-      case 'updateSongDiamonds':
-        socketControllers.updateSongDiamonds(data.song, data.userEmail, socket);
+    if (message) {
+      const { route, data } = message;
+      switch(route) {
+        case 'connectUserToVenue':
+          socketControllers.connectUserToVenue(data.userEmail, socket);
+          break;
+        case 'addSong':
+          socketControllers.addSongToPlaylist(data.song, data.userEmail, socket);
+          break;
+        case 'updateSongDiamonds':
+          socketControllers.updateSongDiamonds(data.song, data.userEmail, socket);
+      }
     }
   });
   socket.on('error', error => console.log(error));
