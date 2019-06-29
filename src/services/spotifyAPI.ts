@@ -1,7 +1,6 @@
 import { createBearerHeaderOptions} from './spotifyAPIUtils'
 const request = require('request-promise');
 const btoa = require('btoa');
-import { Spotify } from '../config/credentials';
 
 export const getRefreshToken = (refreshToken: string) => {
   const options = {
@@ -11,7 +10,7 @@ export const getRefreshToken = (refreshToken: string) => {
       refresh_token: refreshToken,
     },
     headers: {
-      'Authorization': 'Basic ' + btoa(<string>Spotify.client_id + ':' + <string>Spotify.client_secret)
+      'Authorization': 'Basic ' + btoa(<string>process.env.SPOTIFY_client_id + ':' + <string>process.env.SPOTIFY_client_secret)
     },
     json: true
   };

@@ -2,10 +2,9 @@ import express from 'express';
 import router, {socketRouter} from './router';
 import passport from 'passport';
 import cors from 'cors';
-import { PORT } from './config/credentials';
 import socketIo from 'socket.io';
 import http from 'http';
-
+require('dotenv').config()
 const app: express.Application = express();
 
 app
@@ -14,7 +13,7 @@ app
 
 const server = http.createServer(app);
 
-server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+server.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));
 
 const io = socketIo(server);
 

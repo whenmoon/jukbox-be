@@ -1,8 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { Google } from '../config/credentials';
 import User from '../models/User';
-
+require('dotenv').config()
 export const saveGoogleToken = async (accessToken: string, _: string, profile: any, done: any) => {
   try {
     let user = await User.find(profile.emails[0].value);
@@ -25,8 +24,8 @@ export const saveGoogleToken = async (accessToken: string, _: string, profile: a
 
 passport.use(
   new GoogleStrategy({
-    callbackURL: <string>Google.redirect_uri,
-    clientID: <string>Google.client_id,
-    clientSecret: <string>Google.client_secret,
+    callbackURL: <string>process.env.GOOGLE_REDIRECT_URI,
+    clientID: <string>process.env.GOOGLE_CLIENT_ID,
+    clientSecret: <string>process.env.GOOGLE_CLIENT_SECRET,
   }, saveGoogleToken)
 );

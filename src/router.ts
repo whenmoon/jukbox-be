@@ -6,10 +6,10 @@ import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
-import { redirectAdmin, setPlayResume, setVolume,lockNextSong} from './controllers/admin';
+import { redirectAdmin, setPlayResume, setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
-const scopeSpotify: string[] =['user-read-email', 'user-read-private','user-modify-playback-state','user-read-playback-state'];
+const scopeSpotify: string[] =['user-top-read','user-read-recently-played','user-read-currently-playing','user-library-read','user-library-modify','streaming', 'app-remote-control','user-read-email', 'user-read-private', 'user-read-birthdate','user-follow-modify','user-follow-read','user-modify-playback-state','playlist-modify-public','playlist-read-collaborative','playlist-read-private','playlist-modify-private','user-read-playback-state'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
 router.get('/login/user/Codeworks', passport.authenticate('google', {
@@ -47,6 +47,10 @@ router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport
 router.get('/next', extractToken, passport.authenticate('token', {
   session: false
 }), lockNextSong);
+
+router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('token', {
+  session: false
+}), setTransferPlayback)
 
 
 
