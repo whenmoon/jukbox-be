@@ -1,5 +1,5 @@
 import {transferPlayerPlayback, setPlayerToPlay, setPlayerVolume } from '../services/spotifyAPI';
-import { VenueSong, Venue} from '../models';
+import { VenueSong, Venue, UserVenue} from '../models';
 
 
 export const redirectAdmin = async (req: any, res: any) => {
@@ -36,7 +36,7 @@ export const lockNextSong = async( req: any, res:any) => {
     const venue = await Venue.authorize(req.user.token)
     await VenueSong.deleteLastPlayedSong(venue.name)
     let nextSong = await VenueSong.getNextSong(venue.name) 
-    if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song, nextSong.venueName)
+    if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song, venue.name);
     res.status(204).send(nextSong);
   } catch(e) {
     res.status(500).send(e);

@@ -40,7 +40,7 @@ export default class VenueSong {
 
   public static async getNextSong(venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
-    SELECT * FROM venue_songs WHERE venue_id = '${venueName}';
+    SELECT * FROM venue_songs WHERE venue_id = '${venueName}'
     LIMIT 1;
   `);
     return result.rows[0];
@@ -51,7 +51,7 @@ export default class VenueSong {
       UPDATE venue_songs 
       SET lockedIn = true
       WHERE song = '${song}'
-      AND venueName = '${venueName}'
+      AND venue_id = '${venueName}'
       RETURNING *;
     `);
     return result.rows[0];
@@ -61,8 +61,8 @@ export default class VenueSong {
   public static async deleteLastPlayedSong (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
       DELETE FROM venue_songs 
-      WHERE currentlyPlaying = true;
-      AND venueName = '${venueName}' 
+      WHERE currentlyPlaying = true
+      AND venue_id = '${venueName}' 
     `);
     return result.rows[0];
   }
@@ -72,7 +72,7 @@ export default class VenueSong {
       UPDATE venue_songs 
       SET currentlyPlaying = true
       WHERE lockedIn = true
-      AND venueName = '${venueName}'
+      AND venue_id = '${venueName}'
       RETURNING *;
     `);
     return result.rows[0];
