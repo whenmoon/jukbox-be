@@ -51,7 +51,7 @@ router.get('/next', extractToken, passport.authenticate('token',{
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', message => {
-    if (message) {
+    if (message && message.route && message.data) {
       const { route, data } = message;
       switch(route) {
         case 'connectUserToVenue':
