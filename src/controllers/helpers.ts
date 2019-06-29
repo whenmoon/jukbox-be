@@ -10,4 +10,4 @@ export default class Song {
 }
 
 export const parseArray: any = (songList: any[]) => songList.map((song: any) => 
-  song = new Song(song.id, song.artists[0].name, song.name, song.album.name, [song.album.images[0].url, song.album.images[0].url], song.duration_ms));
+  song = new Song(song.id, song.artists[0].name, song.name, song.album.name, [song.album.images[0].url, song.album.images[1].url], song.duration_ms));
