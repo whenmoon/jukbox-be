@@ -1,3 +1,12 @@
+import { VenueSong } from './models';
+
+export interface socketServerResponse {
+  route: string,
+  data: {
+    updatedPlaylist: Array<VenueSong>
+  }
+};
+
 export interface Credentials {
   client_id: string,
   client_secret: string,
@@ -22,8 +31,9 @@ export interface SpotifyPlayerParams {
   paramType?: string,
   urlType?: string,
   token?: string
-}
+};
+
 export interface Url {
   urlType?: string,
   urlParam?: string,
-}
+};

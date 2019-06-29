@@ -38,7 +38,7 @@ export default class VenueSong {
     return result.rows;
   };
 
-  public static async sortPlaylist (playlist: Array<VenueSong>): Promise<Array<VenueSong>> {
+  public static sortPlaylist (playlist: Array<VenueSong>): Array<VenueSong> {
     playlist.sort((a: VenueSong, b: VenueSong) => {
       const aDate = new Date (a.submission_time);
       const bDate = new Date (b.submission_time);
@@ -54,5 +54,5 @@ export default class VenueSong {
       return (a.currentlyPlaying === b.currentlyPlaying) ? 0 : a.currentlyPlaying ? -1 : 1;
     });
     return playlist;
-};
+  };
 }

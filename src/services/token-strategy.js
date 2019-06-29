@@ -5,6 +5,7 @@ const {Venue} = require('../models');
 
 passport.use(
   new UniqueTokenStrategy(async (token, done) => {
+    token = (token.slice(-1) === '#') ? token.slice(0, -1) : token;
     const user = await User.authorize(token);
     if (user) done(null, user);
     else {

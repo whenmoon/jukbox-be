@@ -15,9 +15,11 @@ describe('Saving/Updating records in DB', () => {
     await createTables();
     await User.create(existingUser);
     await Venue.create(existingVenue);
+    await UserVenue.create(existingUser.email, existingVenue.name, 1);
   });
 
   after((done) => {
+
     done();
   });
 
@@ -56,12 +58,18 @@ describe('Saving/Updating records in DB', () => {
     const venue = await Venue.authorize(venueRecord.token);
     expect(venue.spotify_id).to.equal(existingVenue.spotify_id);
     expect(venue.name).to.equal(existingVenue.name);
-  })
+  });
 
   it('should find user associated with token', async () => {
     const userRecord = await User.find(existingUser.email);
     const user = await User.authorize(userRecord.token);
     expect(user.email).to.equal(existingUser.email);
     expect(user.diamonds).to.equal(existingUser.diamonds);
+  });
+
+  it('should find a user current venue', async () => {
+    const venueInfo: any = await Venue.getVenueToken(existingUser.email);
+    const venue: any = await Venue.find(venueInfo.venue_id);
+    expect(venue.token).to.equal(newToken);
   })
 });

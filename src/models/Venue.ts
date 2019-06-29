@@ -57,6 +57,7 @@ export default class Venue {
       INNER JOIN venues ON user_venues.venue_id = venues.name
       WHERE users.email = '${email}';
     `);
+    console.log('QUERY ––––––––––––>', result.rows[0]);
     return result.rows[0];
   }
 }
