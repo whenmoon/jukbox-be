@@ -50,7 +50,7 @@ describe('Saving/Updating records in DB', () => {
 
   it('should find venue associated with token', async () => {
     const venueRecord = await Venue.find(existingVenue.name);
-    const venue = await Venue.getVenue(venueRecord.token);
+    const venue = await Venue.authorize(venueRecord.token);
     expect(venue.spotify_id).to.equal(existingVenue.spotify_id);
     expect(venue.name).to.equal(existingVenue.name);
   });
@@ -63,7 +63,7 @@ describe('Saving/Updating records in DB', () => {
   });
 
   it('should find a user current venue', async () => {
-    const venueInfo: any = await Venue.getVenueToken(existingUser.email);
+    const venueInfo: any = await Venue.authorize(existingUser.email);
     const venue: any = await Venue.find(venueInfo.venue_id);
     expect(venue.token).to.equal(newToken);
   })

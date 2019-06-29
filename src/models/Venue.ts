@@ -26,7 +26,7 @@ export default class Venue {
     return result.rows[0];
   };
 
-  public static async getVenue (token:string): Promise<Venue>  {
+  public static async authorize (token:string): Promise<Venue>  {
     const result = await pool.query(`
       SELECT * FROM venues WHERE token = '${token}';
     `);
