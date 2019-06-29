@@ -24,7 +24,7 @@ export const setPlayResume = async (req: any, res: any) => {
 
 export const setVolume = async (req: any, res: any) => {
   try {
-    const volumeRes = await setPlayerVolume(req.user.token, req.params.volumepercent);
+    await setPlayerVolume(req.user.token, req.params.volumepercent);
     res.status(204).send();
   } catch(e) {
     res.status(e.error.error.status).send(e);

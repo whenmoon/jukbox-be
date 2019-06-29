@@ -1,6 +1,6 @@
 import 'mocha';
 import VenueSong from '../models/VenueSong';
-import { mockUser, token, mockVenue, mockUserVenue, mockVenueSong, deleteTableContents } from '../services/test-utils';
+import { mockUser, mockToken, mockVenue, mockUserVenue, mockVenueSong, deleteTableContents } from '../services/test-utils';
 import chai from 'chai'; 
 import { lockNextSong } from './admin';
 
