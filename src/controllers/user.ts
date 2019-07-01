@@ -22,11 +22,10 @@ export const searchForSongs = async (req: any, res: any) => {
   try {
     const songName: string = req.query.q;
     const token: string = req.token;
-    const response: any = await searchSpotify(token, songName);
+    const response = await searchSpotify(token, songName);
     if (response) res.status(200).send(parseArray(response.tracks.items));
-    else res.status(403).end();
+    else res.status(403).end()
   } catch(e) {
-    console.log(e);
     res.status(500).end();
   }
 }
