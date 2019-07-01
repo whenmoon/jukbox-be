@@ -58,13 +58,13 @@ export const socketRouter = (socket: socketIO.Socket) => {
       const { route, data } = message;
       switch(route) {
         case 'connectUserToVenue':
-          socketControllers.connectUserToVenue(data.userEmail, socket);
+          socketControllers.connectUserToVenue(data.userAccessToken, socket);
           break;
         case 'addSong':
-          socketControllers.addSongToPlaylist(data.song, data.userEmail, socket);
+          socketControllers.addSongToPlaylist(data.song, data.userAccessToken, socket);
           break;
         case 'updateSongDiamonds':
-          socketControllers.updateSongDiamonds(data.song, data.userEmail, socket);
+          socketControllers.updateSongDiamonds(data.song, data.userAccessToken, socket);
       }
     }
   });
