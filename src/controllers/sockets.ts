@@ -3,9 +3,12 @@ import socketIO from 'socket.io';
 import { nsp } from '../';
 import { toCapitalCase } from '../services';
 
-export const connectUserToVenue = async (userEmail: string, socket: socketIO.Socket) => {
+export const connectUserToVenue = async (userAccessToken: string, socket: socketIO.Socket) => {
   try {
     const venueName = toCapitalCase(socket.nsp.name);
+    const user = await User.authorize(userAccessToken);
+    if (! user) throw Error('user not authorized');
+    const userEmail = user.email;
     const userAtCurrentVenue = await UserVenue.find(userEmail, venueName);
     if (! userAtCurrentVenue) {
       const { ticket_default_no } = await Venue.find(venueName);
@@ -17,9 +20,12 @@ export const connectUserToVenue = async (userEmail: string, socket: socketIO.Soc
   }
 };
 
-export const addSongToPlaylist = async (song: string, userEmail: string, socket: socketIO.Socket) => {
+export const addSongToPlaylist = async (song: string, userAccessToken: string, socket: socketIO.Socket) => {
   try {
     const venueName = toCapitalCase(socket.nsp.name);
+    const user = await User.authorize(userAccessToken);
+    if (! user) throw Error('user not authorized');
+    const userEmail = user.email;
     const userAtCurrentVenue = await UserVenue.find(userEmail, venueName);
     if (userAtCurrentVenue.tickets > 0) {
       await VenueSong.create(song, userEmail, venueName);
@@ -31,12 +37,14 @@ export const addSongToPlaylist = async (song: string, userEmail: string, socket:
   }
 };
 
-export const updateSongDiamonds = async (song: string, userEmail: string, socket: socketIO.Socket) => {
+export const updateSongDiamonds = async (song: string, userAccessToken: string, socket: socketIO.Socket) => {
   try {
     const venueName = toCapitalCase(socket.nsp.name);
-    const user = await User.find(userEmail);
+    const user = await User.authorize(userAccessToken);
+    if (! user) throw Error('user not authorized');
     if (user.diamonds > 0) {
       await VenueSong.promote(song);
+      const userEmail = user.email;
       await User.decrementDiamonds(userEmail);
     }
     await emitSortedPlaylist(venueName);

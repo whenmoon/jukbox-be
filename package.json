@@ -24,6 +24,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-spotify": "^1.0.1",
     "passport-unique-token": "^0.1.4",
+    "passport.socketio": "^3.7.0",
     "pg": "^7.11.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
