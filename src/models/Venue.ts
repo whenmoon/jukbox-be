@@ -7,13 +7,14 @@ export default class Venue {
     public token: string,
     public ticket_default_no: number,
     public closing_times: string,
+    public refresh: string,
     private id?: number
   ) {}
 
   public static async create (venue: Venue): Promise<Venue> {
     const result = await pool.query(`
-      INSERT INTO venues (name, token, ticket_default_no, spotify_id)
-      VALUES ('${venue.name}', '${venue.token}', '${venue.ticket_default_no}', '${venue.spotify_id}')
+      INSERT INTO venues (name, token, ticket_default_no, spotify_id, refresh)
+      VALUES ('${venue.name}', '${venue.token}', '${venue.ticket_default_no}', '${venue.spotify_id}','${venue.refresh}')
       RETURNING *;
     `);
     return result.rows[0];

@@ -41,11 +41,29 @@ export const setPlayerToPlay = (token: string, playlist: [any]) => {
   return request.put(options);
 };
 
+export const setPlayerToResume = (token:string) => {
+  const options = {
+    url: "https://api.spotify.com/v1/me/player/play",
+    headers: createBearerHeaderOptions(token),
+  };
+  return request.put(options);
+}
+
+export const setPlayerToPause = (token:string) => {
+  const options = {
+    url: "https://api.spotify.com/v1/me/player/pause",
+    headers: createBearerHeaderOptions(token),
+  };
+  return request.put(options);
+}
+
+
 export const searchSpotify = (token: string, songName: string) => {
   const options = {
     url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
-    headers: createBearerHeaderOptions(token)
-  };
+    headers: createBearerHeaderOptions(token),
+    json: true
+  }
   return request.get(options);
 };
 
@@ -56,10 +74,6 @@ export const setPlayerVolume = (token: string, volume: string) => {
   };
   return request.put(options);
 };
-
-
-
-
 
 
 

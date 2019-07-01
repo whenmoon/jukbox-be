@@ -13,7 +13,7 @@ passport.use(
       if(venue) {
         done(null, venue);
       } else {
-        done({ message: 'Venue not found'}, false);
+        done({ message: ' not found'}, false);
       }
     }
   })
