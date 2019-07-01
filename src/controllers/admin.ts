@@ -49,8 +49,7 @@ export const setTransferPlayback = async (req: any, res: any) => {
     await transferPlayerPlayback(req.user.token, req.params.deviceid);
     res.status(204).send();
   } catch (e) {
-    console.error(e)
-    res.status(500).send(e);
+    res.status(e.error.error.status).send(e);
   }
 };
 
