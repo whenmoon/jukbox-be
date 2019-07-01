@@ -28,7 +28,7 @@ export const setResume = async(req: any, res:any ) => {
   } catch (e) {
     res.status(e.error.error.status).send(e);
   }
-}
+};
 
 export const setPause = async(req: any, res:any ) => {
   try {
@@ -36,10 +36,7 @@ export const setPause = async(req: any, res:any ) => {
   } catch (e) {
     res.status(e.error.error.status).send(e);
   }
-}
-
-
-
+};
 
 export const setVolume = async (req: any, res: any) => {
   try {
@@ -53,10 +50,8 @@ export const setVolume = async (req: any, res: any) => {
 export const lockNextSong = async( req: any, res:any) => {
   try {
     const venue = await Venue.authorize(req.user.token)
-    console.log(venue)
     await VenueSong.deleteLastPlayedSong(venue.name)
     let nextSong = await VenueSong.getNextSong(venue.name) 
-    console.log(nextSong)
     if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song, venue.name);
     res.status(201).json(nextSong);
   } catch(e) {
@@ -64,28 +59,14 @@ export const lockNextSong = async( req: any, res:any) => {
   }
 };
 
-
-
-
 export const setTransferPlayback = async (req: any, res: any) => {
   try {
     await transferPlayerPlayback(req.user.token, req.params.deviceid);
     res.status(204).send()
   } catch (e) {
-    console.error(e);
-    // check refreshToken
     res.status(e.error.error.status).send(e);
   }
 };
 
-export const refreshToken = async (req:any, res:any)=> {
-  try {
-    const venue = await Venue.authorize(req.user.token)
-    const response = await getRefreshToken(venue.refresh);
-    console.log(response)
-    //newVenue = await Venue.updateToken(venue.spotify_id, response.)
-  } catch (e) {
 
-  }
-}
 
