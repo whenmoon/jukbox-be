@@ -70,7 +70,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
           case 'updateSongDiamonds':
             socketControllers.updateSongDiamonds(data.song, user, socket);
         }
-      } else socket.emit('message', 'Invalid token') && socket.disconnect();
+      } else socket.disconnect();
 
     }
   });
