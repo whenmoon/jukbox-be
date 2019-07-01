@@ -6,11 +6,10 @@ require('dotenv').config({
 
 import express from 'express';
 import router, {socketRouter} from './router';
-import passport from 'passport';
 import cors from 'cors';
 import socketIo from 'socket.io';
 import http from 'http';
-require('dotenv').config()
+
 const app: express.Application = express();
 app
   .use(cors())

@@ -11,48 +11,53 @@ export const connectUserToVenue = async (userEmail: string, socket: socketIO.Soc
       const { ticket_default_no } = await Venue.find(venueName);
       await UserVenue.create(userEmail, venueName, ticket_default_no);
     }
-    await emitSortedPlaylist(venueName);
+    await emitToNamespace(userEmail, venueName, socket);
   } catch (error) {
-    console.log(error);
+    socket.emit('error', error);
   }
 };
 
-export const addSongToPlaylist = async (song: string, userEmail: string, socket: socketIO.Socket) => {
+export const addSongToPlaylist = async (songId: string, userEmail: string, socket: socketIO.Socket) => {
   try {
     const venueName = toCapitalCase(socket.nsp.name);
     const userAtCurrentVenue = await UserVenue.find(userEmail, venueName);
     if (userAtCurrentVenue.tickets > 0) {
-      await VenueSong.create(song, userEmail, venueName);
+      await VenueSong.create(songId, userEmail, venueName);
       await UserVenue.decrementTickets(userEmail, venueName);
     }
-    await emitSortedPlaylist(venueName);
+    await emitToNamespace(userEmail, venueName, socket);
   } catch (error) {
-    console.log(error);
+    socket.emit('error', error);
   }
 };
 
-export const updateSongDiamonds = async (song: string, userEmail: string, socket: socketIO.Socket) => {
+export const updateSongDiamonds = async (songId: string, user: User, socket: socketIO.Socket) => {
   try {
+    const userEmail = user.email;
     const venueName = toCapitalCase(socket.nsp.name);
-    const user = await User.find(userEmail);
     if (user.diamonds > 0) {
-      await VenueSong.promote(song);
+      await VenueSong.promote(songId);
       await User.decrementDiamonds(userEmail);
     }
-    await emitSortedPlaylist(venueName);
+    await emitToNamespace(userEmail, venueName, socket);
   } catch (error) {
-    console.log(error);
+    socket.emit('error', error);
   }
 };
 
-const emitSortedPlaylist = async (venueName: string) => {
-  const playlist = await VenueSong.getAll(venueName);
-  const sortedPlaylist = VenueSong.sortPlaylist(playlist);
-  const message = {
-    route: 'updatedPlaylist',
-    data: {
-      updatedPlaylist: sortedPlaylist
-    }
-  };
-  nsp.emit('message', message);
+const emitToNamespace = async (userEmail: string, venueName: string, socket: socketIO.Socket) => {
+  try {
+    const playlist = await VenueSong.getAll(venueName);
+    const sortedPlaylist = VenueSong.sortPlaylist(playlist);
+    const { tickets } = await UserVenue.find(userEmail, venueName);
+    const message = {
+      data: {
+        updatedPlaylist: sortedPlaylist,
+        tickets: tickets
+      }
+    };
+    nsp.emit('message', message);
+  } catch (error) {
+    socket.emit('error', error);
+  }
 };
