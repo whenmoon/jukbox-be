@@ -9,6 +9,7 @@ import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
 import { redirectAdmin, setPlayResume, setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
+import { User } from './models';
 const scopeSpotify: string[] =['user-top-read','user-read-recently-played','user-read-currently-playing','user-library-read','user-library-modify','streaming', 'app-remote-control','user-read-email', 'user-read-private', 'user-read-birthdate','user-follow-modify','user-follow-read','user-modify-playback-state','playlist-modify-public','playlist-read-collaborative','playlist-read-private','playlist-modify-private','user-read-playback-state'];
 const scopeGoogle: string[] = ['profile', 'email'];
 
@@ -53,22 +54,27 @@ router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('t
 }), setTransferPlayback)
 
 export const socketRouter = (socket: socketIO.Socket) => {
-  socket.on('message', message => {
+  socket.on('message', async message => {
     if (message && message.route && message.data) {
       const { route, data } = message;
-      switch(route) {
-        case 'connectUserToVenue':
-          socketControllers.connectUserToVenue(data.userAccessToken, socket);
-          break;
-        case 'addSong':
-          socketControllers.addSongToPlaylist(data.song, data.userAccessToken, socket);
-          break;
-        case 'updateSongDiamonds':
-          socketControllers.updateSongDiamonds(data.song, data.userAccessToken, socket);
-      }
+      const user = await User.authorize(data.userAccessToken);
+
+      if (user) {
+        switch(route) {
+          case 'connectUserToVenue':
+            socketControllers.connectUserToVenue(user.email, socket);
+            break;
+          case 'addSong':
+            socketControllers.addSongToPlaylist(data.song, user.email, socket);
+            break;
+          case 'updateSongDiamonds':
+            socketControllers.updateSongDiamonds(data.song, user, socket);
+        }
+      } else socket.emit('message', 'Invalid token') && socket.disconnect();
+
     }
   });
-  socket.on('error', error => console.log(error));
+  socket.on('error', error => socket.emit('message', error));
 };
 
 export default router;

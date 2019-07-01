@@ -44,7 +44,8 @@ export const setPlayerToPlay = (token: string, playlist: [any]) => {
 export const searchSpotify = (token: string, songName: string) => {
   const options = {
     url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
-    headers: createBearerHeaderOptions(token)
+    headers: createBearerHeaderOptions(token),
+    json: true
   };
   return request.get(options);
 };
