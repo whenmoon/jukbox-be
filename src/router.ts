@@ -55,26 +55,30 @@ router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('t
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', async message => {
-    if (message && message.route && message.data) {
-      const { route, data } = message;
-      const user = await User.authorize(data.userAccessToken);
-
-      if (user) {
-        switch(route) {
-          case 'connectUserToVenue':
-            socketControllers.connectUserToVenue(user.email, socket);
-            break;
-          case 'addSong':
-            socketControllers.addSongToPlaylist(data.song, user.email, socket);
-            break;
-          case 'updateSongDiamonds':
-            socketControllers.updateSongDiamonds(data.song, user, socket);
-        }
-      } else socket.disconnect();
-
+    try {
+      if (message && message.route && message.data) {
+        const { route, data } = message;
+        const user = await User.authorize(data.userAccessToken);
+  
+        if (user) {
+          switch(route) {
+            case 'connectUserToVenue':
+              socketControllers.connectUserToVenue(user.email, socket);
+              break;
+            case 'addSong':
+              socketControllers.addSongToPlaylist(data.songId, user.email, socket);
+              break;
+            case 'updateSongDiamonds':
+              socketControllers.updateSongDiamonds(data.songId, user, socket);
+          }
+        } else socket.emit('error', 'Invalid access token') && socket.disconnect();
+  
+      }
+    } catch (error) {
+      socket.emit('error', error);
     }
   });
-  socket.on('error', error => socket.emit('message', error));
+  socket.on('error', error => console.log(error));
 };
 
 export default router;
