@@ -10,8 +10,11 @@ passport.use(
     if (user) done(null, user);
     else {
       const venue = await Venue.authorize(token);
-      venue && done(null, venue);
-      done(null, false);
+      if(venue) {
+        done(null, venue);
+      } else {
+        done({ message: 'Venue not found'}, false);
+      }
     }
   })
 );

@@ -1,5 +1,4 @@
 import { searchSpotify } from '../services/spotifyAPI';
-import { parseArray } from './helpers';
 
 export const redirectUser = (req: any, res: any) => {
   try {
@@ -11,8 +10,8 @@ export const redirectUser = (req: any, res: any) => {
 
 export const getUserInfo = (req: any, res: any) => {
   try {
-    if (req.user) res.status(200).json(req.user);
-    else res.status(403).end();
+    req.user && res.status(200).json(req.user);
+    res.status(403).end();
   } catch(e) {
     res.status(500).end();
   }
@@ -22,11 +21,9 @@ export const searchForSongs = async (req: any, res: any) => {
   try {
     const songName: string = req.query.q;
     const token: string = req.token;
-    const response: any = await searchSpotify(token, songName);
-    if (response) res.status(200).send(parseArray(response.tracks.items));
-    else res.status(403).end();
+    const response = await searchSpotify(token, songName);
+    response && res.status(200).json(response);
   } catch(e) {
-    console.log(e);
     res.status(500).end();
   }
 }
