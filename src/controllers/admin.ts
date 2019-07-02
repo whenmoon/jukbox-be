@@ -12,10 +12,8 @@ export const redirectAdmin = async (req: any, res: any) => {
 
 export const setPlay = async (req: any, res: any) => {
   try {
-    console.log(req.user.token, 'set play')
     const venue = await Venue.authorize(req.user.token)
     const songToPlay = await VenueSong.selectSongToPlay(venue.name);
-    console.log(songToPlay,'play')
     if (songToPlay) await setPlayerToPlay(req.user.token, [`spotify:track:${JSON.parse(songToPlay.song).song_id}`]);
     else await setPlayerToPlay(req.user.token, ["spotify:track:5c882VwvW0mlp82KaSk99W"]);
     res.status(204).send();
