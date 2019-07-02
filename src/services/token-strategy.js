@@ -1,6 +1,6 @@
 const passport = require('passport');
 const UniqueTokenStrategy = require('passport-unique-token').Strategy;
-const { User} = require('../models');
+const {User} = require('../models');
 const {Venue} = require('../models');
 
 passport.use(
@@ -13,7 +13,7 @@ passport.use(
       if(venue) {
         done(null, venue);
       } else {
-        done({ message: 'Venue not found'}, false);
+        done({ message: ' not found'}, false);
       }
     }
   })

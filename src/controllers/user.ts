@@ -29,7 +29,8 @@ export const searchForSongs = async (req: any, res: any) => {
     if (response) res.status(200).send(parseArray(response.tracks.items));
     else res.status(403).end()
   } catch(e) {
-    res.status(500).end();
+    if (e.statusCode === 401) res.status(e.statusCode).end();
+    else res.status(500).end();
   }
 }
 

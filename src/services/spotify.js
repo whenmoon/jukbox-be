@@ -15,7 +15,8 @@ passport.use(new SpotifyStrategy({
           name: 'Codeworks',
           spotify_id: profile.id,
           token: accessToken,
-          ticket_default_no: 1
+          ticket_default_no: 1,
+          refreshToken : refreshToken
         });
       } else {
         newVenue = await Venue.updateToken(newVenue.spotify_id, accessToken);
