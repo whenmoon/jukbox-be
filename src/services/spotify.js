@@ -8,7 +8,6 @@ passport.use(new SpotifyStrategy({
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     callbackURL: process.env.SPOTIFY_REDIRECT_URI
   }, async (accessToken, refreshToken, expires_in, profile, done) => {
-    console.log(refreshToken, 'refresh');
     try {
       let newVenue = await Venue.find('Codeworks');
       if (!newVenue) {
