@@ -14,7 +14,7 @@ export const setPlay = async (req: any, res: any) => {
   try {
     const venue = await Venue.authorize(req.user.token)
     const songToPlay = await VenueSong.selectSongToPlay(venue.name);
-    if (songToPlay) await setPlayerToPlay(req.user.token, [`spotify:track:${songToPlay.song}`]);
+    if (songToPlay) await setPlayerToPlay(req.user.token, [`spotify:track:${JSON.parse(songToPlay.song).song_id}`]);
     else await setPlayerToPlay(req.user.token, ["spotify:track:5c882VwvW0mlp82KaSk99W"]);
     res.status(204).send();
   } catch (e) {

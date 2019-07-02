@@ -41,7 +41,7 @@ export default class VenueSong {
   public static async getNextSong(venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
       SELECT * FROM venue_songs WHERE venue_id = '${venueName}'
-      LIMIT 1;
+      LIMIT 1 ORDER BY DIAMONDS, SUBMISSION_TIME DESC;
   `);
     return result.rows[0];
   }
