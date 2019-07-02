@@ -1,7 +1,6 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from '../models/User';
-require('dotenv').config()
 export const saveGoogleToken = async (accessToken: string, _: string, profile: any, done: any) => {
   try {
     let user = await User.find(profile.emails[0].value);

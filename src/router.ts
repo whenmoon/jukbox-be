@@ -7,6 +7,7 @@ import './services/token-strategy';
 import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
 import { redirectAdmin, setResume, setPlay, setPause,setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
+import bodyParser from 'body-parser';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
 import { User } from './models';
@@ -60,7 +61,13 @@ router.get('/next', extractToken, passport.authenticate('token', {
 
 router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('token', {
   session: false
-}), setTransferPlayback)
+}), setTransferPlayback);
+
+router.post('/charge', extractToken, passport.authenticate('token', {
+  session: false
+}), chargeCustomer);
+
+router.post('/webhook', bodyParser.raw({type: 'application/json'}), onPayment);
 
 
 
@@ -70,7 +77,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
       if (message && message.route && message.data) {
         const { route, data } = message;
         const user = await User.authorize(data.userAccessToken);
-  
+
         if (user) {
           switch(route) {
             case 'connectUserToVenue':
@@ -83,7 +90,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
               socketControllers.updateSongDiamonds(data.songId, user, socket);
           }
         } else socket.emit('error', 'Invalid access token') && socket.disconnect();
-  
+
       }
     } catch (error) {
       socket.emit('error', error);
