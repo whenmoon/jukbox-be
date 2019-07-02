@@ -4,8 +4,7 @@ import {  Venue} from '../models';
 const request = require('request-promise');
 const btoa = require('btoa');
 
-export const renewAccessToken = async (token: string) => {
-  const venue = await Venue.authorize(token)
+export const renewAccessToken = async (venue: Venue) => {
   const newAccessToken = await getRefreshToken(venue.refresh);
   const newVenue = await Venue.updateToken(venue.spotify_id, newAccessToken)
   return newVenue;
