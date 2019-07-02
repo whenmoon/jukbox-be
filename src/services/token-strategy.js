@@ -1,6 +1,6 @@
 const passport = require('passport');
 const UniqueTokenStrategy = require('passport-unique-token').Strategy;
-const { User} = require('../models');
+const {User} = require('../models');
 const {Venue} = require('../models');
 
 passport.use(

@@ -6,7 +6,7 @@ import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
-import { redirectAdmin, setResume, setPlay, setPause,setVolume,lockNextSong, setTransferPlayback, refreshToken} from './controllers/admin';
+import { redirectAdmin, setResume, setPlay, setPause,setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
 import { User } from './models';
@@ -48,7 +48,6 @@ router.get('/resumedevice/:deviceid', extractToken, passport.authenticate('token
 router.get('/pausedevice/:deviceid', extractToken, passport.authenticate('token', {
   session: false
 }), setPause);
-
 
 router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport.authenticate('token', {
   session: false

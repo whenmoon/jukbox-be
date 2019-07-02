@@ -1,6 +1,15 @@
 import { createBearerHeaderOptions} from './spotifyAPIUtils'
+import {  Venue} from '../models';
+
 const request = require('request-promise');
 const btoa = require('btoa');
+
+export const renewAccessToken = async (token: string) => {
+  const venue = await Venue.authorize(token)
+  const newAccessToken = await getRefreshToken(venue.refresh);
+  const newVenue = await Venue.updateToken(venue.spotify_id, newAccessToken)
+  return newVenue;
+}
 
 export const getRefreshToken = (refreshToken: string) => {
   const options = {
