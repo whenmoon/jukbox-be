@@ -67,12 +67,12 @@ export default class VenueSong {
     return result.rows[0];
   }
 
-  public static async clearSongs (venueName:string): Promise<VenueSong> {
+  public static async clearSongs (venueName:string): Promise<VenueSong[]> {
     const result = await pool.query(`
       DELETE FROM venue_songs 
       WHERE venue_id = '${venueName}';   
     `);
-    return result.rows[0];
+    return result.rows;
   }
 
   public static async getSongToPlay (venueName:string): Promise<VenueSong> {

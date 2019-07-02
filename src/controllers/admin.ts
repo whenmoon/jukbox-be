@@ -17,7 +17,7 @@ export const setPlay = async (req: any, res: any) => {
     else await setPlayerToPlay(req.user.token, ["spotify:track:5c882VwvW0mlp82KaSk99W"]);
     res.status(204).send();
   } catch (e) {
-    res.status(e.error.error.status).send(e);
+    res.status(e.statusCode).send(e);
   }
 };
 
@@ -26,7 +26,7 @@ export const setResume = async(req: any, res:any ) => {
     await setPlayerToResume(req.user.token)
     res.status(204).send();
   } catch (e) {
-    res.status(e.error.error.status).send(e);
+    res.status(e.statusCode).send(e);
   }
 };
 
@@ -35,7 +35,7 @@ export const setPause = async(req: any, res:any ) => {
     await setPlayerToPause(req.user.token)
     res.status(204).send();
   } catch (e) {
-    res.status(e.error.error.status).send(e);
+    res.status(e.statusCode).send(e);
   }
 };
 
@@ -44,7 +44,7 @@ export const setVolume = async (req: any, res: any) => {
     await setPlayerVolume(req.user.token, req.params.volumepercent);
     res.status(204).send();
   } catch(e) {
-    res.status(e.error.error.status).send(e);
+    res.status(e.statusCode).send(e);
   }
 };
 
@@ -64,7 +64,7 @@ export const setTransferPlayback = async (req: any, res: any) => {
     await transferPlayerPlayback(req.user.token, req.params.deviceid);
     res.status(204).send()
   } catch (e) {
-    res.status(e.error.error.status).send(e);
+    res.status(e.statusCode).send(e);
   };
 
 }
