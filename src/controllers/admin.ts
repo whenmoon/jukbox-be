@@ -25,6 +25,7 @@ export const setPlay = async (req: any, res: any) => {
 export const setResume = async(req: any, res:any ) => {
   try {
     await setPlayerToResume(req.user.token)
+    res.status(204).send();
   } catch (e) {
     res.status(e.error.error.status).send(e);
   }
@@ -33,6 +34,7 @@ export const setResume = async(req: any, res:any ) => {
 export const setPause = async(req: any, res:any ) => {
   try {
     await setPlayerToPause(req.user.token)
+    res.status(204).send();
   } catch (e) {
     res.status(e.error.error.status).send(e);
   }
