@@ -7,10 +7,10 @@ import './services/token-strategy';
 import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs, chargeCustomer, onPayment } from './controllers/user';
 import { redirectAdmin, setResume, setPlay, setPause,setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
+import bodyParser from 'body-parser';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
 import { User } from './models';
-const bodyParser = require('body-parser');
 const scopeSpotify: string[] =['user-top-read','user-read-recently-played','user-read-currently-playing','user-library-read','user-library-modify','streaming', 'app-remote-control','user-read-email', 'user-read-private', 'user-read-birthdate','user-follow-modify','user-follow-read','user-modify-playback-state','playlist-modify-public','playlist-read-collaborative','playlist-read-private','playlist-modify-private','user-read-playback-state'];
 const scopeGoogle: string[] = ['profile', 'email'];
 

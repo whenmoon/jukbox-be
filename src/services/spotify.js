@@ -16,7 +16,7 @@ passport.use(new SpotifyStrategy({
           spotify_id: profile.id,
           token: accessToken,
           ticket_default_no: 1,
-          refreshToken : refreshToken
+          refresh: refreshToken,
         });
       } else {
         newVenue = await Venue.updateToken(newVenue.spotify_id, accessToken);

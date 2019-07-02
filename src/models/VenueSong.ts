@@ -38,14 +38,6 @@ export default class VenueSong {
     return result.rows;
   };
 
-  public static async getNextSong(venueName:string): Promise<VenueSong> {
-    const result = await pool.query(`
-      SELECT * FROM venue_songs WHERE venue_id = '${venueName}'
-      ORDER BY DIAMONDS, SUBMISSION_TIME DESC LIMIT 1 ;
-  `);
-    return result.rows[0];
-  }
-
   public static async lockSong (song: string, venueName: string) : Promise<VenueSong> {
     const result = await pool.query(`
       UPDATE venue_songs 
@@ -75,12 +67,12 @@ export default class VenueSong {
     return result.rows[0];
   }
 
-  public static async clearSongs (venueName:string): Promise<VenueSong> {
+  public static async clearSongs (venueName:string): Promise<VenueSong[]> {
     const result = await pool.query(`
       DELETE FROM venue_songs 
       WHERE venue_id = '${venueName}';   
     `);
-    return result.rows[0];
+    return result.rows;
   }
 
   public static async getSongToPlay (venueName:string): Promise<VenueSong> {
@@ -104,8 +96,9 @@ export default class VenueSong {
   }
 
   public static async lockInAndPlayNextSong (venueName:string) {
-    let nextSong = await VenueSong.getNextSong(venueName) 
-    if (nextSong) nextSong = await VenueSong.lockSong(nextSong.song, venueName);
+    let nextSongPlaylist = await VenueSong.getAll(venueName); 
+    if (nextSongPlaylist) nextSongPlaylist = VenueSong.sortPlaylist(nextSongPlaylist)
+    if (nextSongPlaylist[0]) await VenueSong.lockSong(nextSongPlaylist[0].song, venueName);
   }
 
   public static async removeCurrentlyPlayingSong (venueName:string){
