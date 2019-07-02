@@ -42,6 +42,16 @@ export default class User {
     return result.rows[0];
   };
 
+  public static async incrementDiamonds (userEmail: string, incrementBy: number): Promise<User> {
+    const result = await pool.query(`
+      UPDATE users
+      SET diamonds = diamonds + ${incrementBy}
+      WHERE email = '${userEmail}'
+      RETURNING *;
+    `);
+    return result.rows[0];
+  }
+
   public static async decrementDiamonds (userEmail: string): Promise<User> {
     const result = await pool.query(`
       UPDATE users
