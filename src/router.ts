@@ -5,7 +5,8 @@ import './services/spotify';
 import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
-import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
+import bodyParser from 'body-parser';
+import { redirectUser, getUserInfo, searchForSongs, chargeCustomer, onPayment } from './controllers/user';
 import { redirectAdmin, setPlayResume, setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
@@ -51,7 +52,13 @@ router.get('/next', extractToken, passport.authenticate('token', {
 
 router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('token', {
   session: false
-}), setTransferPlayback)
+}), setTransferPlayback);
+
+router.post('/charge', extractToken, passport.authenticate('token', {
+  session: false
+}), chargeCustomer);
+
+router.post('/webhook', bodyParser.raw({type: 'application/json'}), onPayment);
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', async message => {
@@ -59,7 +66,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
       if (message && message.route && message.data) {
         const { route, data } = message;
         const user = await User.authorize(data.userAccessToken);
-  
+
         if (user) {
           switch(route) {
             case 'connectUserToVenue':
@@ -72,7 +79,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
               socketControllers.updateSongDiamonds(data.songId, user, socket);
           }
         } else socket.emit('error', 'Invalid access token') && socket.disconnect();
-  
+
       }
     } catch (error) {
       socket.emit('error', error);
