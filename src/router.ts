@@ -5,9 +5,9 @@ import './services/spotify';
 import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
+import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
+import { redirectAdmin, setResume, setPlay, setPause,setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import bodyParser from 'body-parser';
-import { redirectUser, getUserInfo, searchForSongs, chargeCustomer, onPayment } from './controllers/user';
-import { redirectAdmin, setPlayResume, setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
 import { User } from './models';
@@ -40,7 +40,15 @@ router.get('/login/admin/redirect', passport.authenticate('spotify', {
 
 router.get('/playdevice/:deviceid', extractToken, passport.authenticate('token', {
   session: false
-}), setPlayResume);
+}), setPlay);
+
+router.get('/resumedevice/:deviceid', extractToken, passport.authenticate('token', {
+  session: false
+}), setResume);
+
+router.get('/pausedevice/:deviceid', extractToken, passport.authenticate('token', {
+  session: false
+}), setPause);
 
 router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport.authenticate('token', {
   session: false
@@ -49,6 +57,7 @@ router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport
 router.get('/next', extractToken, passport.authenticate('token', {
   session: false
 }), lockNextSong);
+
 
 router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('token', {
   session: false
@@ -59,6 +68,8 @@ router.post('/charge', extractToken, passport.authenticate('token', {
 }), chargeCustomer);
 
 router.post('/webhook', bodyParser.raw({type: 'application/json'}), onPayment);
+
+
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', async message => {

@@ -28,6 +28,7 @@ function createTables () {
       name VARCHAR NOT NULL,
       spotify_id VARCHAR NOT NULL,
       token VARCHAR NOT NULL,
+      refresh VARCHAR NOT NULL,
       ticket_default_no INTEGER NOT NULL DEFAULT 1,
       closing_times VARCHAR,
       PRIMARY KEY (name)
@@ -51,6 +52,7 @@ function createTables () {
       currentlyPlaying BOOLEAN NOT NULL DEFAULT FALSE,
       lockedIn BOOLEAN NOT NULL DEFAULT FALSE
     );
+    
   `);
 };
 

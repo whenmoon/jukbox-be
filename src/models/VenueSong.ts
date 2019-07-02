@@ -38,14 +38,6 @@ export default class VenueSong {
     return result.rows;
   };
 
-  public static async getNextSong(venueName:string): Promise<VenueSong> {
-    const result = await pool.query(`
-    SELECT * FROM venue_songs WHERE venue_id = '${venueName}'
-    LIMIT 1;
-  `);
-    return result.rows[0];
-  }
-
   public static async lockSong (song: string, venueName: string) : Promise<VenueSong> {
     const result = await pool.query(`
       UPDATE venue_songs 
@@ -57,14 +49,30 @@ export default class VenueSong {
     return result.rows[0];
   }
 
-  // change to delete
   public static async deleteLastPlayedSong (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
       DELETE FROM venue_songs 
       WHERE currentlyPlaying = true
-      AND venue_id = '${venueName}' 
+      AND venue_id = '${venueName}'; 
     `);
     return result.rows[0];
+  }
+
+  public static async checkLastPlayedSong (venueName:string): Promise<VenueSong> {
+    const result = await pool.query(`
+      SELECT * FROM venue_songs 
+      WHERE currentlyPlaying = true
+      AND venue_id = '${venueName}'; 
+    `);
+    return result.rows[0];
+  }
+
+  public static async clearSongs (venueName:string): Promise<VenueSong[]> {
+    const result = await pool.query(`
+      DELETE FROM venue_songs 
+      WHERE venue_id = '${venueName}';   
+    `);
+    return result.rows;
   }
 
   public static async getSongToPlay (venueName:string): Promise<VenueSong> {
@@ -77,6 +85,34 @@ export default class VenueSong {
     `);
     return result.rows[0];
   }
+
+  public static async checkForLockedInSong (venueName:string): Promise<VenueSong> {
+    const result = await pool.query(`
+      SELECT * FROM venue_songs 
+      WHERE lockedIn = true
+      AND venue_id = '${venueName}';
+    `);
+    return result.rows[0];
+  }
+
+  public static async lockInAndPlayNextSong (venueName:string) {
+    let nextSongPlaylist = await VenueSong.getAll(venueName); 
+    if (nextSongPlaylist) nextSongPlaylist = VenueSong.sortPlaylist(nextSongPlaylist)
+    if (nextSongPlaylist[0]) await VenueSong.lockSong(nextSongPlaylist[0].song, venueName);
+  }
+
+  public static async removeCurrentlyPlayingSong (venueName:string){
+    const LastSong = await VenueSong.checkLastPlayedSong(venueName);
+    if (LastSong) await VenueSong.deleteLastPlayedSong(venueName);
+  }
+
+  public static async selectSongToPlay (venueName:string): Promise<VenueSong> {
+    const lockedInSong = await VenueSong.checkForLockedInSong(venueName);
+    if (!lockedInSong) await VenueSong.lockInAndPlayNextSong(venueName);
+    const songToPlay = await VenueSong.getSongToPlay(venueName);
+    return songToPlay;
+  }
+
   public static sortPlaylist (playlist: Array<VenueSong>): Array<VenueSong> {
     playlist.sort((a: VenueSong, b: VenueSong) => {
       const aDate = new Date (a.submission_time);
