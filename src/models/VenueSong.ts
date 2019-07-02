@@ -41,7 +41,7 @@ export default class VenueSong {
   public static async getNextSong(venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
       SELECT * FROM venue_songs WHERE venue_id = '${venueName}'
-      LIMIT 1 ORDER BY DIAMONDS, SUBMISSION_TIME DESC;
+      ORDER BY DIAMONDS, SUBMISSION_TIME DESC LIMIT 1 ;
   `);
     return result.rows[0];
   }
@@ -98,8 +98,7 @@ export default class VenueSong {
     const result = await pool.query(`
       SELECT * FROM venue_songs 
       WHERE lockedIn = true
-      AND venue_id = '${venueName}'
-      RETURNING *;
+      AND venue_id = '${venueName}';
     `);
     return result.rows[0];
   }
@@ -110,12 +109,12 @@ export default class VenueSong {
   }
 
   public static async removeCurrentlyPlayingSong (venueName:string){
-    const LastSong = await VenueSong.checkLastPlayedSong(venueName)
-    if (LastSong) await VenueSong.deleteLastPlayedSong(venueName)
+    const LastSong = await VenueSong.checkLastPlayedSong(venueName);
+    if (LastSong) await VenueSong.deleteLastPlayedSong(venueName);
   }
 
   public static async selectSongToPlay (venueName:string): Promise<VenueSong> {
-    const lockedInSong = await VenueSong.checkForLockedInSong(venueName)
+    const lockedInSong = await VenueSong.checkForLockedInSong(venueName);
     if (!lockedInSong) await VenueSong.lockInAndPlayNextSong(venueName);
     const songToPlay = await VenueSong.getSongToPlay(venueName);
     return songToPlay;
