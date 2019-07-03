@@ -13,7 +13,7 @@ passport.use(
       if(venue) {
         done(null, venue);
       } else {
-        done(null, false);
+        done({message: 'anauthorized'}, false);
       }
     }
   })

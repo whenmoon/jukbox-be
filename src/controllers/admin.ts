@@ -1,7 +1,6 @@
 import {transferPlayerPlayback, setPlayerToPlay, setPlayerVolume } from '../services/spotifyAPI';
 import { VenueSong, Venue, UserVenue} from '../models';
-import { setResponse } from './helpers';
-import { emitPlaylist } from './helpers';
+import { setResponse, emitPlaylist } from './helpers';
 
 export const redirectAdmin = async (req: any, res: any) => {
   try {
