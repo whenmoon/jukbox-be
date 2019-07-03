@@ -33,7 +33,7 @@ export const addSongToPlaylist = async (songId: string, userEmail: string, socke
   }
 };
 
-export const updateSongDiamonds = async (songId: string, user: User, socket: socketIO.Socket) => {
+export const updateSongDiamonds = async (songId: number, user: User, socket: socketIO.Socket) => {
   try {
     const userEmail = user.email;
     const venueName = toCapitalCase(socket.nsp.name);

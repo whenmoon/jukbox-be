@@ -21,11 +21,11 @@ export default class VenueSong {
     return result.rows[0];
   };
 
-  public static async promote (song: string): Promise<VenueSong>  {
+  public static async promote (songId: number): Promise<VenueSong>  {
     const result = await pool.query(`
       UPDATE venue_songs
       SET diamonds = 5
-      WHERE song = '${song}'
+      WHERE id = '${songId}'
       RETURNING *;
     `);
     return result.rows[0];
