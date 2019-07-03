@@ -1,7 +1,7 @@
 const passport = require('passport');
 const UniqueTokenStrategy = require('passport-unique-token').Strategy;
-const {User} = require('../models');
-const {Venue} = require('../models');
+const { User } = require('../models');
+const { Venue } = require('../models');
 
 passport.use(
   new UniqueTokenStrategy(async (token, done) => {
@@ -13,7 +13,7 @@ passport.use(
       if(venue) {
         done(null, venue);
       } else {
-        done({ message: ' not found'}, false);
+        done(null, false);
       }
     }
   })

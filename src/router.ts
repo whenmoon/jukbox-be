@@ -58,8 +58,7 @@ router.get('/next', extractToken, passport.authenticate('token', {
   session: false
 }), lockNextSong);
 
-
-router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('token', {
+router.get('/transferplayback/:deviceid',  extractToken, passport.authenticate('token', {
   session: false
 }), setTransferPlayback);
 
@@ -68,8 +67,6 @@ router.post('/charge', extractToken, passport.authenticate('token', {
 }), chargeCustomer);
 
 router.post('/webhook', bodyParser.raw({type: 'application/json'}), onPayment);
-
-
 
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', async message => {
@@ -96,7 +93,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
       socket.emit('error', error);
     }
   });
-  socket.on('error', error => console.log(error));
+  socket.on('error', error => console.log('socket', error));
 };
 
 export default router;

@@ -1,14 +1,34 @@
-import { createBearerHeaderOptions} from './spotifyAPIUtils'
+import { createBearerHeaderOptions } from './spotifyAPIUtils'
 import { Venue } from '../models';
 
 const request = require('request-promise');
 const btoa = require('btoa');
 
-export const renewAccessToken = async (venue: Venue) => {
+export const renewAccessToken: any = async (venue: Venue) => {
   const newAccessToken = await getRefreshToken(venue.refresh);
-  const newVenue = await Venue.updateToken(venue.spotify_id, newAccessToken)
-  return newVenue;
-}
+  const newVenue = await Venue.updateTokens(venue.spotify_id, newAccessToken.access_token, venue.refresh);
+  return newVenue.token;
+};
+
+const sendRequest = async (options: any, venue: Venue) => {
+  try {
+    return {
+      token: null,
+      request: await request.put(options)
+    }
+  } catch(err) {
+    if (err.statusCode === 401) {
+      const token: string = await renewAccessToken(venue);
+      options.headers = createBearerHeaderOptions(token);
+      return {
+        token,
+        request: await request.put(options)
+      }
+    } else {
+      throw err;
+    }
+  }
+};
 
 export const getRefreshToken = (refreshToken: string) => {
   const options = {
@@ -18,51 +38,53 @@ export const getRefreshToken = (refreshToken: string) => {
       refresh_token: refreshToken,
     },
     headers: {
-      'Authorization': 'Basic ' + btoa(<string>process.env.SPOTIFY_client_id + ':' + <string>process.env.SPOTIFY_client_secret)
+      'Authorization': 'Basic ' + btoa(<string>process.env.SPOTIFY_CLIENT_ID + ':' + <string>process.env.SPOTIFY_CLIENT_SECRET)
     },
     json: true
   };
   return request.post(options);
 };
 
-export const transferPlayerPlayback = (token: string, deviceId: string) => {
+export const transferPlayerPlayback = (venue: Venue, deviceId: string) => {
   const options = {
     uri: 'https://api.spotify.com/v1/me/player',
-    headers: createBearerHeaderOptions(token),
+    headers: createBearerHeaderOptions(venue.token),
     body: {
       'device_ids': [deviceId],
       'play': false,
     },
     json: true
   };
-  return request.put(options);
+  return sendRequest(options, venue);
 };
 
-export const setPlayerToPlay = (token: string, playlist: [any]) => {
+
+export const setPlayerToPlay = (venue: Venue, songToPlay: any) => {
+  songToPlay = songToPlay ? '5c882VwvW0mlp82KaSk99W' : songToPlay;
   const options = {
     url: "https://api.spotify.com/v1/me/player/play",
-    headers: createBearerHeaderOptions(token),
+    headers: createBearerHeaderOptions(venue.token),
     json: {
-      "uris": playlist
+      "uris": [`spotify:track:${songToPlay}`]
     }
   };
-  return request.put(options);
+  return sendRequest(options, venue);
 };
 
-export const setPlayerToResume = (token:string) => {
+export const setPlayerToResume = (venue: Venue) => {
   const options = {
     url: "https://api.spotify.com/v1/me/player/play",
-    headers: createBearerHeaderOptions(token),
+    headers: createBearerHeaderOptions(venue.token),
   };
-  return request.put(options);
+  return sendRequest(options, venue);
 }
 
-export const setPlayerToPause = (token:string) => {
+export const setPlayerToPause = (venue: Venue) => {
   const options = {
     url: "https://api.spotify.com/v1/me/player/pause",
-    headers: createBearerHeaderOptions(token),
+    headers: createBearerHeaderOptions(venue.token),
   };
-  return request.put(options);
+  return sendRequest(options, venue);
 }
 
 
@@ -73,12 +95,13 @@ export const searchSpotify = (token: string, songName: string) => {
     json: true
   }
   return request.get(options);
+
 };
 
-export const setPlayerVolume = (token: string, volume: string) => {
+export const setPlayerVolume = (venue: Venue, volume: string) => {
   const options = {
     url: `https://api.spotify.com/v1/me/player/volume?volume_percent${volume}`,
-    headers: createBearerHeaderOptions(token)
+    headers: createBearerHeaderOptions(venue.token)
   };
-  return request.put(options);
+  return sendRequest(options, venue);
 };

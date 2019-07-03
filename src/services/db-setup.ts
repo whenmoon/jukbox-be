@@ -7,13 +7,13 @@ import pool, { port } from './db';
 
 function createTables () {
   pool.query(`
-    
+
     DROP TABLE IF EXISTS user_venues;
-    
-    DROP TABLE IF EXISTS venue_songs;  
-    
+
+    DROP TABLE IF EXISTS venue_songs;
+
     DROP TABLE IF EXISTS users;
-    
+
     DROP TABLE IF EXISTS venues;
 
     CREATE TABLE users (
@@ -52,7 +52,7 @@ function createTables () {
       currentlyPlaying BOOLEAN NOT NULL DEFAULT FALSE,
       lockedIn BOOLEAN NOT NULL DEFAULT FALSE
     );
-    
+
   `);
 };
 
@@ -64,5 +64,5 @@ async function setupDB () {
 try {
   setupDB();
 } catch (error) {
-  console.log(error);
+  console.log('database setup', error);
 }

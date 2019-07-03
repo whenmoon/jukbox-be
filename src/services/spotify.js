@@ -19,10 +19,10 @@ passport.use(new SpotifyStrategy({
           refresh: refreshToken,
         });
       } else {
-        newVenue = await Venue.updateToken(newVenue.spotify_id, accessToken);
+        newVenue = await Venue.updateTokens(newVenue.spotify_id, accessToken, refreshToken);
       }
       done(null, newVenue);
     } catch (e) {
-      console.log(e);
+      console.log('spotify strategy', e);
     }
 }));

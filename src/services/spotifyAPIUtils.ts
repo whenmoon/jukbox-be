@@ -1,4 +1,3 @@
-
 export const createBearerHeaderOptions = (token: string) => {
   return {
     'Authorization': `Bearer ${token}`,
