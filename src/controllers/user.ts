@@ -27,7 +27,7 @@ export const searchForSongs = async (req: any, res: any) => {
     const token: string = req.token;
     const response = await searchSpotify(token, songName);
     if (response) res.status(200).send(parseArray(response.tracks.items));
-    else res.status(403).end()
+    else res.status(204).end();
   } catch(e) {
     if (e.statusCode === 401) res.status(e.statusCode).end();
     else res.status(500).end();

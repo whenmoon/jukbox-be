@@ -8,6 +8,6 @@ export const extractToken = (req: any , res: any, next: any) => {
 
 export const provideTokenToUser = async (req: any , res: any, next: any) => {
   const result: any = await Venue.getVenueTokenMVP('Codeworks');
-  req.token = result;
+  req.token = result.token;
   next();
 };

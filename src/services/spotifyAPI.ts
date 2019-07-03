@@ -71,30 +71,13 @@ export const setPlayerToPlay = (venue: Venue, songToPlay: any) => {
   return sendRequest(options, venue);
 };
 
-export const setPlayerToResume = (venue: Venue) => {
-  const options = {
-    url: "https://api.spotify.com/v1/me/player/play",
-    headers: createBearerHeaderOptions(venue.token),
-  };
-  return sendRequest(options, venue);
-}
-
-export const setPlayerToPause = (venue: Venue) => {
-  const options = {
-    url: "https://api.spotify.com/v1/me/player/pause",
-    headers: createBearerHeaderOptions(venue.token),
-  };
-  return sendRequest(options, venue);
-}
-
-
 export const searchSpotify = (token: string, songName: string) => {
   const options = {
     url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
     headers: createBearerHeaderOptions(token),
     json: true
   }
-  return request.get(options);
+  return songName && request.get(options);
 
 };
 

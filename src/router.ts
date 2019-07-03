@@ -6,7 +6,7 @@ import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
 import { redirectUser, getUserInfo, searchForSongs, chargeCustomer, onPayment } from './controllers/user';
-import { redirectAdmin, setResume, setPlay, setPause,setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
+import { redirectAdmin, setPlay, setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import bodyParser from 'body-parser';
 import { extractToken, provideTokenToUser } from './services/authUtils';
 import * as socketControllers from './controllers/sockets'
@@ -41,14 +41,6 @@ router.get('/login/admin/redirect', passport.authenticate('spotify', {
 router.get('/playdevice/:deviceid', extractToken, passport.authenticate('token', {
   session: false
 }), setPlay);
-
-router.get('/resumedevice/:deviceid', extractToken, passport.authenticate('token', {
-  session: false
-}), setResume);
-
-router.get('/pausedevice/:deviceid', extractToken, passport.authenticate('token', {
-  session: false
-}), setPause);
 
 router.get('/playdevice/:deviceid/volume/:volumepercent', extractToken, passport.authenticate('token', {
   session: false
