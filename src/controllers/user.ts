@@ -46,7 +46,7 @@ export const chargeCustomer = async (req: any, res: any) => {
         currency: 'eur',
         quantity: 1,
       }],
-      success_url: 'http://localhost:3000/success',
+      success_url: 'http://localhost:3000/dashboard',
       cancel_url: 'http://localhost:3000/failure',
     });
     res.status(200).json(session.id);

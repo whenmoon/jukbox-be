@@ -85,7 +85,7 @@ export const socketRouter = (socket: socketIO.Socket) => {
       socket.emit('error', error);
     }
   });
-  socket.on('error', error => console.log('socket', error));
+  socket.on('error', error => console.log('Socket error', error));
 };
 
 export default router;
