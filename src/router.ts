@@ -63,11 +63,11 @@ router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('t
   session: false
 }), setTransferPlayback);
 
-router.post('/charge', extractToken, passport.authenticate('token', {
-  session: false
-}), chargeCustomer);
+// router.post('/charge', extractToken, passport.authenticate('token', {
+//   session: false
+// }), chargeCustomer);
 
-router.post('/webhook', bodyParser.raw({type: 'application/json'}), onPayment);
+// router.post('/webhook', bodyParser.raw({type: 'application/json'}), onPayment);
 
 
 
