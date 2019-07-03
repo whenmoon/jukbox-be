@@ -2,6 +2,7 @@ import {transferPlayerPlayback, setPlayerToPlay, setPlayerToPause, setPlayerToRe
 import { VenueSong, Venue, UserVenue} from '../models';
 import { setResponse } from './helpers';
 
+import { emitPlaylist } from './helpers';
 
 
 export const redirectAdmin = async (req: any, res: any) => {
@@ -18,6 +19,7 @@ export const setPlay = async (req: any, res: any) => {
     const venue: Venue = req.user;
     const songToPlay = await VenueSong.selectSongToPlay(venue.name);
     const { token, request } = await setPlayerToPlay(venue, songToPlay);
+    await emitPlaylist(venue.name);
     return setResponse(res, token);
   } catch (e) {
     if (e.statusCode === 403) res.status(e.statusCode).send(e);
