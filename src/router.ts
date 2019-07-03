@@ -5,7 +5,7 @@ import './services/spotify';
 import './services/google';
 import './services/token-strategy';
 import socketIO from 'socket.io';
-import { redirectUser, getUserInfo, searchForSongs } from './controllers/user';
+import { redirectUser, getUserInfo, searchForSongs, chargeCustomer, onPayment } from './controllers/user';
 import { redirectAdmin, setResume, setPlay, setPause,setVolume,lockNextSong, setTransferPlayback} from './controllers/admin';
 import bodyParser from 'body-parser';
 import { extractToken, provideTokenToUser } from './services/authUtils';

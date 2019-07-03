@@ -11,7 +11,8 @@ export const connectUserToVenue = async (userEmail: string, socket: socketIO.Soc
       const { ticket_default_no } = await Venue.find(venueName);
       await UserVenue.create(userEmail, venueName, ticket_default_no);
     }
-    await emitToNamespace(userEmail, venueName, socket);
+    await emitTickets(userEmail, venueName, socket);
+    await emitPlaylist(userEmail, venueName, socket);
   } catch (error) {
     socket.emit('error', error);
   }
@@ -25,7 +26,8 @@ export const addSongToPlaylist = async (songId: string, userEmail: string, socke
       await VenueSong.create(songId, userEmail, venueName);
       await UserVenue.decrementTickets(userEmail, venueName);
     }
-    await emitToNamespace(userEmail, venueName, socket);
+    await emitTickets(userEmail, venueName, socket);
+    await emitPlaylist(userEmail, venueName, socket);
   } catch (error) {
     socket.emit('error', error);
   }
@@ -39,25 +41,40 @@ export const updateSongDiamonds = async (songId: string, user: User, socket: soc
       await VenueSong.promote(songId);
       await User.decrementDiamonds(userEmail);
     }
-    await emitToNamespace(userEmail, venueName, socket);
+    await emitTickets(userEmail, venueName, socket);
+    await emitPlaylist(userEmail, venueName, socket);
   } catch (error) {
     socket.emit('error', error);
   }
 };
 
-const emitToNamespace = async (userEmail: string, venueName: string, socket: socketIO.Socket) => {
+export const emitPlaylist = async (userEmail: string, venueName: string, socket: any) => {
   try {
     const playlist = await VenueSong.getAll(venueName);
     const sortedPlaylist = VenueSong.sortPlaylist(playlist);
-    const { tickets } = await UserVenue.find(userEmail, venueName);
     const message = {
       data: {
-        updatedPlaylist: sortedPlaylist,
-        tickets: tickets
+        updatedPlaylist: sortedPlaylist
       }
     };
     nsp.emit('message', message);
-  } catch (error) {
+  }
+  catch (error) {
     socket.emit('error', error);
   }
-};
+}
+
+const emitTickets = async (userEmail: string, venueName: string, socket: socketIO.Socket) => {
+  try {
+    const { tickets } = await UserVenue.find(userEmail, venueName);
+    const message = {
+      data: {
+        tickets: tickets
+      }
+    };
+    socket.emit('message', message);
+  }
+  catch (error) {
+    socket.emit('error', error);
+  }
+}
