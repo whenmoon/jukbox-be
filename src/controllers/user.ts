@@ -1,4 +1,5 @@
 import { searchSpotify } from '../services/spotifyAPI';
+import { parseArray } from './helpers';
 
 export const redirectUser = (req: any, res: any) => {
   try {
@@ -22,7 +23,8 @@ export const searchForSongs = async (req: any, res: any) => {
     const songName: string = req.query.q;
     const token: string = req.token;
     const response = await searchSpotify(token, songName);
-    response && res.status(200).json(response);
+    if (response) res.status(200).send(parseArray(response.tracks.items));
+    else res.status(403).end()
   } catch(e) {
     res.status(500).end();
   }
