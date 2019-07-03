@@ -1,7 +1,7 @@
 import { VenueSong, UserVenue, User, Venue } from '../models';
 import socketIO from 'socket.io';
-import { nsp } from '../';
 import { toCapitalCase } from '../services';
+import { emitPlaylist, emitTickets } from './helpers';
 
 export const connectUserToVenue = async (userEmail: string, socket: socketIO.Socket) => {
   try {
@@ -12,7 +12,7 @@ export const connectUserToVenue = async (userEmail: string, socket: socketIO.Soc
       await UserVenue.create(userEmail, venueName, ticket_default_no);
     }
     await emitTickets(userEmail, venueName, socket);
-    await emitPlaylist(userEmail, venueName, socket);
+    await emitPlaylist(venueName);
   } catch (error) {
     socket.emit('error', error);
   }
@@ -27,7 +27,7 @@ export const addSongToPlaylist = async (songId: string, userEmail: string, socke
       await UserVenue.decrementTickets(userEmail, venueName);
     }
     await emitTickets(userEmail, venueName, socket);
-    await emitPlaylist(userEmail, venueName, socket);
+    await emitPlaylist(venueName);
   } catch (error) {
     socket.emit('error', error);
   }
@@ -42,39 +42,9 @@ export const updateSongDiamonds = async (songId: number, user: User, socket: soc
       await User.decrementDiamonds(userEmail);
     }
     await emitTickets(userEmail, venueName, socket);
-    await emitPlaylist(userEmail, venueName, socket);
+    await emitPlaylist(venueName);
   } catch (error) {
     socket.emit('error', error);
   }
 };
 
-export const emitPlaylist = async (userEmail: string, venueName: string, socket: any) => {
-  try {
-    const playlist = await VenueSong.getAll(venueName);
-    const sortedPlaylist = VenueSong.sortPlaylist(playlist);
-    const message = {
-      data: {
-        updatedPlaylist: sortedPlaylist
-      }
-    };
-    nsp.emit('message', message);
-  }
-  catch (error) {
-    socket.emit('error', error);
-  }
-}
-
-const emitTickets = async (userEmail: string, venueName: string, socket: socketIO.Socket) => {
-  try {
-    const { tickets } = await UserVenue.find(userEmail, venueName);
-    const message = {
-      data: {
-        tickets: tickets
-      }
-    };
-    socket.emit('message', message);
-  }
-  catch (error) {
-    socket.emit('error', error);
-  }
-}

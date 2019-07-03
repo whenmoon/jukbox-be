@@ -1,6 +1,6 @@
 import {transferPlayerPlayback, setPlayerToPlay, setPlayerToPause, setPlayerToResume, setPlayerVolume, renewAccessToken } from '../services/spotifyAPI';
 import { VenueSong, Venue, UserVenue} from '../models';
-import { emitPlaylist } from './sockets';
+import { emitPlaylist } from './helpers';
 
 
 export const redirectAdmin = async (req: any, res: any) => {
@@ -17,7 +17,7 @@ export const setPlay = async (req: any, res: any) => {
     const songToPlay = await VenueSong.selectSongToPlay(venueName);
     if (songToPlay) await setPlayerToPlay(req.user.token, [`spotify:track:${JSON.parse(songToPlay.song).song_id}`]);
     else await setPlayerToPlay(req.user.token, ["spotify:track:5c882VwvW0mlp82KaSk99W"]);
-    await emitPlaylist('', venueName, '');
+    await emitPlaylist(venueName);
     res.status(204).send();
   } catch (e) {
     res.status(e.statusCode).send(e);
