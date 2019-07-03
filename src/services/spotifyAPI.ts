@@ -60,7 +60,8 @@ export const transferPlayerPlayback = (venue: Venue, deviceId: string) => {
 
 
 export const setPlayerToPlay = (venue: Venue, songToPlay: any) => {
-  songToPlay = songToPlay ? '5c882VwvW0mlp82KaSk99W' : songToPlay;
+  songToPlay = songToPlay ? songToPlay : '5c882VwvW0mlp82KaSk99W';
+  console.log(songToPlay);
   const options = {
     url: "https://api.spotify.com/v1/me/player/play",
     headers: createBearerHeaderOptions(venue.token),

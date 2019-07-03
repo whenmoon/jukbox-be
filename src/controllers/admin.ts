@@ -19,6 +19,7 @@ export const setPlay = async (req: any, res: any) => {
     await emitPlaylist(venue.name);
     return setResponse(res, token);
   } catch (e) {
+    console.log('SET PLAY', e);
     if (e.statusCode === 403) res.status(e.statusCode).send(e);
     else res.status(500).send(e);
   }
@@ -30,6 +31,7 @@ export const setVolume = async (req: any, res: any) => {
     const { token, request } =  await setPlayerVolume(venue, req.params.volumepercent);
     return setResponse(res, token);
   } catch(e) {
+    console.log('SET VOLUME', e);
     if (e.statusCode === 403) res.status(e.statusCode).send(e);
     else res.status(500).send(e);
   }
@@ -43,6 +45,7 @@ export const lockNextSong = async( req: any, res:any) => {
     await VenueSong.lockInAndPlayNextSong(venue.name);
     res.status(204).send();
   } catch(e) {
+    console.log('LOCK NEXT SONG' ,e);
     if (e.statusCode === 403) res.status(e.statusCode).send(e);
     else res.status(500).send(e);
   }

@@ -110,7 +110,7 @@ export default class VenueSong {
     const lockedInSong = await VenueSong.checkForLockedInSong(venueName);
     if (!lockedInSong) await VenueSong.lockInAndPlayNextSong(venueName);
     const songToPlay = await VenueSong.getSongToPlay(venueName);
-    return JSON.parse(songToPlay.song).song_id;
+    return songToPlay && JSON.parse(songToPlay.song).song_id;
   }
 
   public static sortPlaylist (playlist: Array<VenueSong>): Array<VenueSong> {
