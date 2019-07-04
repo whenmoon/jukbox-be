@@ -58,7 +58,6 @@ router.get('/next', extractToken, passport.authenticate('token', {
   session: false
 }), lockNextSong);
 
-
 router.get('/transferplayback/:deviceid', extractToken, passport.authenticate('token', {
   session: false
 }), setTransferPlayback);
