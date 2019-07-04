@@ -27,9 +27,10 @@ export const searchForSongs = async (req: any, res: any) => {
     const token: string = req.token;
     const response = await searchSpotify(token, songName);
     if (response) res.status(200).send(parseArray(response.tracks.items));
-    else res.status(403).end()
+    else res.status(204).end();
   } catch(e) {
-    res.status(500).end();
+    if (e.statusCode === 401) res.status(e.statusCode).end();
+    else res.status(500).end();
   }
 }
 
@@ -45,7 +46,7 @@ export const chargeCustomer = async (req: any, res: any) => {
         currency: 'eur',
         quantity: 1,
       }],
-      success_url: 'http://localhost:3000/success',
+      success_url: 'http://localhost:3000/dashboard',
       cancel_url: 'http://localhost:3000/failure',
     });
     res.status(200).json(session.id);

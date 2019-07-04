@@ -1,11 +1,11 @@
-import {transferPlayerPlayback, setPlayerToPlay, setPlayerToPause, setPlayerToResume, setPlayerVolume, renewAccessToken } from '../services/spotifyAPI';
+import {transferPlayerPlayback, setPlayerToPlay, setPlayerVolume } from '../services/spotifyAPI';
 import { VenueSong, Venue, UserVenue} from '../models';
-import { emitPlaylist } from './helpers';
-
+import { setResponse, emitPlaylist } from './helpers';
 
 export const redirectAdmin = async (req: any, res: any) => {
   try {
-    res.redirect(`http://localhost:3000/authorized-admin?access_token=${req.user.token}`);
+    const venue: Venue = req.user;
+    res.redirect(`http://localhost:3000/authorized-admin?access_token=${venue.token}`);
   } catch(e) {
     res.status(500).end();
   }
@@ -13,62 +13,51 @@ export const redirectAdmin = async (req: any, res: any) => {
 
 export const setPlay = async (req: any, res: any) => {
   try {
-    const venueName = req.user.name;
-    const songToPlay = await VenueSong.selectSongToPlay(venueName);
-    if (songToPlay) await setPlayerToPlay(req.user.token, [`spotify:track:${JSON.parse(songToPlay.song).song_id}`]);
-    else await setPlayerToPlay(req.user.token, ["spotify:track:5c882VwvW0mlp82KaSk99W"]);
-    await emitPlaylist(venueName);
-    res.status(204).send();
+    const venue: Venue = req.user;
+    const songToPlay = await VenueSong.selectSongToPlay(venue.name);
+    const { token, request } = await setPlayerToPlay(venue, songToPlay);
+    await emitPlaylist(venue.name);
+    return setResponse(res, token);
   } catch (e) {
-    res.status(e.statusCode).send(e);
-  }
-};
-
-export const setResume = async(req: any, res:any ) => {
-  try {
-    await setPlayerToResume(req.user.token)
-    res.status(204).send();
-  } catch (e) {
-    res.status(e.statusCode).send(e);
-  }
-};
-
-export const setPause = async(req: any, res:any ) => {
-  try {
-    await setPlayerToPause(req.user.token)
-    res.status(204).send();
-  } catch (e) {
-    res.status(e.statusCode).send(e);
+    console.log('SET PLAY', e);
+    if (e.statusCode === 403) res.status(e.statusCode).send(e);
+    else res.status(500).send(e);
   }
 };
 
 export const setVolume = async (req: any, res: any) => {
   try {
-    await setPlayerVolume(req.user.token, req.params.volumepercent);
-    res.status(204).send();
+    const venue: Venue = req.user;
+    const { token, request } =  await setPlayerVolume(venue, req.params.volumepercent);
+    return setResponse(res, token);
   } catch(e) {
-    res.status(e.statusCode).send(e);
+    console.log('SET VOLUME', e);
+    if (e.statusCode === 403) res.status(e.statusCode).send(e);
+    else res.status(500).send(e);
   }
 };
 
 
 export const lockNextSong = async( req: any, res:any) => {
   try {
-    await VenueSong.removeCurrentlyPlayingSong(req.user.name)
-    await VenueSong.lockInAndPlayNextSong(req.user.name);
+    const venue: Venue = req.user;
+    await VenueSong.removeCurrentlyPlayingSong(venue.name)
+    await VenueSong.lockInAndPlayNextSong(venue.name);
     res.status(204).send();
   } catch(e) {
-    res.status(500).send();
+    console.log('LOCK NEXT SONG' ,e);
+    if (e.statusCode === 403) res.status(e.statusCode).send(e);
+    else res.status(500).send(e);
   }
 };
 
 export const setTransferPlayback = async (req: any, res: any) => {
   try {
-    await transferPlayerPlayback(req.user.token, req.params.deviceid);
-    res.status(204).send()
+    const venue: Venue = req.user;
+    const { token, request }  = await transferPlayerPlayback(venue, req.params.deviceid);
+    return setResponse(res, token);
   } catch (e) {
-    res.status(e.statusCode).send(e);
+    if (e.statusCode === 403) res.status(e.statusCode).send(e);
+    else res.status(500).send(e);
   };
-
 }
-

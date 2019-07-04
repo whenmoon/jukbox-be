@@ -34,10 +34,10 @@ export default class Venue {
     return result.rows[0];
   };
 
-  public static async updateToken (spotify_id: string, token:string): Promise<Venue>  {
+  public static async updateTokens (spotify_id: string, token: string, refreshToken: string): Promise<Venue>  {
     const result = await pool.query(`
       UPDATE venues
-      SET token = '${token}'
+      SET token = '${token}', refresh = '${refreshToken}'
       WHERE spotify_id = '${spotify_id}'
       RETURNING *;
     `);

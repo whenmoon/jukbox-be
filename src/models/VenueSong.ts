@@ -40,7 +40,7 @@ export default class VenueSong {
 
   public static async lockSong (song: string, venueName: string) : Promise<VenueSong> {
     const result = await pool.query(`
-      UPDATE venue_songs 
+      UPDATE venue_songs
       SET lockedIn = true
       WHERE song = '${song}'
       AND venue_id = '${venueName}'
@@ -51,33 +51,33 @@ export default class VenueSong {
 
   public static async deleteLastPlayedSong (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
-      DELETE FROM venue_songs 
+      DELETE FROM venue_songs
       WHERE currentlyPlaying = true
-      AND venue_id = '${venueName}'; 
+      AND venue_id = '${venueName}';
     `);
     return result.rows[0];
   }
 
   public static async checkLastPlayedSong (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
-      SELECT * FROM venue_songs 
+      SELECT * FROM venue_songs
       WHERE currentlyPlaying = true
-      AND venue_id = '${venueName}'; 
+      AND venue_id = '${venueName}';
     `);
     return result.rows[0];
   }
 
   public static async clearSongs (venueName:string): Promise<VenueSong[]> {
     const result = await pool.query(`
-      DELETE FROM venue_songs 
-      WHERE venue_id = '${venueName}';   
+      DELETE FROM venue_songs
+      WHERE venue_id = '${venueName}';
     `);
     return result.rows;
   }
 
   public static async getSongToPlay (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
-      UPDATE venue_songs 
+      UPDATE venue_songs
       SET currentlyPlaying = true
       WHERE lockedIn = true
       AND venue_id = '${venueName}'
@@ -88,7 +88,7 @@ export default class VenueSong {
 
   public static async checkForLockedInSong (venueName:string): Promise<VenueSong> {
     const result = await pool.query(`
-      SELECT * FROM venue_songs 
+      SELECT * FROM venue_songs
       WHERE lockedIn = true
       AND venue_id = '${venueName}';
     `);
@@ -96,7 +96,7 @@ export default class VenueSong {
   }
 
   public static async lockInAndPlayNextSong (venueName:string) {
-    let nextSongPlaylist = await VenueSong.getAll(venueName); 
+    let nextSongPlaylist = await VenueSong.getAll(venueName);
     if (nextSongPlaylist) nextSongPlaylist = VenueSong.sortPlaylist(nextSongPlaylist)
     if (nextSongPlaylist[0]) await VenueSong.lockSong(nextSongPlaylist[0].song, venueName);
   }
@@ -110,7 +110,7 @@ export default class VenueSong {
     const lockedInSong = await VenueSong.checkForLockedInSong(venueName);
     if (!lockedInSong) await VenueSong.lockInAndPlayNextSong(venueName);
     const songToPlay = await VenueSong.getSongToPlay(venueName);
-    return songToPlay;
+    return songToPlay && JSON.parse(songToPlay.song).song_id;
   }
 
   public static sortPlaylist (playlist: Array<VenueSong>): Array<VenueSong> {

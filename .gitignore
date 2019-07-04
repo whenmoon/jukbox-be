@@ -64,3 +64,5 @@ typings/
 config
 src/config
 db-testdata.ts
+
+dist
