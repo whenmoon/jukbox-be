@@ -6,7 +6,7 @@ const stripe = new Stripe(String(process.env.STRIPE_SECRET_KEY));
 
 export const redirectUser = (req: any, res: any) => {
   try {
-    res.redirect(`http://localhost:3000/authorized-user?token=${req.user.token}`);
+    res.redirect(`https://inspiring-aryabhata-56eaac.netlify.com/authorized-user?token=${req.user.token}`);
   } catch(e) {
     res.status(500).end();
   }
