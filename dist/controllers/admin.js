@@ -13,7 +13,7 @@ const models_1 = require("../models");
 const helpers_1 = require("./helpers");
 exports.redirectAdmin = (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
-        res.redirect(`http://localhost:3000/authorized-admin?access_token=${req.user.token}`);
+        res.redirect(`https://inspiring-aryabhata-56eaac.netlify.com/authorized-admin?access_token=${req.user.token}`);
     }
     catch (e) {
         res.status(500).end();
