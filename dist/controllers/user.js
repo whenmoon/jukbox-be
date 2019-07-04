@@ -18,7 +18,7 @@ const stripe_1 = __importDefault(require("stripe"));
 const stripe = new stripe_1.default(String(process.env.STRIPE_SECRET_KEY));
 exports.redirectUser = (req, res) => {
     try {
-        res.redirect(`https://inspiring-aryabhata-56eaac.netlify.com/authorized-user?token=${req.user.token}`);
+        res.redirect(`http://localhost:3000/authorized-user?token=${req.user.token}`);
     }
     catch (e) {
         res.status(500).end();
