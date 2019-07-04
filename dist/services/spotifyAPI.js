@@ -19,7 +19,7 @@ exports.renewAccessToken = (venue) => __awaiter(this, void 0, void 0, function* 
 });
 exports.getRefreshToken = (refreshToken) => {
     const options = {
-        url: `https://accounts.spotify.com/api/token`,
+        url: process.env.SPOTIFY_GET_REFRESH,
         form: {
             grant_type: 'refresh_token',
             refresh_token: refreshToken,
@@ -33,7 +33,7 @@ exports.getRefreshToken = (refreshToken) => {
 };
 exports.transferPlayerPlayback = (token, deviceId) => {
     const options = {
-        uri: 'https://api.spotify.com/v1/me/player',
+        uri: process.env.SPOTIFY_TRANSFER_PLAYBACK,
         headers: spotifyAPIUtils_1.createBearerHeaderOptions(token),
         body: {
             'device_ids': [deviceId],
@@ -45,7 +45,7 @@ exports.transferPlayerPlayback = (token, deviceId) => {
 };
 exports.setPlayerToPlay = (token, playlist) => {
     const options = {
-        url: "https://api.spotify.com/v1/me/player/play",
+        url: process.env.SPOTIFY_PLAY,
         headers: spotifyAPIUtils_1.createBearerHeaderOptions(token),
         json: {
             "uris": playlist
@@ -55,21 +55,21 @@ exports.setPlayerToPlay = (token, playlist) => {
 };
 exports.setPlayerToResume = (token) => {
     const options = {
-        url: "https://api.spotify.com/v1/me/player/play",
+        url: process.env.SPOTIFY_PLAY,
         headers: spotifyAPIUtils_1.createBearerHeaderOptions(token),
     };
     return request.put(options);
 };
 exports.setPlayerToPause = (token) => {
     const options = {
-        url: "https://api.spotify.com/v1/me/player/pause",
+        url: process.env.SPOTIFY_PAUSE,
         headers: spotifyAPIUtils_1.createBearerHeaderOptions(token),
     };
     return request.put(options);
 };
 exports.searchSpotify = (token, songName) => {
     const options = {
-        url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
+        url: `${process.env.searchSpotify}${songName}&type=track`,
         headers: spotifyAPIUtils_1.createBearerHeaderOptions(token),
         json: true
     };
@@ -77,7 +77,7 @@ exports.searchSpotify = (token, songName) => {
 };
 exports.setPlayerVolume = (token, volume) => {
     const options = {
-        url: `https://api.spotify.com/v1/me/player/volume?volume_percent${volume}`,
+        url: process.env.SPOTIFY_VOLUME,
         headers: spotifyAPIUtils_1.createBearerHeaderOptions(token)
     };
     return request.put(options);
