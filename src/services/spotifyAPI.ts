@@ -68,7 +68,7 @@ export const setPlayerToPause = (token:string) => {
 
 export const searchSpotify = (token: string, songName: string) => {
   const options = {
-    url: `${process.env.searchSpotify}${songName}&type=track`,
+    url: `https://api.spotify.com/v1/search?q=${songName}&type=track`,
     headers: createBearerHeaderOptions(token),
     json: true
   }
