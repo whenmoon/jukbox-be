@@ -5,7 +5,7 @@ import { emitPlaylist } from './helpers';
 
 export const redirectAdmin = async (req: any, res: any) => {
   try {
-    res.redirect(`https://inspiring-aryabhata-56eaac.netlify.com/authorized-admin?access_token=${req.user.token}`);
+    res.redirect(`http://localhost:3000/authorized-admin?access_token=${req.user.token}`);
   } catch(e) {
     res.status(500).end();
   }
