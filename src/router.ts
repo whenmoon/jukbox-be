@@ -68,8 +68,6 @@ router.post('/charge', extractToken, passport.authenticate('token', {
 
 router.post('/webhook', bodyParser.raw({type: 'application/json'}), onPayment);
 
-
-
 export const socketRouter = (socket: socketIO.Socket) => {
   socket.on('message', async message => {
     try {
@@ -89,7 +87,6 @@ export const socketRouter = (socket: socketIO.Socket) => {
               socketControllers.updateSongDiamonds(data.songId, user, socket);
           }
         } else socket.emit('error', 'Invalid access token') && socket.disconnect();
-
       }
     } catch (error) {
       socket.emit('error', error);
