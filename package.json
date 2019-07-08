@@ -9,7 +9,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc -p .",
     "test": "NODE_ENV=test mocha -r ts-node/register \"**/*.test.ts\"",
-    "db:testdata":"ts-node src/services/db-testdata.ts"
+    "db:testdata": "ts-node src/services/db-testdata.ts"
   },
   "author": "",
   "license": "ISC",
